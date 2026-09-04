@@ -1,0 +1,40 @@
+{
+    "id": "test_conversation",
+    "title": "First Encounter",
+    "participants": [
+        { "id": "npc", "name": "Survivor" },
+        { "id": "player", "name": "Player" }
+    ],
+    "lines": [
+        {
+            "id": "line_1",
+            "speaker": "npc",
+            "text": "You're new here."
+        },
+        {
+            "id": "line_2",
+            "speaker": "player",
+            "text": "Where am I?"
+        },
+        {
+            "id": "line_3",
+            "speaker": "npc",
+            "text": "This place is called Pine Ridge."
+        },
+        {
+            "id": "line_4",
+            "speaker": "npc",
+            "text": "If you're staying, you'll need to speak with the settlement leader."
+        }
+    ],
+    "cutscene": [1, 0, 2, 3],
+    "focus": [
+        "npc",
+        "player",
+        ["player", "npc"],
+        "npc"
+    ],
+    "onComplete": {
+        "setFlag": "met_survivor"
+    }
+}

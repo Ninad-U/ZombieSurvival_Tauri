@@ -1,0 +1,71 @@
+{
+    "survivor": {
+        "name": "Survivor",
+        "type": "npc",
+        "template": "survivor",
+        "components": {
+            "transform": { "width": 32, "height": 48 },
+            "sprite": { "asset": "player.png", "width": 32, "height": 48 },
+            "health": { "maxHealth": 50, "currentHealth": 50 },
+            "npc": {
+                "name": "Survivor",
+                "faction": "neutral",
+                "dialogue": "survivor_greeting",
+                "interactionRadius": 50
+            }
+        }
+    },
+    "merchant": {
+        "name": "Merchant",
+        "type": "npc",
+        "template": "merchant",
+        "components": {
+            "transform": { "width": 32, "height": 48 },
+            "sprite": { "asset": "player.png", "width": 32, "height": 48 },
+            "health": { "maxHealth": 40, "currentHealth": 40 },
+            "npc": {
+                "name": "Merchant",
+                "faction": "neutral",
+                "dialogue": "merchant_greeting",
+                "interactionRadius": 50,
+                "isMerchant": true
+            }
+        }
+    },
+    "quest_giver": {
+        "name": "Quest Giver",
+        "type": "npc",
+        "template": "quest_giver",
+        "components": {
+            "transform": { "width": 32, "height": 48 },
+            "sprite": { "asset": "player.png", "width": 32, "height": 48 },
+            "health": { "maxHealth": 50, "currentHealth": 50 },
+            "npc": {
+                "name": "Elder",
+                "faction": "friendly",
+                "dialogue": "quest_giver_intro",
+                "interactionRadius": 50,
+                "hasQuest": true
+            }
+        }
+    },
+    "hostile": {
+        "name": "Hostile NPC",
+        "type": "npc",
+        "template": "hostile",
+        "components": {
+            "transform": { "width": 32, "height": 48 },
+            "sprite": { "asset": "zombie.png", "width": 32, "height": 48 },
+            "health": { "maxHealth": 60, "currentHealth": 60 },
+            "combat": { "damage": 8, "range": 30, "cooldown": 1.0 },
+            "ai": { "type": "chase", "detectionRange": 150, "attackRange": 35 },
+            "npc": {
+                "name": "Bandit",
+                "faction": "hostile",
+                "dialogue": null,
+                "interactionRadius": 30,
+                "isHostile": true
+            }
+        }
+    }
+}

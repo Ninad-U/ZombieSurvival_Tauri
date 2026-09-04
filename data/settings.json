@@ -1,0 +1,15 @@
+{
+  "project": {
+    "name": "ZombieSurvival",
+    "version": "0.1.0",
+    "created": "2024-01-01T00:00:00Z"
+  },
+  "settings": {
+    "resolution": {
+      "width": 1280,
+      "height": 720
+    },
+    "fps": 60,
+    "debug": true
+  }
+}

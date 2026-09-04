@@ -1,0 +1,34 @@
+{
+    "id": "kill_test",
+    "name": "Clear the Area",
+    "description": "Clear the area of zombies.",
+    "startNpc": "hunter",
+    "startLocation": "pine_ridge",
+    "status": "inactive",
+    "objectives": [
+        {
+            "id": "kill_zombies",
+            "type": "kill_enemy",
+            "target": "enemy",
+            "quantity": 3,
+            "description": "Kill 3 zombies",
+            "completed": false
+        },
+        {
+            "id": "return_hunter",
+            "type": "talk_to_npc",
+            "target": "hunter",
+            "description": "Return to Hunter",
+            "completed": false
+        }
+    ],
+    "rewards": {
+        "items": [
+            {
+                "item": "food",
+                "quantity": 1
+            }
+        ],
+        "xp": 5
+    }
+}

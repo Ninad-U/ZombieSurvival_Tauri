@@ -1,0 +1,176 @@
+ZombieSurvival - Cutscene / Focus Syntax Guide
+
+Cutscene and focus are optional additions to the Dialogue system.
+Both arrays use the same index as the dialogue line.
+
+Example:
+
+"dialogue": [
+"Line 1",
+"Line 2",
+"Line 3",
+"Line 4"
+],
+
+"cutscene": [1, 0, 2, 3],
+
+"focus": [
+"player",
+"",
+"survivor",
+"player"
+]
+
+Meaning:
+
+Line 1 → focus Player, Squeeze In
+Line 2 → no focus change, no cutscene action
+Line 3 → focus Survivor, Static bars
+Line 4 → focus Player, Squeeze Out
+
+CUTSCENE VALUES
+
+0 = None / no new action
+1 = Black Bars Squeeze In
+2 = Black Bars Static
+3 = Black Bars Squeeze Out
+
+0 does NOT clear or reset the previous state.
+It means "do nothing on this line", so the current bar state remains.
+
+Example:
+
+"cutscene": [1, 0, 0, 3]
+
+Line 1 → bars squeeze in
+Line 2 → bars remain
+Line 3 → bars remain
+Line 4 → bars squeeze out
+
+BLACK BARS
+
+There are only TWO cinematic bars:
+
+one black box at the TOP
+one black box at the BOTTOM
+
+They span the FULL width of the game viewport.
+There are no left/right gaps and no left/right bars.
+
+
+Squeeze In (1):
+Top bar moves DOWN into the screen.
+Bottom bar moves UP into the screen.
+Both move simultaneously until they reach the same final height as Static.
+
+Static (2):
+Immediately show both bars at their full cinematic height.
+
+Squeeze Out (3):
+Top bar moves UP and out of the screen.
+Bottom bar moves DOWN and out of the screen.
+
+The bars are the same two bars throughout the cutscene.
+They should not stack or create new bars on every dialogue line.
+
+FOCUS VALUES
+
+"" = keep the current camera focus
+
+"player" = snap camera to the local/self-controlled Player
+
+"survivor" = snap camera to the existing NPC named Survivor
+
+"<99,99>" = snap camera to world coordinates X=99, Y=99
+
+Any existing NPC name can be used instead of "survivor".
+
+SMOOTH FOCUS / MOVE
+
+A two-item array means smoothly move the CAMERA from one target to another:
+
+["player", "survivor"]
+
+Player → Survivor
+
+["survivor", "player"]
+
+Survivor → Player
+
+["<99,99>", "<100,100>"]
+
+99,99 → 100,100
+
+Mixed targets are also allowed:
+
+["player", "<50,80>"]
+
+["<50,80>", "survivor"]
+
+A single target = immediate Snap/Cut.
+Two targets = smooth camera movement.
+
+The camera moves.
+The actual Player/NPC/entity does NOT move.
+
+FOCUS + CUTSCENE ORDER
+
+For each dialogue line:
+
+Apply focus
+Apply cutscene action
+Show dialogue line
+
+So focus happens BEFORE the black-bar action.
+
+CUTSCENE UI
+
+If the dialogue contains a "cutscene" attribute, cinematic presentation mode is active while that dialogue is playing.
+
+Normal gameplay UI is hidden to make room for the cinematic view and top/bottom black bars.
+
+The dialogue UI remains visible so the conversation can be read and advanced.
+
+When the dialogue ends, normal gameplay UI is restored.
+
+If there is NO "cutscene" attribute, the dialogue behaves as normal dialogue.
+
+QUICK REFERENCE
+
+cutscene:
+0 = no new action / keep current state
+1 = squeeze bars in
+2 = static bars
+3 = squeeze bars out
+
+focus:
+"" = keep current focus
+"player" = snap to Player
+"npcname" = snap to NPC
+"<x,y>" = snap to coordinates
+["from","to"] = smooth camera movement
+
+FULL EXAMPLE
+
+"dialogue": [
+"We need to leave.",
+"Wait...",
+"Look over there.",
+"Let's go."
+],
+
+"cutscene": [1, 0, 2, 3],
+
+"focus": [
+"player",
+["player", "survivor"],
+"<99,99>",
+"player"
+]
+
+Result:
+
+Line 1 → Player + Squeeze In
+Line 2 → smoothly move Player → Survivor, bars remain
+Line 3 → snap to 99,99 + Static bars
+Line 4 → Player + Squeeze Out

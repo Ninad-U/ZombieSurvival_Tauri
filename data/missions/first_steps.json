@@ -1,0 +1,48 @@
+{
+    "id": "first_steps",
+    "name": "First Steps",
+    "description": "Help the settlement find some medical supplies.",
+    "startNpc": "survivor",
+    "startLocation": "pine_ridge",
+    "status": "inactive",
+    "objectives": [
+        {
+            "id": "talk_leader",
+            "type": "talk_to_npc",
+            "target": "survivor",
+            "description": "Talk to the survivor",
+            "completed": false
+        },
+        {
+            "id": "reach_house",
+            "type": "reach_location",
+            "target": "abandoned_house",
+            "description": "Reach the abandoned house",
+            "completed": false
+        },
+        {
+            "id": "find_medicine",
+            "type": "collect_item",
+            "item": "medicine",
+            "quantity": 1,
+            "description": "Find the medicine",
+            "completed": false
+        },
+        {
+            "id": "return_leader",
+            "type": "talk_to_npc",
+            "target": "survivor",
+            "description": "Return to the survivor",
+            "completed": false
+        }
+    ],
+    "rewards": {
+        "items": [
+            {
+                "item": "food",
+                "quantity": 2
+            }
+        ],
+        "xp": 10
+    }
+}

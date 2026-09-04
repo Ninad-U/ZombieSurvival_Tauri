@@ -1,0 +1,56 @@
+{
+    "id": "abandoned_house",
+    "name": "Abandoned House",
+    "description": "A dilapidated house on the outskirts of Pine Ridge.",
+    "width": 15,
+    "height": 12,
+    "tileSize": 32,
+    "tileset": "grass_tiles.png",
+    "layers": {
+        "ground": [],
+        "objects": [],
+        "collision": [
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+            [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+        ]
+    },
+    "entities": [
+        {
+            "type": "player",
+            "x": 7,
+            "y": 5,
+            "spawn": true
+        },
+{
+    "type": "item",
+    "x": 7,
+    "y": 4,
+    "template": "medicine"
+}
+    ],
+"exits": [
+    {
+        "id": "exit_outside",
+        "x": 7,
+        "y": 9,
+        "size": { "x": 2, "y": 3 },
+        "visible": true,
+        "targetLocation": "test_outside",
+        "targetSpawn": "from_house"
+    }
+],
+    "spawnPoints": {
+        "default": { "x": 7, "y": 5 },
+        "from_outside": { "x": 7, "y": 1 }
+    }
+}

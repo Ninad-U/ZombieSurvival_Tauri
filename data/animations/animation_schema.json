@@ -1,0 +1,48 @@
+{
+  "version": "1.0",
+  "animations": {
+    "idle": {
+      "frames": [
+        "idle_1.png",
+        "idle_2.png"
+      ],
+      "fps": 4,
+      "loop": true,
+      "keyframes": []
+    },
+    "walk": {
+      "frames": [
+        "walk_1.png",
+        "walk_2.png",
+        "walk_3.png",
+        "walk_4.png"
+      ],
+      "fps": 8,
+      "loop": true,
+      "keyframes": []
+    },
+    "attack": {
+      "frames": [
+        "attack_1.png",
+        "attack_2.png",
+        "attack_3.png"
+      ],
+      "fps": 12,
+      "loop": false,
+      "keyframes": [
+        {
+          "frame": 1,
+          "event": "hitbox_enable"
+        },
+        {
+          "frame": 2,
+          "event": "hitbox_disable"
+        },
+        {
+          "frame": 2,
+          "event": "spawn_projectile"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZombieSurvival Game Builder</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Tauri API -->
+    <script type="module">
+        // Import Tauri APIs
+        import { invoke } from '@tauri-apps/api/core';
+        import { listen } from '@tauri-apps/api/event';
+        
+        // Expose Tauri APIs to the global scope for use by the game
+        window.__TAURI__ = {
+            invoke,
+            listen,
+        };
+        
+        console.log('Tauri APIs initialized');
+    </script>
+</head>
+<body>
+    <div id="app">
+        <div id="menu-bar">
+            <div class="menu-item">Project</div>
+            <div class="menu-item">Edit</div>
+            <div class="menu-item">Create</div>
+            <div class="menu-item">Test</div>
+            <div class="menu-item">View</div>
+            <div class="menu-item">Debug</div>
+            <div style="flex:1"></div>
+            <div id="project-status">Ready</div>
+            <button id="toggle-console-btn">Console</button>
+        </div>
+        <div id="main-layout">
+            <div id="left-panel">
+                <div class="panel-title">Project / Tools</div>
+                <div id="tool-list">
+                    <div class="tool-item active" data-tool="templates">Templates</div>
+                    <div class="tool-item" data-tool="sprites">Sprites</div>
+                    <div class="tool-item" data-tool="maps">Maps</div>
+                    <div class="tool-item" data-tool="missions">Missions</div>
+                    <div class="tool-item" data-tool="dialogue">Dialogue</div>
+                    <div class="tool-item" data-tool="items">Items</div>
+                    <div class="tool-item" data-tool="npcs">NPCs</div>
+                    <div class="tool-item" data-tool="assets">Assets</div>
+                    <div class="tool-item" data-tool="guide">Project Guide</div>
+                </div>
+                <div id="guide-panel" style="display:none">
+                    <h3>Project Roadmap</h3>
+                    <div id="roadmap">
+                        <div class="roadmap-item completed">Foundation</div>
+                        <div class="roadmap-item completed">Player</div>
+                        <div class="roadmap-item completed">Enemy</div>
+                        <div class="roadmap-item completed">Combat</div>
+                        <div class="roadmap-item active">Survival</div>
+                        <div class="roadmap-item">First Location</div>
+                        <div class="roadmap-item">NPCs</div>
+                        <div class="roadmap-item">Dialogue</div>
+                        <div class="roadmap-item">Missions</div>
+                        <div class="roadmap-item">Animation/Keyframe Designer</div>
+                        <div class="roadmap-item">Procedural World</div>
+                        <div class="roadmap-item future">Multiplayer</div>
+                    </div>
+                    <div id="guide-instructions">
+                        <h4>Next Steps</h4>
+                        <p>Create a food item to test the survival system.</p>
+                        <ol>
+                            <li>Open Items</li>
+                            <li>Create -> Food</li>
+                            <li>Set hunger restored</li>
+                            <li>Save and test</li>
+                        </ol>
+                    </div>
+                </div>
+                <div id="templates-panel">
+                    <h3>Create</h3>
+                    <button class="create-btn" data-template="player">Player</button>
+                    <button class="create-btn" data-template="enemy">Enemy</button>
+                    <button class="create-btn" data-template="npc">NPC</button>
+                    <button class="create-btn" data-template="item">Item</button>
+                    <button class="create-btn" data-template="weapon">Weapon</button>
+                    <button class="create-btn" data-template="interactable">Interactable</button>
+                    <button class="create-btn" data-template="mission">Mission</button>
+                    
+                    <!-- Reset Mission Progress Button -->
+                    <div style="margin-top: 12px; border-top: 1px solid #333; padding-top: 12px;">
+                        <button id="reset-mission-btn" style="
+                            width: 100%;
+                            padding: 8px 12px;
+                            background: #f44336;
+                            border: 1px solid #f44336;
+                            color: #fff;
+                            cursor: pointer;
+                            font-family: inherit;
+                            font-size: 13px;
+                            text-align: center;
+                            border-radius: 3px;
+                            transition: all 0.2s;
+                        ">🔄 Reset Mission Progress</button>
+                        <div style="color: #666; font-size: 10px; margin-top: 4px; text-align: center;">
+                            Clears active/completed missions for testing
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="workspace">
+                <div id="workspace-tabs">
+                    <span class="tab active">Game Preview</span>
+                    <span class="tab">Editor</span>
+                </div>
+                <div id="game-container">
+                    <canvas id="gameCanvas"></canvas>
+                </div>
+                <div id="editor-container" style="display:none">
+                    <div id="editor-content">
+                        <h2>Editor Workspace</h2>
+                        <p>Select a tool from the left panel to begin editing.</p>
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px;">
+                            <button id="open-anim-editor-btn" style="background: #4caf50; color: #fff; border: none; padding: 8px 16px; cursor: pointer; font-family: inherit;">
+                                🎬 Open Animation Editor
+                            </button>
+                            <button id="open-cutscene-editor-btn" style="background: #ff9800; color: #fff; border: none; padding: 8px 16px; cursor: pointer; font-family: inherit;">
+                                🎬 Open Cutscene Editor
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="right-panel">
+                <div class="panel-title">Properties</div>
+                <div id="properties-content">
+                    <p>Select an entity to edit properties</p>
+                    <div id="property-editor"></div>
+                </div>
+            </div>
+        </div>
+        <div id="console-panel">
+            <div id="console-header">
+                <span>Developer Console</span>
+                <span id="console-controls">
+                    <button id="console-clear">Clear</button>
+                    <button id="console-copy">Copy All</button>
+                    <button id="console-toggle">Toggle</button>
+                    <span id="console-filter">
+                        <select id="filter-level">
+                            <option value="all">ALL</option>
+                            <option value="info">INFO</option>
+                            <option value="debug">DEBUG</option>
+                            <option value="warning">WARNING</option>
+                            <option value="error">ERROR</option>
+                        </select>
+                    </span>
+                </span>
+            </div>
+            <div id="console-output"></div>
+        </div>
+    </div>
+    <script type="module" src="src/core/app.js"></script>
+</body>
+</html>

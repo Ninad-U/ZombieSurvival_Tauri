@@ -1,0 +1,28 @@
+{
+    "id": "kill_mission_start",
+    "title": "Hunter's Request",
+    "participants": [
+        { "id": "npc", "name": "Hunter" },
+        { "id": "player", "name": "Player" }
+    ],
+    "lines": [
+        {
+            "id": "line_1",
+            "speaker": "npc",
+            "text": "There are too many zombies in the area. Kill 3 of them for me."
+        },
+        {
+            "id": "line_2",
+            "speaker": "player",
+            "text": "I'll take care of it."
+        },
+        {
+            "id": "line_3",
+            "speaker": "npc",
+            "text": "Good. Come back when you're done."
+        }
+    ],
+    "onComplete": {
+        "startMission": "kill_test"
+    }
+}

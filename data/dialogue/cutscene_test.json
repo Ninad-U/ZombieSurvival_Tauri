@@ -1,0 +1,46 @@
+{
+    "id": "cutscene_test",
+    "title": "Cutscene Test Conversation",
+    "participants": [
+        { "id": "npc", "name": "Survivor" },
+        { "id": "player", "name": "Player" }
+    ],
+    "lines": [
+        {
+            "id": "line_1",
+            "speaker": "npc",
+            "text": "I need to show you something important."
+        },
+        {
+            "id": "line_2",
+            "speaker": "player",
+            "text": "What is it?"
+        },
+        {
+            "id": "line_3",
+            "speaker": "npc",
+            "text": "Look over there. See that structure?"
+        },
+        {
+            "id": "line_4",
+            "speaker": "player",
+            "text": "The abandoned house?"
+        },
+        {
+            "id": "line_5",
+            "speaker": "npc",
+            "text": "That's where we need to go."
+        }
+    ],
+    "cutscene": [1, 0, 2, 0, 3],
+    "focus": [
+        "npc",
+        "",
+        ["npc", "player"],
+        "",
+        "<20,15>"
+    ],
+    "onComplete": {
+        "setFlag": "cutscene_seen"
+    }
+}
