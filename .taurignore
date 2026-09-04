@@ -1,0 +1,26 @@
+# Animation Editor - saves frames and metadata
+assets/animations/
+
+# Mission Editor - saves mission data files
+data/missions/
+
+# Map Editor - saves location data files
+data/locations/
+
+# NPC Editor - saves NPC template files
+data/npcs/
+
+# Cutscene Editor - saves dialogue/cutscene files
+data/dialogue/
+
+# Temporary test files
+temp/
+
+# Generated schemas (auto-generated, not source)
+gen/
+
+# Future Btools directories (uncomment when ready)
+# assets/sprites/
+# assets/tiles/
+# data/items/
+# data/templates/

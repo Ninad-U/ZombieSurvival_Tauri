@@ -484,7 +484,6 @@ export class AnimationEditor {
         this.updateFrameList();
         this.updatePreview();
         
-        
         console.log(`Frame ${this.frames.length} added`);
         this.setStatus(`Frame ${this.frames.length} added`, 'info');
     }
@@ -549,7 +548,6 @@ export class AnimationEditor {
         console.log(`Frame deleted`);
         this.setStatus(`Frame deleted`, 'info');
     }
-    
     
     updateFrameList() {
         const container = document.getElementById('anim-frame-list');
@@ -718,12 +716,6 @@ export class AnimationEditor {
         }
         this.animationName = name;
         
-        // Check if Tauri is available
-        if (typeof window.__TAURI__ === 'undefined') {
-            this.setStatus('Tauri not available. Use "Export Animation Data" instead.', 'error');
-            return;
-        }
-        
         try {
             this.setStatus('Saving animation to project...', 'info');
             
@@ -780,13 +772,104 @@ export class AnimationEditor {
             await writeTextFile(jsonPath, JSON.stringify(jsonData, null, 2));
             console.log(`Saved metadata: ${jsonPath}`);
             
-            this.setStatus(`✅ Animation "${name}" saved successfully to ${animationFolder}`, 'success');
+            // --- NEW: Associate animation with selected entity ---
+            const selectedEntity = this.game.selectedEntity;
+            if (selectedEntity && this.workflow === 'existing') {
+                // Load animation into the entity
+                this.loadAnimationOnEntity(selectedEntity, name, jsonData);
+                this.setStatus(`✅ Animation "${name}" saved and applied to ${selectedEntity.name}`, 'success');
+            } else {
+                this.setStatus(`✅ Animation "${name}" saved successfully to ${animationFolder}`, 'success');
+            }
+            
+            // Mark project as dirty
+            if (this.game && this.game.app) {
+                this.game.app.markDirty();
+            }
             
         } catch (error) {
             console.error('Error saving animation:', error);
             this.setStatus(`Error saving: ${error.message}`, 'error');
         }
     }
+    
+loadAnimationOnEntity(entity, animationName, animationData) {
+    // Import AnimationComponent
+    import('../components/animation_component.js').then(module => {
+        const { AnimationComponent } = module;
+        
+        // Check if entity already has an animation component
+        let animComp = entity.components.animation;
+        if (!animComp) {
+            animComp = new AnimationComponent();
+            entity.components.animation = animComp;
+            console.log(`Added AnimationComponent to ${entity.name}`);
+        }
+        
+        // Load the animation data into the component
+        const frames = animationData.frames.map(f => ({
+            filename: `${animationName}/${f.filename}`,
+            width: f.width,
+            height: f.height
+        }));
+        
+        animComp.frames = frames;
+        animComp.fps = animationData.fps || 12;
+        animComp.loop = animationData.loop !== undefined ? animationData.loop : true;
+        animComp.playing = true;
+        animComp.currentFrameIndex = 0;
+        animComp.frameTimer = 0;
+        animComp.isComplete = false;
+        animComp.animationName = animationName;
+        
+        console.log(`Animation "${animationName}" loaded on ${entity.name} with ${frames.length} frames`);
+        
+        // --- FIX 3: Save animation assignment to location ---
+        this.saveAnimationAssignment(entity, animationName);
+    }).catch(err => {
+        console.error('Error loading AnimationComponent:', err);
+    });
+}
+
+saveAnimationAssignment(entity, animationName) {
+    const location = this.game.locationLoader.getCurrentLocation();
+    if (!location || !location.entities) return;
+    
+    const tileSize = this.game.tileSize || 32;
+    const gridX = Math.floor(entity.components.transform.x / tileSize);
+    const gridY = Math.floor(entity.components.transform.y / tileSize);
+    
+    // Find entity in location data
+    const entityData = location.entities.find(e => 
+        e.x === gridX && e.y === gridY && e.type === entity.type
+    );
+    
+    if (entityData) {
+        entityData.animation = animationName;
+        console.log(`Saved animation assignment: ${entity.name} -> ${animationName}`);
+    } else {
+        // Entity not in location data yet - add it
+        const newEntityData = {
+            type: entity.type,
+            x: gridX,
+            y: gridY,
+            animation: animationName
+        };
+        if (entity.type === 'npc' && entity.components.npc) {
+            newEntityData.name = entity.components.npc.name || 'NPC';
+            newEntityData.dialogue = entity.components.npc.dialogue || 'test_conversation';
+            newEntityData.faction = entity.components.npc.faction || 'neutral';
+        }
+        location.entities.push(newEntityData);
+        console.log(`Added entity with animation assignment to location data`);
+    }
+    
+    // Mark project dirty
+    if (this.game && this.game.app) {
+        this.game.app.markDirty();
+        this.game.app.updateSaveStatus();
+    }
+}
     
     setStatus(message, type = 'info') {
         const el = document.getElementById('anim-status');

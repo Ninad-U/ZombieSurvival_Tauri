@@ -16,7 +16,8 @@ SKIP_DIRS = {
     ".venv",
     "venv",
     "node_modules",
-    "target"
+    "target",
+    "gen"
 }
 
 SKIP_FILES = {

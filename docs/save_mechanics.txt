@@ -1,0 +1,42 @@
+# Current Persistence/Save Status (Updated)
+
+============================================================
+
+PERSISTED (Save + Reload Works):
+
+- Location data (map, tiles, layers) -> data/locations/*.json
+- Exits -> data/locations/*.json
+- NPC placement in location -> data/locations/*.json
+- Enemy placement in location -> data/locations/*.json
+- Item placement in location -> data/locations/*.json
+- NPC Templates (via NPC Editor) -> data/npcs/npc_templates.json
+- Missions (via Mission Editor) -> data/missions/*.json
+- Animation assets (frames + JSON) -> assets/animations/*/
+- Entity Creation (via Templates panel) -> data/locations/*.json
+- Entity Deletion (via Properties panel) -> data/locations/*.json
+- Entity Property Changes (via Save button) -> data/locations/*.json
+- Animation Assignment (via Animation Editor) -> data/locations/*.json
+
+============================================================
+
+NOT PERSISTED (Runtime Only - Excluded from project save):
+
+- Player hunger/thirst/fatigue values
+- Player health/inventory
+- Enemy kill state (resets on reload)
+- Dialogue flags (resets on reload)
+
+============================================================
+
+PARTIAL / NEEDS FIX:
+
+- Cutscene Editor saves -> uses Blob download, needs Tauri FS
+- Mission UI timing -> shows during dialogue, should show after
+
+============================================================
+
+NOTES:
+
+- taurignore excludes: assets/animations/, data/missions/, data/locations/, data/npcs/, data/dialogue/
+- data/settings.json is NOT ignored (source file)
+- Admin preferences (lockdiet) use localStorage, NOT project files

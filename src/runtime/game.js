@@ -84,6 +84,8 @@ export class GameRuntime {
 
         await this.loadLocation('pine_ridge');
 
+        await this.applyAdminPreferences();
+
         this.app.console.log('info', 'Game runtime initialized');
         this.app.console.log('info', 'Press R to toggle rig attachment points');
     }
@@ -331,39 +333,45 @@ export class GameRuntime {
                 }
                 const item = await this.createEntityFromTemplate(templateData);
                 this.addEntity(item);
-            } else if (entityData.type === 'npc') {
-                // Create NPCComponent instance
-                const npcComp = new NPCComponent({
-                    name: entityData.name || 'NPC',
-                    faction: entityData.faction || 'neutral',
-                    dialogue: entityData.dialogue || 'test_conversation',
-                    interactionRadius: entityData.interactionRadius || 50,
-                    isMerchant: entityData.isMerchant || false,
-                    hasQuest: entityData.hasQuest || false,
-                    isHostile: entityData.isHostile || false
-                });
-                
-                console.log('Created NPCComponent:', npcComp.constructor.name);
-                console.log('Has getDialogueId?', typeof npcComp.getDialogueId === 'function');
-                
-                const template = {
-                    name: entityData.name || 'NPC',
-                    type: 'npc',
-                    components: {
-                        transform: {
-                            x: entityData.x * this.tileSize + this.tileSize / 2,
-                            y: entityData.y * this.tileSize + this.tileSize / 2,
-                            width: 32,
-                            height: 48
-                        },
-                        sprite: { asset: 'player.png', width: 32, height: 48 },
-                        health: { maxHealth: 50, currentHealth: 50 },
-                        npc: npcComp  // Pass the instance directly
-                    }
-                };
-                const npc = await this.createEntityFromTemplate(template);
-                this.addEntity(npc);
-            }
+    // In loadLocation(), after creating the NPC entity:
+    } else if (entityData.type === 'npc') {
+    // Create NPCComponent instance
+    const npcComp = new NPCComponent({
+        name: entityData.name || 'NPC',
+        faction: entityData.faction || 'neutral',
+        dialogue: entityData.dialogue || 'test_conversation',
+        interactionRadius: entityData.interactionRadius || 50,
+        isMerchant: entityData.isMerchant || false,
+        hasQuest: entityData.hasQuest || false,
+        isHostile: entityData.isHostile || false
+    });
+    
+    console.log('Created NPCComponent:', npcComp.constructor.name);
+    console.log('Has getDialogueId?', typeof npcComp.getDialogueId === 'function');
+    
+    const template = {
+        name: entityData.name || 'NPC',
+        type: 'npc',
+        components: {
+            transform: {
+                x: entityData.x * this.tileSize + this.tileSize / 2,
+                y: entityData.y * this.tileSize + this.tileSize / 2,
+                width: 32,
+                height: 48
+            },
+            sprite: { asset: 'player.png', width: 32, height: 48 },
+            health: { maxHealth: 50, currentHealth: 50 },
+            npc: npcComp  // Pass the instance directly
+        }
+    };
+    const npc = await this.createEntityFromTemplate(template);
+    this.addEntity(npc);
+    
+    // --- FIX 3: Load animation assignment ---
+    if (entityData.animation) {
+        this.loadAnimationOnEntity(npc, entityData.animation);
+    }
+    }
         }
 
         this.app.console.log('info', `Location loaded: ${locationData.name}`);
@@ -375,6 +383,161 @@ export class GameRuntime {
             this.updateMissionUI();
         }
     }
+
+    loadAnimationOnEntity(entity, animationName) {
+        // Load animation data from disk
+        const animationPath = `assets/animations/${animationName}/animation.json`;
+        
+        fetch(animationPath)
+            .then(response => {
+                if (!response.ok) {
+                    console.warn(`Animation data not found: ${animationName}`);
+                    return null;
+                }
+                return response.json();
+            })
+            .then(animationData => {
+                if (!animationData) return;
+                
+                // Import AnimationComponent
+                import('../components/animation_component.js').then(module => {
+                    const { AnimationComponent } = module;
+                    
+                    let animComp = entity.components.animation;
+                    if (!animComp) {
+                        animComp = new AnimationComponent();
+                        entity.components.animation = animComp;
+                    }
+                    
+                    const frames = animationData.frames.map(f => ({
+                        filename: `${animationName}/${f.filename}`,
+                        width: f.width,
+                        height: f.height
+                    }));
+                    
+                    animComp.frames = frames;
+                    animComp.fps = animationData.fps || 12;
+                    animComp.loop = animationData.loop !== undefined ? animationData.loop : true;
+                    animComp.playing = true;
+                    animComp.currentFrameIndex = 0;
+                    animComp.frameTimer = 0;
+                    animComp.isComplete = false;
+                    animComp.animationName = animationName;
+                    
+                    console.log(`Animation "${animationName}" loaded on ${entity.name} from saved assignment`);
+                });
+            })
+            .catch(err => {
+                console.warn(`Failed to load animation "${animationName}" for ${entity.name}:`, err);
+            });
+    }
+
+    // --- Admin Commands ---
+    
+    /**
+     * Execute an admin shell command
+     * @param {string} command - The command to execute (e.g., "/lockdiet")
+     * @returns {Object} Result with success flag and message
+     */
+    executeAdminCommand(command) {
+        const trimmed = command.trim();
+        
+        switch (trimmed) {
+            case '/lockdiet':
+                return this.adminLockDiet();
+            case '/unlockdiet':
+                return this.adminUnlockDiet();
+            default:
+                return {
+                    success: false,
+                    message: `Unknown command: "${trimmed}". Available: /lockdiet, /unlockdiet`
+                };
+        }
+    }
+    
+    /**
+     * Lock the player's diet (hunger and thirst)
+     */
+    adminLockDiet() {
+        if (!this.player) {
+            return { success: false, message: 'No player found.' };
+        }
+        
+        const survival = this.player.components.survival;
+        if (!survival) {
+            return { success: false, message: 'No survival component found.' };
+        }
+        
+        // Store the current drain rates if not already stored
+        if (survival._originalHungerDrain === undefined) {
+            survival._originalHungerDrain = survival.hungerDrainRate;
+            survival._originalThirstDrain = survival.thirstDrainRate;
+        }
+        
+        // Set drain rates to 0
+        survival.hungerDrainRate = 0;
+        survival.thirstDrainRate = 0;
+        
+        // Persist the admin preference
+        import('../utils/adminState.js').then(module => {
+            module.AdminState.setDietLocked(true);
+        });
+        
+        this.app.console.log('info', '[Admin] 🍖 Diet LOCKED - Hunger and thirst frozen.');
+        return { 
+            success: true, 
+            message: '🍖 Diet LOCKED - Hunger and thirst will not decrease.' 
+        };
+    }
+    
+    /**
+     * Unlock the player's diet (restore normal hunger and thirst)
+     */
+    adminUnlockDiet() {
+        if (!this.player) {
+            return { success: false, message: 'No player found.' };
+        }
+        
+        const survival = this.player.components.survival;
+        if (!survival) {
+            return { success: false, message: 'No survival component found.' };
+        }
+        
+        // Restore original drain rates
+        if (survival._originalHungerDrain !== undefined) {
+            survival.hungerDrainRate = survival._originalHungerDrain;
+        }
+        if (survival._originalThirstDrain !== undefined) {
+            survival.thirstDrainRate = survival._originalThirstDrain;
+        }
+        
+        // Persist the admin preference
+        import('../utils/adminState.js').then(module => {
+            module.AdminState.setDietLocked(false);
+        });
+        
+        this.app.console.log('info', '[Admin] 🍖 Diet UNLOCKED - Hunger and thirst restored.');
+        return { 
+            success: true, 
+            message: '🍖 Diet UNLOCKED - Hunger and thirst will decrease normally.' 
+        };
+    }
+    
+    /**
+     * Apply admin preferences on startup
+     */
+    async applyAdminPreferences() {
+        const { AdminState } = await import('../utils/adminState.js');
+        
+        if (AdminState.isDietLocked()) {
+            // Wait a moment for the player to be fully initialized
+            setTimeout(() => {
+                this.adminLockDiet();
+                this.app.console.log('info', '[Admin] 🍖 Diet lock applied on startup.');
+            }, 100);
+        }
+    }
+
 
     isEnemyKilled(enemyId) {
         const key = `${this.currentLocationId}_${enemyId}`;
@@ -1314,8 +1477,8 @@ export class GameRuntime {
                 this.app.console.log('info', 'Starting mission: First Steps');
                 const mission = await this.missionLoader.startMission('first_steps');
                 if (mission) {
-                    this.createMissionUI();
-                    this.updateMissionUI();
+                    //this.createMissionUI();
+                    //this.updateMissionUI();
                     this.app.console.log('info', 'Mission started: First Steps');
                     return true;
                 }
@@ -1461,55 +1624,53 @@ export class GameRuntime {
             `Progress: ${progress.completed}/${progress.total}`;
     }
 
-    setupSelection() {
-        this.canvas.addEventListener('click', (e) => {
-            const rect = this.canvas.getBoundingClientRect();
-            const scaleX = this.canvas.width / rect.width;
-            const scaleY = this.canvas.height / rect.height;
+setupSelection() {
+  this.canvas.addEventListener('click', (e) => {
+    const rect = this.canvas.getBoundingClientRect();
+    const scaleX = this.canvas.width / rect.width;
+    const scaleY = this.canvas.height / rect.height;
 
-            const screenX = (e.clientX - rect.left) * scaleX;
-            const screenY = (e.clientY - rect.top) * scaleY;
+    const screenX = (e.clientX - rect.left) * scaleX;
+    const screenY = (e.clientY - rect.top) * scaleY;
 
-            const worldX = screenX + this.camera.x;
-            const worldY = screenY + this.camera.y;
+    const worldX = screenX + this.camera.x;
+    const worldY = screenY + this.camera.y;
 
-            let selected = null;
-            for (let i = this.entities.length - 1; i >= 0; i--) {
-                const entity = this.entities[i];
-                if (entity._dead) continue;
+    let selected = null;
+    for (let i = this.entities.length - 1; i >= 0; i--) {
+      const entity = this.entities[i];
+      if (entity._dead) continue;
 
-                const transform = entity.components.transform;
-                if (!transform) continue;
+      const transform = entity.components.transform;
+      if (!transform) continue;
 
-                const w = entity.components.sprite?.width || 32;
-                const h = entity.components.sprite?.height || 48;
+      const w = entity.components.sprite?.width || 32;
+      const h = entity.components.sprite?.height || 48;
 
-                const left = transform.x - w / 2;
-                const right = transform.x + w / 2;
-                const top = transform.y - h / 2;
-                const bottom = transform.y + h / 2;
+      const left = transform.x - w / 2;
+      const right = transform.x + w / 2;
+      const top = transform.y - h / 2;
+      const bottom = transform.y + h / 2;
 
-                if (worldX >= left && worldX <= right &&
-                    worldY >= top && worldY <= bottom) {
-                    selected = entity;
-                    break;
-                }
-            }
-
-            if (selected) {
-                this.app.console.log('info', `Selected: ${selected.name} (${selected.id})`);
-                this.app.showEntityProperties(selected);
-                this.selectedEntity = selected;
-            } else {
-                this.app.console.log('info', 'Deselected');
-                this.selectedEntity = null;
-                const container = document.getElementById('property-editor');
-                if (container) {
-                    container.innerHTML = '<p style="color:#666;font-style:italic;">No entity selected</p>';
-                }
-            }
-        });
+      if (worldX >= left && worldX <= right &&
+          worldY >= top && worldY <= bottom) {
+        selected = entity;
+        break;
+      }
     }
+
+    if (selected) {
+      this.app.console.log('info', `Selected: ${selected.name} (${selected.id})`);
+      this.app.showEntityProperties(selected);
+      this.selectedEntity = selected;
+    } else {
+      this.app.console.log('info', 'Deselected');
+      this.selectedEntity = null;
+      // --- FIX: Call clearSelection to show Btools ---
+      this.app.clearSelection();
+    }
+  });
+}
 
     createDialogueUI() {
         if (document.getElementById('dialogue-panel')) return;
@@ -1680,6 +1841,7 @@ export class GameRuntime {
                     }
                 }
 
+                this.createMissionUI();
                 this.updateMissionUI();
                 this.endDialogue();
                 this.app.console.log('info', `Dialogue complete. Flags:`, comp.flags);

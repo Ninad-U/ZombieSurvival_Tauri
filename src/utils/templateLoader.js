@@ -147,7 +147,65 @@ medicine: {
             message: 'You took some medicine.'
         }
     }
+},
+
+crate: {
+    name: 'Crate',
+    type: 'object',
+    components: {
+        transform: { x: 0, y: 0, width: 32, height: 32 },
+        sprite: { asset: 'crate.png', width: 32, height: 32 },
+        collision: { width: 28, height: 28, offsetX: 2, offsetY: 2 }
+    }
+},
+door: {
+    name: 'Door',
+    type: 'object',
+    components: {
+        transform: { x: 0, y: 0, width: 32, height: 48 },
+        sprite: { asset: 'door.png', width: 32, height: 48 },
+        collision: { width: 28, height: 44, offsetX: 2, offsetY: 2 }
+    }
+},
+bed: {
+    name: 'Bed',
+    type: 'object',
+    components: {
+        transform: { x: 0, y: 0, width: 48, height: 32 },
+        sprite: { asset: 'bed.png', width: 48, height: 32 },
+        collision: { width: 44, height: 28, offsetX: 2, offsetY: 2 }
+    }
+},
+tree: {
+    name: 'Tree',
+    type: 'object',
+    components: {
+        transform: { x: 0, y: 0, width: 32, height: 48 },
+        sprite: { asset: 'tree.png', width: 32, height: 48 },
+        collision: { width: 20, height: 20, offsetX: 6, offsetY: 14 }
+    }
+},
+rock: {
+    name: 'Rock',
+    type: 'object',
+    components: {
+        transform: { x: 0, y: 0, width: 32, height: 24 },
+        sprite: { asset: 'rock.png', width: 32, height: 24 },
+        collision: { width: 28, height: 20, offsetX: 2, offsetY: 2 }
+    }
+},
+barrel: {
+    name: 'Barrel',
+    type: 'object',
+    components: {
+        transform: { x: 0, y: 0, width: 24, height: 32 },
+        sprite: { asset: 'crate.png', width: 24, height: 32 }, // Using crate as placeholder
+        collision: { width: 20, height: 28, offsetX: 2, offsetY: 2 }
+    }
 }
+
+
+
         };
         
         for (const [key, data] of Object.entries(templateData)) {

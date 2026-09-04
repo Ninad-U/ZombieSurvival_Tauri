@@ -212,55 +212,89 @@ export class CutsceneEditor {
         return participant ? participant.name : speakerId;
     }
     
-    async saveDialogue() {
-        if (!this.dialogueData) {
-            this.setStatus('No dialogue loaded.', 'error');
+async saveDialogue() {
+    if (!this.dialogueData) {
+        this.setStatus('No dialogue loaded.', 'error');
+        return;
+    }
+    
+    // Collect data from UI
+    for (let i = 0; i < this.lines.length; i++) {
+        const cutsceneInput = document.getElementById(`cutscene-input-${i}`);
+        if (cutsceneInput) {
+            this.cutscene[i] = parseInt(cutsceneInput.value) || 0;
+        }
+        
+        const focusInput = document.getElementById(`focus-input-${i}`);
+        if (focusInput) {
+            let val = focusInput.value.trim();
+            if (val.startsWith('[') && val.endsWith(']')) {
+                try {
+                    const parsed = JSON.parse(val);
+                    if (Array.isArray(parsed) && parsed.length === 2) {
+                        this.focus[i] = parsed;
+                        continue;
+                    }
+                } catch (e) {}
+            }
+            this.focus[i] = val;
+        }
+    }
+    
+    const updatedData = {
+        ...this.dialogueData,
+        cutscene: this.cutscene,
+        focus: this.focus
+    };
+    
+    // --- FIX 4: Use Tauri FS instead of Blob download ---
+    try {
+        // Check if Tauri is available
+        if (typeof window.__TAURI__ === 'undefined') {
+            // Fallback to download
+            this.downloadDialogue(updatedData);
             return;
         }
         
-        for (let i = 0; i < this.lines.length; i++) {
-            const cutsceneInput = document.getElementById(`cutscene-input-${i}`);
-            if (cutsceneInput) {
-                this.cutscene[i] = parseInt(cutsceneInput.value) || 0;
-            }
-            
-            const focusInput = document.getElementById(`focus-input-${i}`);
-            if (focusInput) {
-                let val = focusInput.value.trim();
-                if (val.startsWith('[') && val.endsWith(']')) {
-                    try {
-                        const parsed = JSON.parse(val);
-                        if (Array.isArray(parsed) && parsed.length === 2) {
-                            this.focus[i] = parsed;
-                            continue;
-                        }
-                    } catch (e) {}
-                }
-                this.focus[i] = val;
-            }
+        // Import Tauri FS
+        const { writeTextFile } = await import('@tauri-apps/plugin-fs');
+        const path = `data/dialogue/${this.dialogueId}.json`;
+        
+        await writeTextFile(path, JSON.stringify(updatedData, null, 2));
+        
+        this.setStatus(`✅ Saved ${this.dialogueId}.json - ${this.lines.length} lines`, 'success');
+        this.app.console.log('info', `Cutscene data saved for ${this.dialogueId}`);
+        
+        // Mark project dirty
+        if (this.game && this.game.app) {
+            this.game.app.markDirty();
+            this.game.app.updateSaveStatus();
         }
         
-        const updatedData = {
-            ...this.dialogueData,
-            cutscene: this.cutscene,
-            focus: this.focus
-        };
-        
-        const json = JSON.stringify(updatedData, null, 2);
-        const blob = new Blob([json], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        
-        const link = document.createElement('a');
-        link.download = `${this.dialogueId}.json`;
-        link.href = url;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-        
-        this.setStatus(`Saved ${this.dialogueId}.json - ${this.lines.length} lines`, 'success');
-        this.app.console.log('info', `Cutscene data saved for ${this.dialogueId}`);
+    } catch (error) {
+        console.error('Error saving dialogue:', error);
+        this.setStatus(`Error saving: ${error.message}`, 'error');
+        // Fallback to download if Tauri fails
+        this.downloadDialogue(updatedData);
     }
+}
+
+// Helper method for fallback download
+downloadDialogue(data) {
+    const json = JSON.stringify(data, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.download = `${this.dialogueId}.json`;
+    link.href = url;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    this.setStatus(`Downloaded ${this.dialogueId}.json - ${this.lines.length} lines (Tauri not available)`, 'warning');
+}
     
     setStatus(message, type = 'info') {
         const el = document.getElementById('cutscene-status');
