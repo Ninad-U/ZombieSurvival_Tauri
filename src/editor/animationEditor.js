@@ -1,11 +1,12 @@
 // Animation Editor
 // Lightweight animation creation and management
 
+import { writeTextFile, writeFile, exists, mkdir } from '@tauri-apps/plugin-fs';
+
 export class AnimationEditor {
     constructor(gameRuntime) {
         this.game = gameRuntime;
         this.workflow = 'existing'; // 'existing' or 'new'
-        this.selectedEntity = null;
         this.animationName = '';
         this.frames = [];
         this.currentFrameIndex = 0;
@@ -19,6 +20,7 @@ export class AnimationEditor {
         this.customHeight = 32;
         this.targetCategory = 'character'; // 'character', 'item', 'object'
         this.targetSubType = 'player'; // 'player', 'npc', 'enemy', 'medicine', etc.
+        this._updateInterval = null;
         
         this.initUI();
     }
@@ -47,8 +49,8 @@ export class AnimationEditor {
                 <span id="anim-workflow-label" style="color: #888; font-size: 11px; margin-left: 8px;">Edit existing entity's visual</span>
             </div>
             
-            <!-- Category Selection -->
-            <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px;">
+            <!-- Category Selection (New mode only) -->
+            <div id="anim-new-controls" style="display: none; gap: 16px; flex-wrap: wrap; margin-bottom: 16px;">
                 <div>
                     <label style="color: #888; font-size: 12px; display: block;">Category</label>
                     <select id="anim-category-select" style="background: #2a2a2a; color: #c0c0c0; border: 1px solid #444; padding: 6px 12px; font-family: inherit; width: 150px;">
@@ -64,10 +66,6 @@ export class AnimationEditor {
                         <option value="npc">NPC</option>
                         <option value="enemy">Enemy</option>
                     </select>
-                </div>
-                <div>
-                    <label style="color: #888; font-size: 12px; display: block;">Animation Name</label>
-                    <input id="anim-name-input" type="text" placeholder="idle" style="background: #2a2a2a; color: #c0c0c0; border: 1px solid #444; padding: 6px 12px; font-family: inherit; width: 150px;">
                 </div>
                 <div id="anim-size-section" style="display: none;">
                     <label style="color: #888; font-size: 12px; display: block;">Object Size</label>
@@ -87,14 +85,33 @@ export class AnimationEditor {
                         <input id="anim-custom-height" type="number" value="32" style="width: 50px; background: #2a2a2a; color: #c0c0c0; border: 1px solid #444; padding: 4px 6px; font-family: inherit;">
                     </div>
                 </div>
-                <div id="anim-existing-info" style="display: none;">
-                    <label style="color: #888; font-size: 12px; display: block;">Existing Dimensions</label>
-                    <span id="anim-existing-dimensions" style="color: #4caf50; font-size: 13px;">32 × 48</span>
-                </div>
-                <div style="display: flex; align-items: flex-end; gap: 8px;">
-                    <button id="anim-create-btn" style="background: #4caf50; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Create Animation</button>
-                    <button id="anim-add-frame-btn" style="background: #2196f3; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Add Frame</button>
-                    <button id="anim-import-frame-btn" style="background: #ff9800; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Import Frame</button>
+            </div>
+            
+            <!-- Existing Entity Info (Existing mode only) -->
+            <div id="anim-existing-controls" style="display: block; margin-bottom: 16px;">
+                <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <label style="color: #888; font-size: 12px; display: block;">Selected Entity</label>
+                        <div id="anim-entity-info" style="background: #0a1a0a; border: 1px solid #2a4a2a; border-radius: 4px; padding: 10px 14px;">
+                            <div style="color: #4caf50; font-weight: bold; font-size: 14px;" id="anim-entity-name">No entity selected</div>
+                            <div style="color: #888; font-size: 11px; margin-top: 4px;">
+                                <span id="anim-entity-id">ID: ---</span>
+                                <span style="margin-left: 16px;" id="anim-entity-type">Type: ---</span>
+                            </div>
+                            <div style="color: #888; font-size: 11px; margin-top: 4px; border-top: 1px solid #1a3a1a; padding-top: 4px;">
+                                Dimensions: <span id="anim-existing-dimensions" style="color: #4caf50;">---</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label style="color: #888; font-size: 12px; display: block;">Animation Name</label>
+                        <input id="anim-name-input" type="text" placeholder="idle" style="background: #2a2a2a; color: #c0c0c0; border: 1px solid #444; padding: 6px 12px; font-family: inherit; width: 150px;">
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: flex-end;">
+                        <button id="anim-create-btn" style="background: #4caf50; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Create Animation</button>
+                        <button id="anim-add-frame-btn" style="background: #2196f3; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Add Frame</button>
+                        <button id="anim-import-frame-btn" style="background: #ff9800; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Import Frame</button>
+                    </div>
                 </div>
             </div>
             
@@ -123,8 +140,9 @@ export class AnimationEditor {
             
             <div style="margin-top: 16px; border-top: 1px solid #333; padding-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
                 <button id="anim-export-btn" style="background: #4caf50; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Export Animation Data</button>
-                <button id="anim-download-frames-btn" style="background: #2196f3; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Download All Frames</button>
+                <button id="anim-save-btn" style="background: #2196f3; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">💾 Save to Project</button>
                 <button id="anim-close-btn" style="background: #f44336; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Close Editor</button>
+                <span id="anim-status" style="color: #888; font-size: 12px; margin-left: 12px; align-self: center;"></span>
             </div>
         `;
         
@@ -136,7 +154,12 @@ export class AnimationEditor {
         this.setupEvents();
         this.updateSubtypeOptions();
         this.updateWorkflowUI();
-        this.populateEntityList();
+        this.updateEntityInfo();
+        
+        // Start periodic update to catch selection changes
+        this._updateInterval = setInterval(() => {
+            this.updateEntityInfo();
+        }, 250);
     }
     
     updateSubtypeOptions() {
@@ -190,50 +213,102 @@ export class AnimationEditor {
     
     updateWorkflowUI() {
         const isNew = this.workflow === 'new';
-        const category = document.getElementById('anim-category-select')?.value || 'character';
-        const isObject = category === 'object';
-        
-        const sizeSection = document.getElementById('anim-size-section');
-        const customSizeSection = document.getElementById('anim-custom-size-section');
-        const existingInfo = document.getElementById('anim-existing-info');
+        const newControls = document.getElementById('anim-new-controls');
+        const existingControls = document.getElementById('anim-existing-controls');
+        const label = document.getElementById('anim-workflow-label');
         const categorySelect = document.getElementById('anim-category-select');
         const subtypeSelect = document.getElementById('anim-subtype-select');
-        const label = document.getElementById('anim-workflow-label');
         
-        if (isNew && isObject) {
-            sizeSection.style.display = 'block';
-            customSizeSection.style.display = document.getElementById('anim-size-select')?.value === 'custom' ? 'block' : 'none';
-            existingInfo.style.display = 'none';
-            categorySelect.disabled = false;
-            subtypeSelect.disabled = false;
-            if (label) label.textContent = 'Create new environmental object';
-        } else if (isNew) {
-            sizeSection.style.display = 'none';
-            customSizeSection.style.display = 'none';
-            existingInfo.style.display = 'none';
-            categorySelect.disabled = false;
-            subtypeSelect.disabled = false;
+        if (isNew) {
+            // New mode: show category/subtype, hide entity info
+            if (newControls) newControls.style.display = 'flex';
+            if (existingControls) existingControls.style.display = 'none';
+            if (categorySelect) categorySelect.disabled = false;
+            if (subtypeSelect) subtypeSelect.disabled = false;
             if (label) label.textContent = 'Create new visual asset';
+            
+            // Show size options for objects
+            const category = document.getElementById('anim-category-select')?.value || 'character';
+            const sizeSection = document.getElementById('anim-size-section');
+            const customSizeSection = document.getElementById('anim-custom-size-section');
+            if (category === 'object') {
+                if (sizeSection) sizeSection.style.display = 'block';
+                if (customSizeSection) {
+                    customSizeSection.style.display = document.getElementById('anim-size-select')?.value === 'custom' ? 'block' : 'none';
+                }
+            } else {
+                if (sizeSection) sizeSection.style.display = 'none';
+                if (customSizeSection) customSizeSection.style.display = 'none';
+            }
         } else {
-            sizeSection.style.display = 'none';
-            customSizeSection.style.display = 'none';
-            existingInfo.style.display = 'block';
-            categorySelect.disabled = true;
-            subtypeSelect.disabled = true;
+            // Existing mode: hide category/subtype, show entity info
+            if (newControls) newControls.style.display = 'none';
+            if (existingControls) existingControls.style.display = 'block';
+            if (categorySelect) categorySelect.disabled = true;
+            if (subtypeSelect) subtypeSelect.disabled = true;
             if (label) label.textContent = 'Edit existing entity\'s visual';
-            this.updateExistingDimensions();
+            
+            // Update entity info
+            this.updateEntityInfo();
         }
     }
     
-    updateExistingDimensions() {
-        const entity = this.game.entities.find(e => e.type === this.selectedEntity);
+    updateEntityInfo() {
+        // Get the selected entity from the game's selection state
+        const entity = this.game.selectedEntity;
+        const nameEl = document.getElementById('anim-entity-name');
+        const idEl = document.getElementById('anim-entity-id');
+        const typeEl = document.getElementById('anim-entity-type');
         const dimsEl = document.getElementById('anim-existing-dimensions');
-        if (entity && entity.components.sprite) {
-            const w = entity.components.sprite.width || 32;
-            const h = entity.components.sprite.height || 48;
-            dimsEl.textContent = `${w} × ${h}`;
+        
+        if (entity) {
+            // Update name
+            if (nameEl) {
+                nameEl.textContent = entity.name || 'Unnamed Entity';
+                nameEl.style.color = '#4caf50';
+            }
+            
+            // Update ID
+            if (idEl) {
+                idEl.textContent = `ID: ${entity.id || '---'}`;
+                idEl.style.color = '#aaa';
+            }
+            
+            // Update type
+            if (typeEl) {
+                typeEl.textContent = `Type: ${entity.type || 'unknown'}`;
+                typeEl.style.color = '#aaa';
+            }
+            
+            // Update dimensions from sprite component
+            if (dimsEl) {
+                const sprite = entity.components?.sprite;
+                if (sprite && sprite.width && sprite.height) {
+                    dimsEl.textContent = `${sprite.width} × ${sprite.height}`;
+                    dimsEl.style.color = '#4caf50';
+                } else {
+                    dimsEl.textContent = 'No sprite dimensions';
+                    dimsEl.style.color = '#888';
+                }
+            }
         } else {
-            dimsEl.textContent = 'No entity selected';
+            // No entity selected
+            if (nameEl) {
+                nameEl.textContent = 'No entity selected';
+                nameEl.style.color = '#888';
+            }
+            if (idEl) {
+                idEl.textContent = 'ID: ---';
+                idEl.style.color = '#666';
+            }
+            if (typeEl) {
+                typeEl.textContent = 'Type: ---';
+                typeEl.style.color = '#666';
+            }
+            if (dimsEl) {
+                dimsEl.textContent = '---';
+                dimsEl.style.color = '#666';
+            }
         }
     }
     
@@ -245,8 +320,6 @@ export class AnimationEditor {
             document.getElementById('anim-workflow-new').style.background = '#2a2a2a';
             document.getElementById('anim-workflow-new').style.color = '#aaa';
             this.updateWorkflowUI();
-            this.populateEntityList();
-            this.updateExistingDimensions();
         });
         
         document.getElementById('anim-workflow-new')?.addEventListener('click', () => {
@@ -256,15 +329,11 @@ export class AnimationEditor {
             document.getElementById('anim-workflow-existing').style.background = '#2a2a2a';
             document.getElementById('anim-workflow-existing').style.color = '#aaa';
             this.updateWorkflowUI();
-            this.populateEntityList();
         });
         
         document.getElementById('anim-category-select')?.addEventListener('change', () => {
             this.updateSubtypeOptions();
             this.updateWorkflowUI();
-            if (this.workflow === 'new') {
-                this.updateSizeOptions();
-            }
         });
         
         document.getElementById('anim-size-select')?.addEventListener('change', (e) => {
@@ -273,13 +342,6 @@ export class AnimationEditor {
                 customSection.style.display = 'block';
             } else {
                 customSection.style.display = 'none';
-            }
-        });
-        
-        document.getElementById('anim-entity-select')?.addEventListener('change', (e) => {
-            this.selectedEntity = e.target.value;
-            if (this.workflow === 'existing') {
-                this.updateExistingDimensions();
             }
         });
         
@@ -319,8 +381,8 @@ export class AnimationEditor {
             this.exportAnimation();
         });
         
-        document.getElementById('anim-download-frames-btn')?.addEventListener('click', () => {
-            this.downloadAllFrames();
+        document.getElementById('anim-save-btn')?.addEventListener('click', () => {
+            this.saveAnimationToProject();
         });
         
         document.getElementById('anim-close-btn')?.addEventListener('click', () => {
@@ -328,78 +390,10 @@ export class AnimationEditor {
         });
     }
     
-    updateSizeOptions() {
-        const category = document.getElementById('anim-category-select')?.value || 'character';
-        const select = document.getElementById('anim-size-select');
-        if (!select) return;
-        
-        if (category !== 'object') {
-            select.style.display = 'none';
-            document.getElementById('anim-size-section').style.display = 'none';
-            return;
-        }
-        
-        select.style.display = 'block';
-        const presets = [
-            { value: '16x16', label: '1×1 (16×16)' },
-            { value: '32x32', label: '2×2 (32×32)' },
-            { value: '48x48', label: '3×3 (48×48)' },
-            { value: '64x64', label: '4×4 (64×64)' },
-            { value: '80x80', label: '5×5 (80×80)' },
-            { value: 'custom', label: 'Custom' }
-        ];
-        
-        const currentValue = select.value;
-        select.innerHTML = '';
-        for (const opt of presets) {
-            const option = document.createElement('option');
-            option.value = opt.value;
-            option.textContent = opt.label;
-            select.appendChild(option);
-        }
-        if (currentValue) {
-            const exists = Array.from(select.options).some(o => o.value === currentValue);
-            if (exists) select.value = currentValue;
-        }
-    }
-    
-    populateEntityList() {
-        const select = document.getElementById('anim-entity-select');
-        if (!select) return;
-        
-        while (select.options.length > 1) {
-            select.remove(1);
-        }
-        
-        if (this.workflow === 'existing') {
-            const types = new Set();
-            for (const entity of this.game.entities) {
-                if (entity.type) {
-                    types.add(entity.type);
-                }
-            }
-            types.add('player');
-            
-            for (const type of types) {
-                const option = document.createElement('option');
-                option.value = type;
-                option.textContent = type.charAt(0).toUpperCase() + type.slice(1);
-                select.appendChild(option);
-            }
-        } else {
-            const category = document.getElementById('anim-category-select')?.value || 'character';
-            const subtype = document.getElementById('anim-subtype-select')?.value || 'player';
-            const option = document.createElement('option');
-            option.value = `${category}_${subtype}`;
-            option.textContent = `New ${subtype.charAt(0).toUpperCase() + subtype.slice(1)} (${category})`;
-            select.appendChild(option);
-        }
-    }
-    
     getCanvasDimensions() {
         if (this.workflow === 'existing') {
-            const entity = this.game.entities.find(e => e.type === this.selectedEntity);
-            if (entity && entity.components.sprite) {
+            const entity = this.game.selectedEntity;
+            if (entity && entity.components && entity.components.sprite) {
                 return { width: entity.components.sprite.width || 32, height: entity.components.sprite.height || 48 };
             }
             return { width: 32, height: 48 };
@@ -443,6 +437,7 @@ export class AnimationEditor {
         this.updatePreview();
         
         console.log(`Animation "${name}" created with dimensions ${width}x${height} (${this.workflow} workflow)`);
+        this.setStatus(`Animation "${name}" created (${this.frames.length} frames)`, 'success');
     }
     
     addFrame() {
@@ -488,9 +483,10 @@ export class AnimationEditor {
         this.currentFrameIndex = this.frames.length - 1;
         this.updateFrameList();
         this.updatePreview();
-        this.downloadFrame(this.frames.length - 1);
+        
         
         console.log(`Frame ${this.frames.length} added`);
+        this.setStatus(`Frame ${this.frames.length} added`, 'info');
     }
     
     importFrame() {
@@ -529,6 +525,7 @@ export class AnimationEditor {
                     this.updateFrameList();
                     this.updatePreview();
                     console.log(`Imported frame ${this.frames.length}`);
+                    this.setStatus(`Imported frame ${this.frames.length}`, 'info');
                 };
                 img.src = ev.target.result;
             };
@@ -550,19 +547,9 @@ export class AnimationEditor {
         this.updateFrameList();
         this.updatePreview();
         console.log(`Frame deleted`);
+        this.setStatus(`Frame deleted`, 'info');
     }
     
-    downloadFrame(index) {
-        const frame = this.frames[index];
-        if (!frame) return;
-        
-        const link = document.createElement('a');
-        link.download = `${this.animationName || 'animation'}_frame_${String(index + 1).padStart(2, '0')}.png`;
-        link.href = frame.dataUrl;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
     
     updateFrameList() {
         const container = document.getElementById('anim-frame-list');
@@ -713,148 +700,166 @@ export class AnimationEditor {
         URL.revokeObjectURL(url);
         
         console.log('Animation exported:', data);
+        this.setStatus(`Animation data exported`, 'success');
     }
     
-    async downloadAllFrames() {
+    async saveAnimationToProject() {
+        // Check if we have frames to save
         if (this.frames.length === 0) {
-            alert('No frames to download.');
+            this.setStatus('No frames to save. Add frames first.', 'error');
             return;
         }
         
-        if (typeof JSZip === 'undefined') {
-            await this.loadJSZip();
+        // Get animation name
+        const name = document.getElementById('anim-name-input')?.value || 'unnamed';
+        if (!name || name === 'unnamed') {
+            this.setStatus('Please enter a name for the animation.', 'error');
+            return;
+        }
+        this.animationName = name;
+        
+        // Check if Tauri is available
+        if (typeof window.__TAURI__ === 'undefined') {
+            this.setStatus('Tauri not available. Use "Export Animation Data" instead.', 'error');
+            return;
         }
         
-        const zip = new JSZip();
-        const folderName = this.animationName || 'animation';
-        const folder = zip.folder(folderName);
-        
-        for (let i = 0; i < this.frames.length; i++) {
-            const frame = this.frames[i];
-            const base64Data = frame.dataUrl.split(',')[1];
-            const fileName = `frame_${String(i + 1).padStart(2, '0')}.png`;
-            folder.file(fileName, base64Data, { base64: true });
+        try {
+            this.setStatus('Saving animation to project...', 'info');
+            
+            // Define paths - use project root relative path
+            const basePath = 'assets/animations';
+            const animationFolder = `${basePath}/${name}`;
+            
+            // Check if folder exists, create if not
+            const folderExists = await exists(animationFolder);
+            if (!folderExists) {
+                await mkdir(animationFolder, { recursive: true });
+                console.log(`Created folder: ${animationFolder}`);
+            }
+            
+            // Save each frame as PNG
+            for (let i = 0; i < this.frames.length; i++) {
+                const frame = this.frames[i];
+                const frameName = `frame_${String(i + 1).padStart(2, '0')}.png`;
+                const framePath = `${animationFolder}/${frameName}`;
+                
+                // Convert data URL to Uint8Array
+                const base64Data = frame.dataUrl.split(',')[1];
+                const binaryData = atob(base64Data);
+                const bytes = new Uint8Array(binaryData.length);
+                for (let j = 0; j < binaryData.length; j++) {
+                    bytes[j] = binaryData.charCodeAt(j);
+                }
+                
+                await writeFile(framePath, bytes);
+                console.log(`Saved frame: ${framePath}`);
+            }
+            
+            // Save animation metadata as JSON
+            const category = document.getElementById('anim-category-select')?.value || 'character';
+            const subtype = document.getElementById('anim-subtype-select')?.value || 'player';
+            
+            const jsonData = {
+                name: name,
+                workflow: this.workflow,
+                category: category,
+                subType: subtype,
+                fps: this.fps,
+                loop: this.loop,
+                frameCount: this.frames.length,
+                frames: this.frames.map((f, i) => ({
+                    index: i + 1,
+                    width: f.width,
+                    height: f.height,
+                    filename: `frame_${String(i + 1).padStart(2, '0')}.png`
+                }))
+            };
+            
+            const jsonPath = `${animationFolder}/animation.json`;
+            await writeTextFile(jsonPath, JSON.stringify(jsonData, null, 2));
+            console.log(`Saved metadata: ${jsonPath}`);
+            
+            this.setStatus(`✅ Animation "${name}" saved successfully to ${animationFolder}`, 'success');
+            
+        } catch (error) {
+            console.error('Error saving animation:', error);
+            this.setStatus(`Error saving: ${error.message}`, 'error');
         }
+    }
+    
+    setStatus(message, type = 'info') {
+        const el = document.getElementById('anim-status');
+        if (!el) return;
         
-        const category = document.getElementById('anim-category-select')?.value || 'character';
-        const subtype = document.getElementById('anim-subtype-select')?.value || 'player';
-        
-        const jsonData = {
-            name: this.animationName || 'unnamed',
-            workflow: this.workflow,
-            category: category,
-            subType: subtype,
-            fps: this.fps,
-            loop: this.loop,
-            frameCount: this.frames.length,
-            frames: this.frames.map((f, i) => ({
-                index: i + 1,
-                width: f.width,
-                height: f.height,
-                filename: `frame_${String(i + 1).padStart(2, '0')}.png`
-            }))
+        const colors = {
+            info: '#888',
+            success: '#4caf50',
+            error: '#f44336',
+            warning: '#ff9800'
         };
-        
-        folder.file(`${folderName}.json`, JSON.stringify(jsonData, null, 2));
-        
-        const zipBlob = await zip.generateAsync({ type: 'blob' });
-        const url = URL.createObjectURL(zipBlob);
-        
-        const link = document.createElement('a');
-        link.download = `${folderName}.zip`;
-        link.href = url;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-        
-        const instruction = document.createElement('div');
-        instruction.style.cssText = `
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: #4caf50;
-            padding: 12px 24px;
-            border-radius: 8px;
-            border: 1px solid #4caf50;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            z-index: 10000;
-            text-align: center;
-            max-width: 500px;
-        `;
-        instruction.textContent = '📁 Extract this ZIP into your project\'s animations/ folder';
-        document.body.appendChild(instruction);
-        setTimeout(() => {
-            instruction.style.opacity = '0';
-            instruction.style.transition = 'opacity 0.5s';
-            setTimeout(() => instruction.remove(), 500);
-        }, 4000);
-        
-        console.log(`ZIP exported: ${folderName}.zip with ${this.frames.length} frames`);
+        el.style.color = colors[type] || '#888';
+        el.textContent = message;
     }
     
-    loadJSZip() {
-        return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
-            script.onload = resolve;
-            script.onerror = reject;
-            document.head.appendChild(script);
-        });
-    }
-    
-close() {
-    if (this.game && this.game.app) {
-        this.game.app.lastOpenedEditor = null;
-    }
+    close() {
+        if (this.game && this.game.app) {
+            this.game.app.lastOpenedEditor = null;
+        }
 
-    this.stopPreview();
-    const panel = document.getElementById('animation-editor-panel');
-    if (panel) {
-        panel.style.display = 'none';
-    }
+        // Stop the update interval
+        if (this._updateInterval) {
+            clearInterval(this._updateInterval);
+            this._updateInterval = null;
+        }
 
-    const editorContent = document.getElementById('editor-content');
-    if (editorContent) {
-        editorContent.style.display = 'block';
-        editorContent.style.visibility = 'visible';
-    }
+        this.stopPreview();
+        const panel = document.getElementById('animation-editor-panel');
+        if (panel) {
+            panel.style.display = 'none';
+        }
 
-    const editorTab = document.querySelector('.tab:last-child');
-    if (editorTab) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        editorTab.classList.add('active');
-        editorTab.click();
-    }
-}
+        const editorContent = document.getElementById('editor-content');
+        if (editorContent) {
+            editorContent.style.display = 'block';
+            editorContent.style.visibility = 'visible';
+        }
 
+        const editorTab = document.querySelector('.tab:last-child');
+        if (editorTab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            editorTab.classList.add('active');
+            editorTab.click();
+        }
+    }
 
     show() {
+        // Store which editor is opened
+        if (this.game && this.game.app) {
+            this.game.app.lastOpenedEditor = 'animation-editor-panel';
+        }
 
-    // Store which editor is opened
-    if (this.game && this.game.app) {
-        this.game.app.lastOpenedEditor = 'animation-editor-panel';
-    }
-
-const editorContent = document.getElementById('editor-content');
-if (editorContent) {
-    editorContent.style.display = 'none';
-    editorContent.style.visibility = 'hidden';
-}
+        const editorContent = document.getElementById('editor-content');
+        if (editorContent) {
+            editorContent.style.display = 'none';
+            editorContent.style.visibility = 'hidden';
+        }
 
         const panel = document.getElementById('animation-editor-panel');
         if (panel) {
             panel.style.display = 'block';
         }
-        this.populateEntityList();
-        this.updateWorkflowUI();
-        this.updateSizeOptions();
-        this.updateSubtypeOptions();
-        if (this.workflow === 'existing') {
-            this.updateExistingDimensions();
+        
+        // Restart update interval if needed
+        if (!this._updateInterval) {
+            this._updateInterval = setInterval(() => {
+                this.updateEntityInfo();
+            }, 250);
         }
+        
+        // Update entity info when showing
+        this.updateEntityInfo();
+        this.updateWorkflowUI();
+        this.setStatus('Ready', 'info');
     }
 }

@@ -3,7 +3,7 @@ ZOMBIESURVIVAL PROJECT DUMP
 ================================================================================
 
 Project Root: C:\Users\ninad\Downloads\ZombieSurvival_Tauri
-Total Files Included: 69
+Total Files Included: 72
 
 ================================================================================
 PROJECT STRUCTURE
@@ -83,6 +83,10 @@ ZombieSurvival_Tauri
 │   │   └── templateLoader.js
 │   └── main.rs
 ├── temp
+│   ├── anim_test
+│   │   ├── stick_01.png
+│   │   ├── stick_02.png
+│   │   └── stick_03.png
 │   ├── bed.png
 │   ├── crate.png
 │   ├── door.png
@@ -111,7 +115,7 @@ FILE CONTENTS
 
 
 ################################################################################
-FILE 1/69: .gitignore
+FILE 1/72: .gitignore
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -120,7 +124,7 @@ Size: 205 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 2/69: assets\sprites\medicine.png
+FILE 2/72: assets\sprites\medicine.png
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -129,7 +133,7 @@ Size: 1129 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 3/69: build.rs
+FILE 3/72: build.rs
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -138,7 +142,7 @@ Size: 42 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 4/69: Cargo.lock
+FILE 4/72: Cargo.lock
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -147,7 +151,7 @@ Size: 113629 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 5/69: Cargo.toml
+FILE 5/72: Cargo.toml
 ################################################################################
 
 [package]
@@ -180,7 +184,7 @@ custom-protocol = ["tauri/custom-protocol"]
 
 
 ################################################################################
-FILE 6/69: data\animations\animation_schema.json
+FILE 6/72: data\animations\animation_schema.json
 ################################################################################
 
 {
@@ -233,7 +237,7 @@ FILE 6/69: data\animations\animation_schema.json
 }
 
 ################################################################################
-FILE 7/69: data\dialogue\cutscene_test.json
+FILE 7/72: data\dialogue\cutscene_test.json
 ################################################################################
 
 {
@@ -284,7 +288,7 @@ FILE 7/69: data\dialogue\cutscene_test.json
 }
 
 ################################################################################
-FILE 8/69: data\dialogue\kill_mission_start.json
+FILE 8/72: data\dialogue\kill_mission_start.json
 ################################################################################
 
 {
@@ -317,7 +321,7 @@ FILE 8/69: data\dialogue\kill_mission_start.json
 }
 
 ################################################################################
-FILE 9/69: data\dialogue\test_conversation copy.txt
+FILE 9/72: data\dialogue\test_conversation copy.txt
 ################################################################################
 
 /*
@@ -358,7 +362,7 @@ FILE 9/69: data\dialogue\test_conversation copy.txt
 */
 
 ################################################################################
-FILE 10/69: data\dialogue\test_conversation.json
+FILE 10/72: data\dialogue\test_conversation.json
 ################################################################################
 
 {
@@ -403,7 +407,7 @@ FILE 10/69: data\dialogue\test_conversation.json
 }
 
 ################################################################################
-FILE 11/69: data\locations\abandoned_house.json
+FILE 11/72: data\locations\abandoned_house.json
 ################################################################################
 
 {
@@ -464,7 +468,7 @@ FILE 11/69: data\locations\abandoned_house.json
 }
 
 ################################################################################
-FILE 12/69: data\locations\pine_ridge.json
+FILE 12/72: data\locations\pine_ridge.json
 ################################################################################
 
 {
@@ -608,7 +612,7 @@ FILE 12/69: data\locations\pine_ridge.json
 }
 
 ################################################################################
-FILE 13/69: data\locations\test_outside.json
+FILE 13/72: data\locations\test_outside.json
 ################################################################################
 
 {
@@ -687,7 +691,7 @@ FILE 13/69: data\locations\test_outside.json
 }
 
 ################################################################################
-FILE 14/69: data\missions\example_test_mission.json
+FILE 14/72: data\missions\example_test_mission.json
 ################################################################################
 
 {
@@ -726,7 +730,7 @@ FILE 14/69: data\missions\example_test_mission.json
 }
 
 ################################################################################
-FILE 15/69: data\missions\first_steps.json
+FILE 15/72: data\missions\first_steps.json
 ################################################################################
 
 {
@@ -779,7 +783,7 @@ FILE 15/69: data\missions\first_steps.json
 }
 
 ################################################################################
-FILE 16/69: data\missions\kill_test.json
+FILE 16/72: data\missions\kill_test.json
 ################################################################################
 
 {
@@ -818,7 +822,7 @@ FILE 16/69: data\missions\kill_test.json
 }
 
 ################################################################################
-FILE 17/69: data\npcs\npc_templates.json
+FILE 17/72: data\npcs\npc_templates.json
 ################################################################################
 
 {
@@ -894,7 +898,7 @@ FILE 17/69: data\npcs\npc_templates.json
 }
 
 ################################################################################
-FILE 18/69: data\settings.json
+FILE 18/72: data\settings.json
 ################################################################################
 
 {
@@ -914,7 +918,7 @@ FILE 18/69: data\settings.json
 }
 
 ################################################################################
-FILE 19/69: docs\cutscene_guide.txt
+FILE 19/72: docs\cutscene_guide.txt
 ################################################################################
 
 ZombieSurvival - Cutscene / Focus Syntax Guide
@@ -1095,19 +1099,19 @@ Line 3 → snap to 99,99 + Static bars
 Line 4 → Player + Squeeze Out
 
 ################################################################################
-FILE 20/69: gen\schemas\acl-manifests.json
+FILE 20/72: gen\schemas\acl-manifests.json
 ################################################################################
 
 {"core":{"default_permission":{"identifier":"default","description":"Default core plugins set.","permissions":["core:path:default","core:event:default","core:window:default","core:webview:default","core:app:default","core:image:default","core:resources:default","core:menu:default","core:tray:default"]},"permissions":{},"permission_sets":{},"global_scope_schema":null},"core:app":{"default_permission":{"identifier":"default","description":"Default permissions for the plugin.","permissions":["allow-version","allow-name","allow-tauri-version","allow-identifier","allow-bundle-type","allow-register-listener","allow-remove-listener","allow-supports-multiple-windows"]},"permissions":{"allow-app-hide":{"identifier":"allow-app-hide","description":"Enables the app_hide command without any pre-configured scope.","commands":{"allow":["app_hide"],"deny":[]}},"allow-app-show":{"identifier":"allow-app-show","description":"Enables the app_show command without any pre-configured scope.","commands":{"allow":["app_show"],"deny":[]}},"allow-bundle-type":{"identifier":"allow-bundle-type","description":"Enables the bundle_type command without any pre-configured scope.","commands":{"allow":["bundle_type"],"deny":[]}},"allow-default-window-icon":{"identifier":"allow-default-window-icon","description":"Enables the default_window_icon command without any pre-configured scope.","commands":{"allow":["default_window_icon"],"deny":[]}},"allow-fetch-data-store-identifiers":{"identifier":"allow-fetch-data-store-identifiers","description":"Enables the fetch_data_store_identifiers command without any pre-configured scope.","commands":{"allow":["fetch_data_store_identifiers"],"deny":[]}},"allow-identifier":{"identifier":"allow-identifier","description":"Enables the identifier command without any pre-configured scope.","commands":{"allow":["identifier"],"deny":[]}},"allow-name":{"identifier":"allow-name","description":"Enables the name command without any pre-configured scope.","commands":{"allow":["name"],"deny":[]}},"allow-register-listener":{"identifier":"allow-register-listener","description":"Enables the register_listener command without any pre-configured scope.","commands":{"allow":["register_listener"],"deny":[]}},"allow-remove-data-store":{"identifier":"allow-remove-data-store","description":"Enables the remove_data_store command without any pre-configured scope.","commands":{"allow":["remove_data_store"],"deny":[]}},"allow-remove-listener":{"identifier":"allow-remove-listener","description":"Enables the remove_listener command without any pre-configured scope.","commands":{"allow":["remove_listener"],"deny":[]}},"allow-set-app-theme":{"identifier":"allow-set-app-theme","description":"Enables the set_app_theme command without any pre-configured scope.","commands":{"allow":["set_app_theme"],"deny":[]}},"allow-set-dock-visibility":{"identifier":"allow-set-dock-visibility","description":"Enables the set_dock_visibility command without any pre-configured scope.","commands":{"allow":["set_dock_visibility"],"deny":[]}},"allow-supports-multiple-windows":{"identifier":"allow-supports-multiple-windows","description":"Enables the supports_multiple_windows command without any pre-configured scope.","commands":{"allow":["supports_multiple_windows"],"deny":[]}},"allow-tauri-version":{"identifier":"allow-tauri-version","description":"Enables the tauri_version command without any pre-configured scope.","commands":{"allow":["tauri_version"],"deny":[]}},"allow-version":{"identifier":"allow-version","description":"Enables the version command without any pre-configured scope.","commands":{"allow":["version"],"deny":[]}},"deny-app-hide":{"identifier":"deny-app-hide","description":"Denies the app_hide command without any pre-configured scope.","commands":{"allow":[],"deny":["app_hide"]}},"deny-app-show":{"identifier":"deny-app-show","description":"Denies the app_show command without any pre-configured scope.","commands":{"allow":[],"deny":["app_show"]}},"deny-bundle-type":{"identifier":"deny-bundle-type","description":"Denies the bundle_type command without any pre-configured scope.","commands":{"allow":[],"deny":["bundle_type"]}},"deny-default-window-icon":{"identifier":"deny-default-window-icon","description":"Denies the default_window_icon command without any pre-configured scope.","commands":{"allow":[],"deny":["default_window_icon"]}},"deny-fetch-data-store-identifiers":{"identifier":"deny-fetch-data-store-identifiers","description":"Denies the fetch_data_store_identifiers command without any pre-configured scope.","commands":{"allow":[],"deny":["fetch_data_store_identifiers"]}},"deny-identifier":{"identifier":"deny-identifier","description":"Denies the identifier command without any pre-configured scope.","commands":{"allow":[],"deny":["identifier"]}},"deny-name":{"identifier":"deny-name","description":"Denies the name command without any pre-configured scope.","commands":{"allow":[],"deny":["name"]}},"deny-register-listener":{"identifier":"deny-register-listener","description":"Denies the register_listener command without any pre-configured scope.","commands":{"allow":[],"deny":["register_listener"]}},"deny-remove-data-store":{"identifier":"deny-remove-data-store","description":"Denies the remove_data_store command without any pre-configured scope.","commands":{"allow":[],"deny":["remove_data_store"]}},"deny-remove-listener":{"identifier":"deny-remove-listener","description":"Denies the remove_listener command without any pre-configured scope.","commands":{"allow":[],"deny":["remove_listener"]}},"deny-set-app-theme":{"identifier":"deny-set-app-theme","description":"Denies the set_app_theme command without any pre-configured scope.","commands":{"allow":[],"deny":["set_app_theme"]}},"deny-set-dock-visibility":{"identifier":"deny-set-dock-visibility","description":"Denies the set_dock_visibility command without any pre-configured scope.","commands":{"allow":[],"deny":["set_dock_visibility"]}},"deny-supports-multiple-windows":{"identifier":"deny-supports-multiple-windows","description":"Denies the supports_multiple_windows command without any pre-configured scope.","commands":{"allow":[],"deny":["supports_multiple_windows"]}},"deny-tauri-version":{"identifier":"deny-tauri-version","description":"Denies the tauri_version command without any pre-configured scope.","commands":{"allow":[],"deny":["tauri_version"]}},"deny-version":{"identifier":"deny-version","description":"Denies the version command without any pre-configured scope.","commands":{"allow":[],"deny":["version"]}}},"permission_sets":{},"global_scope_schema":null},"core:event":{"default_permission":{"identifier":"default","description":"Default permissions for the plugin, which enables all commands.","permissions":["allow-listen","allow-unlisten","allow-emit","allow-emit-to"]},"permissions":{"allow-emit":{"identifier":"allow-emit","description":"Enables the emit command without any pre-configured scope.","commands":{"allow":["emit"],"deny":[]}},"allow-emit-to":{"identifier":"allow-emit-to","description":"Enables the emit_to command without any pre-configured scope.","commands":{"allow":["emit_to"],"deny":[]}},"allow-listen":{"identifier":"allow-listen","description":"Enables the listen command without any pre-configured scope.","commands":{"allow":["listen"],"deny":[]}},"allow-unlisten":{"identifier":"allow-unlisten","description":"Enables the unlisten command without any pre-configured scope.","commands":{"allow":["unlisten"],"deny":[]}},"deny-emit":{"identifier":"deny-emit","description":"Denies the emit command without any pre-configured scope.","commands":{"allow":[],"deny":["emit"]}},"deny-emit-to":{"identifier":"deny-emit-to","description":"Denies the emit_to command without any pre-configured scope.","commands":{"allow":[],"deny":["emit_to"]}},"deny-listen":{"identifier":"deny-listen","description":"Denies the listen command without any pre-configured scope.","commands":{"allow":[],"deny":["listen"]}},"deny-unlisten":{"identifier":"deny-unlisten","description":"Denies the unlisten command without any pre-configured scope.","commands":{"allow":[],"deny":["unlisten"]}}},"permission_sets":{},"global_scope_schema":null},"core:image":{"default_permission":{"identifier":"default","description":"Default permissions for the plugin, which enables all commands.","permissions":["allow-new","allow-from-bytes","allow-from-path","allow-rgba","allow-size"]},"permissions":{"allow-from-bytes":{"identifier":"allow-from-bytes","description":"Enables the from_bytes command without any pre-configured scope.","commands":{"allow":["from_bytes"],"deny":[]}},"allow-from-path":{"identifier":"allow-from-path","description":"Enables the from_path command without any pre-configured scope.","commands":{"allow":["from_path"],"deny":[]}},"allow-new":{"identifier":"allow-new","description":"Enables the new command without any pre-configured scope.","commands":{"allow":["new"],"deny":[]}},"allow-rgba":{"identifier":"allow-rgba","description":"Enables the rgba command without any pre-configured scope.","commands":{"allow":["rgba"],"deny":[]}},"allow-size":{"identifier":"allow-size","description":"Enables the size command without any pre-configured scope.","commands":{"allow":["size"],"deny":[]}},"deny-from-bytes":{"identifier":"deny-from-bytes","description":"Denies the from_bytes command without any pre-configured scope.","commands":{"allow":[],"deny":["from_bytes"]}},"deny-from-path":{"identifier":"deny-from-path","description":"Denies the from_path command without any pre-configured scope.","commands":{"allow":[],"deny":["from_path"]}},"deny-new":{"identifier":"deny-new","description":"Denies the new command without any pre-configured scope.","commands":{"allow":[],"deny":["new"]}},"deny-rgba":{"identifier":"deny-rgba","description":"Denies the rgba command without any pre-configured scope.","commands":{"allow":[],"deny":["rgba"]}},"deny-size":{"identifier":"deny-size","description":"Denies the size command without any pre-configured scope.","commands":{"allow":[],"deny":["size"]}}},"permission_sets":{},"global_scope_schema":null},"core:menu":{"default_permission":{"identifier":"default","description":"Default permissions for the plugin, which enables all commands.","permissions":["allow-new","allow-append","allow-prepend","allow-insert","allow-remove","allow-remove-at","allow-items","allow-get","allow-popup","allow-create-default","allow-set-as-app-menu","allow-set-as-window-menu","allow-text","allow-set-text","allow-is-enabled","allow-set-enabled","allow-set-accelerator","allow-set-as-windows-menu-for-nsapp","allow-set-as-help-menu-for-nsapp","allow-is-checked","allow-set-checked","allow-set-icon"]},"permissions":{"allow-append":{"identifier":"allow-append","description":"Enables the append command without any pre-configured scope.","commands":{"allow":["append"],"deny":[]}},"allow-create-default":{"identifier":"allow-create-default","description":"Enables the create_default command without any pre-configured scope.","commands":{"allow":["create_default"],"deny":[]}},"allow-get":{"identifier":"allow-get","description":"Enables the get command without any pre-configured scope.","commands":{"allow":["get"],"deny":[]}},"allow-insert":{"identifier":"allow-insert","description":"Enables the insert command without any pre-configured scope.","commands":{"allow":["insert"],"deny":[]}},"allow-is-checked":{"identifier":"allow-is-checked","description":"Enables the is_checked command without any pre-configured scope.","commands":{"allow":["is_checked"],"deny":[]}},"allow-is-enabled":{"identifier":"allow-is-enabled","description":"Enables the is_enabled command without any pre-configured scope.","commands":{"allow":["is_enabled"],"deny":[]}},"allow-items":{"identifier":"allow-items","description":"Enables the items command without any pre-configured scope.","commands":{"allow":["items"],"deny":[]}},"allow-new":{"identifier":"allow-new","description":"Enables the new command without any pre-configured scope.","commands":{"allow":["new"],"deny":[]}},"allow-popup":{"identifier":"allow-popup","description":"Enables the popup command without any pre-configured scope.","commands":{"allow":["popup"],"deny":[]}},"allow-prepend":{"identifier":"allow-prepend","description":"Enables the prepend command without any pre-configured scope.","commands":{"allow":["prepend"],"deny":[]}},"allow-remove":{"identifier":"allow-remove","description":"Enables the remove command without any pre-configured scope.","commands":{"allow":["remove"],"deny":[]}},"allow-remove-at":{"identifier":"allow-remove-at","description":"Enables the remove_at command without any pre-configured scope.","commands":{"allow":["remove_at"],"deny":[]}},"allow-set-accelerator":{"identifier":"allow-set-accelerator","description":"Enables the set_accelerator command without any pre-configured scope.","commands":{"allow":["set_accelerator"],"deny":[]}},"allow-set-as-app-menu":{"identifier":"allow-set-as-app-menu","description":"Enables the set_as_app_menu command without any pre-configured scope.","commands":{"allow":["set_as_app_menu"],"deny":[]}},"allow-set-as-help-menu-for-nsapp":{"identifier":"allow-set-as-help-menu-for-nsapp","description":"Enables the set_as_help_menu_for_nsapp command without any pre-configured scope.","commands":{"allow":["set_as_help_menu_for_nsapp"],"deny":[]}},"allow-set-as-window-menu":{"identifier":"allow-set-as-window-menu","description":"Enables the set_as_window_menu command without any pre-configured scope.","commands":{"allow":["set_as_window_menu"],"deny":[]}},"allow-set-as-windows-menu-for-nsapp":{"identifier":"allow-set-as-windows-menu-for-nsapp","description":"Enables the set_as_windows_menu_for_nsapp command without any pre-configured scope.","commands":{"allow":["set_as_windows_menu_for_nsapp"],"deny":[]}},"allow-set-checked":{"identifier":"allow-set-checked","description":"Enables the set_checked command without any pre-configured scope.","commands":{"allow":["set_checked"],"deny":[]}},"allow-set-enabled":{"identifier":"allow-set-enabled","description":"Enables the set_enabled command without any pre-configured scope.","commands":{"allow":["set_enabled"],"deny":[]}},"allow-set-icon":{"identifier":"allow-set-icon","description":"Enables the set_icon command without any pre-configured scope.","commands":{"allow":["set_icon"],"deny":[]}},"allow-set-text":{"identifier":"allow-set-text","description":"Enables the set_text command without any pre-configured scope.","commands":{"allow":["set_text"],"deny":[]}},"allow-text":{"identifier":"allow-text","description":"Enables the text command without any pre-configured scope.","commands":{"allow":["text"],"deny":[]}},"deny-append":{"identifier":"deny-append","description":"Denies the append command without any pre-configured scope.","commands":{"allow":[],"deny":["append"]}},"deny-create-default":{"identifier":"deny-create-default","description":"Denies the create_default command without any pre-configured scope.","commands":{"allow":[],"deny":["create_default"]}},"deny-get":{"identifier":"deny-get","description":"Denies the get command without any pre-configured scope.","commands":{"allow":[],"deny":["get"]}},"deny-insert":{"identifier":"deny-insert","description":"Denies the insert command without any pre-configured scope.","commands":{"allow":[],"deny":["insert"]}},"deny-is-checked":{"identifier":"deny-is-checked","description":"Denies the is_checked command without any pre-configured scope.","commands":{"allow":[],"deny":["is_checked"]}},"deny-is-enabled":{"identifier":"deny-is-enabled","description":"Denies the is_enabled command without any pre-configured scope.","commands":{"allow":[],"deny":["is_enabled"]}},"deny-items":{"identifier":"deny-items","description":"Denies the items command without any pre-configured scope.","commands":{"allow":[],"deny":["items"]}},"deny-new":{"identifier":"deny-new","description":"Denies the new command without any pre-configured scope.","commands":{"allow":[],"deny":["new"]}},"deny-popup":{"identifier":"deny-popup","description":"Denies the popup command without any pre-configured scope.","commands":{"allow":[],"deny":["popup"]}},"deny-prepend":{"identifier":"deny-prepend","description":"Denies the prepend command without any pre-configured scope.","commands":{"allow":[],"deny":["prepend"]}},"deny-remove":{"identifier":"deny-remove","description":"Denies the remove command without any pre-configured scope.","commands":{"allow":[],"deny":["remove"]}},"deny-remove-at":{"identifier":"deny-remove-at","description":"Denies the remove_at command without any pre-configured scope.","commands":{"allow":[],"deny":["remove_at"]}},"deny-set-accelerator":{"identifier":"deny-set-accelerator","description":"Denies the set_accelerator command without any pre-configured scope.","commands":{"allow":[],"deny":["set_accelerator"]}},"deny-set-as-app-menu":{"identifier":"deny-set-as-app-menu","description":"Denies the set_as_app_menu command without any pre-configured scope.","commands":{"allow":[],"deny":["set_as_app_menu"]}},"deny-set-as-help-menu-for-nsapp":{"identifier":"deny-set-as-help-menu-for-nsapp","description":"Denies the set_as_help_menu_for_nsapp command without any pre-configured scope.","commands":{"allow":[],"deny":["set_as_help_menu_for_nsapp"]}},"deny-set-as-window-menu":{"identifier":"deny-set-as-window-menu","description":"Denies the set_as_window_menu command without any pre-configured scope.","commands":{"allow":[],"deny":["set_as_window_menu"]}},"deny-set-as-windows-menu-for-nsapp":{"identifier":"deny-set-as-windows-menu-for-nsapp","description":"Denies the set_as_windows_menu_for_nsapp command without any pre-configured scope.","commands":{"allow":[],"deny":["set_as_windows_menu_for_nsapp"]}},"deny-set-checked":{"identifier":"deny-set-checked","description":"Denies the set_checked command without any pre-configured scope.","commands":{"allow":[],"deny":["set_checked"]}},"deny-set-enabled":{"identifier":"deny-set-enabled","description":"Denies the set_enabled command without any pre-configured scope.","commands":{"allow":[],"deny":["set_enabled"]}},"deny-set-icon":{"identifier":"deny-set-icon","description":"Denies the set_icon command without any pre-configured scope.","commands":{"allow":[],"deny":["set_icon"]}},"deny-set-text":{"identifier":"deny-set-text","description":"Denies the set_text command without any pre-configured scope.","commands":{"allow":[],"deny":["set_text"]}},"deny-text":{"identifier":"deny-text","description":"Denies the text command without any pre-configured scope.","commands":{"allow":[],"deny":["text"]}}},"permission_sets":{},"global_scope_schema":null},"core:path":{"default_permission":{"identifier":"default","description":"Default permissions for the plugin, which enables all commands.","permissions":["allow-resolve-directory","allow-resolve","allow-normalize","allow-join","allow-dirname","allow-extname","allow-basename","allow-is-absolute"]},"permissions":{"allow-basename":{"identifier":"allow-basename","description":"Enables the basename command without any pre-configured scope.","commands":{"allow":["basename"],"deny":[]}},"allow-dirname":{"identifier":"allow-dirname","description":"Enables the dirname command without any pre-configured scope.","commands":{"allow":["dirname"],"deny":[]}},"allow-extname":{"identifier":"allow-extname","description":"Enables the extname command without any pre-configured scope.","commands":{"allow":["extname"],"deny":[]}},"allow-is-absolute":{"identifier":"allow-is-absolute","description":"Enables the is_absolute command without any pre-configured scope.","commands":{"allow":["is_absolute"],"deny":[]}},"allow-join":{"identifier":"allow-join","description":"Enables the join command without any pre-configured scope.","commands":{"allow":["join"],"deny":[]}},"allow-normalize":{"identifier":"allow-normalize","description":"Enables the normalize command without any pre-configured scope.","commands":{"allow":["normalize"],"deny":[]}},"allow-resolve":{"identifier":"allow-resolve","description":"Enables the resolve command without any pre-configured scope.","commands":{"allow":["resolve"],"deny":[]}},"allow-resolve-directory":{"identifier":"allow-resolve-directory","description":"Enables the resolve_directory command without any pre-configured scope.","commands":{"allow":["resolve_directory"],"deny":[]}},"deny-basename":{"identifier":"deny-basename","description":"Denies the basename command without any pre-configured scope.","commands":{"allow":[],"deny":["basename"]}},"deny-dirname":{"identifier":"deny-dirname","description":"Denies the dirname command without any pre-configured scope.","commands":{"allow":[],"deny":["dirname"]}},"deny-extname":{"identifier":"deny-extname","description":"Denies the extname command without any pre-configured scope.","commands":{"allow":[],"deny":["extname"]}},"deny-is-absolute":{"identifier":"deny-is-absolute","description":"Denies the is_absolute command without any pre-configured scope.","commands":{"allow":[],"deny":["is_absolute"]}},"deny-join":{"identifier":"deny-join","description":"Denies the join command without any pre-configured scope.","commands":{"allow":[],"deny":["join"]}},"deny-normalize":{"identifier":"deny-normalize","description":"Denies the normalize command without any pre-configured scope.","commands":{"allow":[],"deny":["normalize"]}},"deny-resolve":{"identifier":"deny-resolve","description":"Denies the resolve command without any pre-configured scope.","commands":{"allow":[],"deny":["resolve"]}},"deny-resolve-directory":{"identifier":"deny-resolve-directory","description":"Denies the resolve_directory command without any pre-configured scope.","commands":{"allow":[],"deny":["resolve_directory"]}}},"permission_sets":{},"global_scope_schema":null},"core:resources":{"default_permission":{"identifier":"default","description":"Default permissions for the plugin, which enables all commands.","permissions":["allow-close"]},"permissions":{"allow-close":{"identifier":"allow-close","description":"Enables the close command without any pre-configured scope.","commands":{"allow":["close"],"deny":[]}},"deny-close":{"identifier":"deny-close","description":"Denies the close command without any pre-configured scope.","commands":{"allow":[],"deny":["close"]}}},"permission_sets":{},"global_scope_schema":null},"core:tray":{"default_permission":{"identifier":"default","description":"Default permissions for the plugin, which enables all commands.","permissions":["allow-new","allow-get-by-id","allow-remove-by-id","allow-set-icon","allow-set-menu","allow-set-tooltip","allow-set-title","allow-set-visible","allow-set-temp-dir-path","allow-set-icon-as-template","allow-set-icon-with-as-template","allow-set-show-menu-on-left-click"]},"permissions":{"allow-get-by-id":{"identifier":"allow-get-by-id","description":"Enables the get_by_id command without any pre-configured scope.","commands":{"allow":["get_by_id"],"deny":[]}},"allow-new":{"identifier":"allow-new","description":"Enables the new command without any pre-configured scope.","commands":{"allow":["new"],"deny":[]}},"allow-remove-by-id":{"identifier":"allow-remove-by-id","description":"Enables the remove_by_id command without any pre-configured scope.","commands":{"allow":["remove_by_id"],"deny":[]}},"allow-set-icon":{"identifier":"allow-set-icon","description":"Enables the set_icon command without any pre-configured scope.","commands":{"allow":["set_icon"],"deny":[]}},"allow-set-icon-as-template":{"identifier":"allow-set-icon-as-template","description":"Enables the set_icon_as_template command without any pre-configured scope.","commands":{"allow":["set_icon_as_template"],"deny":[]}},"allow-set-icon-with-as-template":{"identifier":"allow-set-icon-with-as-template","description":"Enables the set_icon_with_as_template command without any pre-configured scope.","commands":{"allow":["set_icon_with_as_template"],"deny":[]}},"allow-set-menu":{"identifier":"allow-set-menu","description":"Enables the set_menu command without any pre-configured scope.","commands":{"allow":["set_menu"],"deny":[]}},"allow-set-show-menu-on-left-click":{"identifier":"allow-set-show-menu-on-left-click","description":"Enables the set_show_menu_on_left_click command without any pre-configured scope.","commands":{"allow":["set_show_menu_on_left_click"],"deny":[]}},"allow-set-temp-dir-path":{"identifier":"allow-set-temp-dir-path","description":"Enables the set_temp_dir_path command without any pre-configured scope.","commands":{"allow":["set_temp_dir_path"],"deny":[]}},"allow-set-title":{"identifier":"allow-set-title","description":"Enables the set_title command without any pre-configured scope.","commands":{"allow":["set_title"],"deny":[]}},"allow-set-tooltip":{"identifier":"allow-set-tooltip","description":"Enables the set_tooltip command without any pre-configured scope.","commands":{"allow":["set_tooltip"],"deny":[]}},"allow-set-visible":{"identifier":"allow-set-visible","description":"Enables the set_visible command without any pre-configured scope.","commands":{"allow":["set_visible"],"deny":[]}},"deny-get-by-id":{"identifier":"deny-get-by-id","description":"Denies the get_by_id command without any pre-configured scope.","commands":{"allow":[],"deny":["get_by_id"]}},"deny-new":{"identifier":"deny-new","description":"Denies the new command without any pre-configured scope.","commands":{"allow":[],"deny":["new"]}},"deny-remove-by-id":{"identifier":"deny-remove-by-id","description":"Denies the remove_by_id command without any pre-configured scope.","commands":{"allow":[],"deny":["remove_by_id"]}},"deny-set-icon":{"identifier":"deny-set-icon","description":"Denies the set_icon command without any pre-configured scope.","commands":{"allow":[],"deny":["set_icon"]}},"deny-set-icon-as-template":{"identifier":"deny-set-icon-as-template","description":"Denies the set_icon_as_template command without any pre-configured scope.","commands":{"allow":[],"deny":["set_icon_as_template"]}},"deny-set-icon-with-as-template":{"identifier":"deny-set-icon-with-as-template","description":"Denies the set_icon_with_as_template command without any pre-configured scope.","commands":{"allow":[],"deny":["set_icon_with_as_template"]}},"deny-set-menu":{"identifier":"deny-set-menu","description":"Denies the set_menu command without any pre-configured scope.","commands":{"allow":[],"deny":["set_menu"]}},"deny-set-show-menu-on-left-click":{"identifier":"deny-set-show-menu-on-left-click","description":"Denies the set_show_menu_on_left_click command without any pre-configured scope.","commands":{"allow":[],"deny":["set_show_menu_on_left_click"]}},"deny-set-temp-dir-path":{"identifier":"deny-set-temp-dir-path","description":"Denies the set_temp_dir_path command without any pre-configured scope.","commands":{"allow":[],"deny":["set_temp_dir_path"]}},"deny-set-title":{"identifier":"deny-set-title","description":"Denies the set_title command without any pre-configured scope.","commands":{"allow":[],"deny":["set_title"]}},"deny-set-tooltip":{"identifier":"deny-set-tooltip","description":"Denies the set_tooltip command without any pre-configured scope.","commands":{"allow":[],"deny":["set_tooltip"]}},"deny-set-visible":{"identifier":"deny-set-visible","description":"Denies the set_visible command without any pre-configured scope.","commands":{"allow":[],"deny":["set_visible"]}}},"permission_sets":{},"global_scope_schema":null},"core:webview":{"default_permission":{"identifier":"default","description":"Default permissions for the plugin.","permissions":["allow-get-all-webviews","allow-webview-position","allow-webview-size","allow-internal-toggle-devtools"]},"permissions":{"allow-clear-all-browsing-data":{"identifier":"allow-clear-all-browsing-data","description":"Enables the clear_all_browsing_data command without any pre-configured scope.","commands":{"allow":["clear_all_browsing_data"],"deny":[]}},"allow-create-webview":{"identifier":"allow-create-webview","description":"Enables the create_webview command without any pre-configured scope.","commands":{"allow":["create_webview"],"deny":[]}},"allow-create-webview-window":{"identifier":"allow-create-webview-window","description":"Enables the create_webview_window command without any pre-configured scope.","commands":{"allow":["create_webview_window"],"deny":[]}},"allow-get-all-webviews":{"identifier":"allow-get-all-webviews","description":"Enables the get_all_webviews command without any pre-configured scope.","commands":{"allow":["get_all_webviews"],"deny":[]}},"allow-internal-toggle-devtools":{"identifier":"allow-internal-toggle-devtools","description":"Enables the internal_toggle_devtools command without any pre-configured scope.","commands":{"allow":["internal_toggle_devtools"],"deny":[]}},"allow-print":{"identifier":"allow-print","description":"Enables the print command without any pre-configured scope.","commands":{"allow":["print"],"deny":[]}},"allow-reparent":{"identifier":"allow-reparent","description":"Enables the reparent command without any pre-configured scope.","commands":{"allow":["reparent"],"deny":[]}},"allow-set-webview-auto-resize":{"identifier":"allow-set-webview-auto-resize","description":"Enables the set_webview_auto_resize command without any pre-configured scope.","commands":{"allow":["set_webview_auto_resize"],"deny":[]}},"allow-set-webview-background-color":{"identifier":"allow-set-webview-background-color","description":"Enables the set_webview_background_color command without any pre-configured scope.","commands":{"allow":["set_webview_background_color"],"deny":[]}},"allow-set-webview-focus":{"identifier":"allow-set-webview-focus","description":"Enables the set_webview_focus command without any pre-configured scope.","commands":{"allow":["set_webview_focus"],"deny":[]}},"allow-set-webview-position":{"identifier":"allow-set-webview-position","description":"Enables the set_webview_position command without any pre-configured scope.","commands":{"allow":["set_webview_position"],"deny":[]}},"allow-set-webview-size":{"identifier":"allow-set-webview-size","description":"Enables the set_webview_size command without any pre-configured scope.","commands":{"allow":["set_webview_size"],"deny":[]}},"allow-set-webview-zoom":{"identifier":"allow-set-webview-zoom","description":"Enables the set_webview_zoom command without any pre-configured scope.","commands":{"allow":["set_webview_zoom"],"deny":[]}},"allow-webview-close":{"identifier":"allow-webview-close","description":"Enables the webview_close command without any pre-configured scope.","commands":{"allow":["webview_close"],"deny":[]}},"allow-webview-hide":{"identifier":"allow-webview-hide","description":"Enables the webview_hide command without any pre-configured scope.","commands":{"allow":["webview_hide"],"deny":[]}},"allow-webview-position":{"identifier":"allow-webview-position","description":"Enables the webview_position command without any pre-configured scope.","commands":{"allow":["webview_position"],"deny":[]}},"allow-webview-show":{"identifier":"allow-webview-show","description":"Enables the webview_show command without any pre-configured scope.","commands":{"allow":["webview_show"],"deny":[]}},"allow-webview-size":{"identifier":"allow-webview-size","description":"Enables the webview_size command without any pre-configured scope.","commands":{"allow":["webview_size"],"deny":[]}},"deny-clear-all-browsing-data":{"identifier":"deny-clear-all-browsing-data","description":"Denies the clear_all_browsing_data command without any pre-configured scope.","commands":{"allow":[],"deny":["clear_all_browsing_data"]}},"deny-create-webview":{"identifier":"deny-create-webview","description":"Denies the create_webview command without any pre-configured scope.","commands":{"allow":[],"deny":["create_webview"]}},"deny-create-webview-window":{"identifier":"deny-create-webview-window","description":"Denies the create_webview_window command without any pre-configured scope.","commands":{"allow":[],"deny":["create_webview_window"]}},"deny-get-all-webviews":{"identifier":"deny-get-all-webviews","description":"Denies the get_all_webviews command without any pre-configured scope.","commands":{"allow":[],"deny":["get_all_webviews"]}},"deny-internal-toggle-devtools":{"identifier":"deny-internal-toggle-devtools","description":"Denies the internal_toggle_devtools command without any pre-configured scope.","commands":{"allow":[],"deny":["internal_toggle_devtools"]}},"deny-print":{"identifier":"deny-print","description":"Denies the print command without any pre-configured scope.","commands":{"allow":[],"deny":["print"]}},"deny-reparent":{"identifier":"deny-reparent","description":"Denies the reparent command without any pre-configured scope.","commands":{"allow":[],"deny":["reparent"]}},"deny-set-webview-auto-resize":{"identifier":"deny-set-webview-auto-resize","description":"Denies the set_webview_auto_resize command without any pre-configured scope.","commands":{"allow":[],"deny":["set_webview_auto_resize"]}},"deny-set-webview-background-color":{"identifier":"deny-set-webview-background-color","description":"Denies the set_webview_background_color command without any pre-configured scope.","commands":{"allow":[],"deny":["set_webview_background_color"]}},"deny-set-webview-focus":{"identifier":"deny-set-webview-focus","description":"Denies the set_webview_focus command without any pre-configured scope.","commands":{"allow":[],"deny":["set_webview_focus"]}},"deny-set-webview-position":{"identifier":"deny-set-webview-position","description":"Denies the set_webview_position command without any pre-configured scope.","commands":{"allow":[],"deny":["set_webview_position"]}},"deny-set-webview-size":{"identifier":"deny-set-webview-size","description":"Denies the set_webview_size command without any pre-configured scope.","commands":{"allow":[],"deny":["set_webview_size"]}},"deny-set-webview-zoom":{"identifier":"deny-set-webview-zoom","description":"Denies the set_webview_zoom command without any pre-configured scope.","commands":{"allow":[],"deny":["set_webview_zoom"]}},"deny-webview-close":{"identifier":"deny-webview-close","description":"Denies the webview_close command without any pre-configured scope.","commands":{"allow":[],"deny":["webview_close"]}},"deny-webview-hide":{"identifier":"deny-webview-hide","description":"Denies the webview_hide command without any pre-configured scope.","commands":{"allow":[],"deny":["webview_hide"]}},"deny-webview-position":{"identifier":"deny-webview-position","description":"Denies the webview_position command without any pre-configured scope.","commands":{"allow":[],"deny":["webview_position"]}},"deny-webview-show":{"identifier":"deny-webview-show","description":"Denies the webview_show command without any pre-configured scope.","commands":{"allow":[],"deny":["webview_show"]}},"deny-webview-size":{"identifier":"deny-webview-size","description":"Denies the webview_size command without any pre-configured scope.","commands":{"allow":[],"deny":["webview_size"]}}},"permission_sets":{},"global_scope_schema":null},"core:window":{"default_permission":{"identifier":"default","description":"Default permissions for the plugin.","permissions":["allow-get-all-windows","allow-scale-factor","allow-inner-position","allow-outer-position","allow-inner-size","allow-outer-size","allow-is-fullscreen","allow-is-minimized","allow-is-maximized","allow-is-focused","allow-is-decorated","allow-is-resizable","allow-is-maximizable","allow-is-minimizable","allow-is-closable","allow-is-visible","allow-is-enabled","allow-title","allow-current-monitor","allow-primary-monitor","allow-monitor-from-point","allow-available-monitors","allow-cursor-position","allow-theme","allow-is-always-on-top","allow-activity-name","allow-scene-identifier","allow-internal-toggle-maximize"]},"permissions":{"allow-activity-name":{"identifier":"allow-activity-name","description":"Enables the activity_name command without any pre-configured scope.","commands":{"allow":["activity_name"],"deny":[]}},"allow-available-monitors":{"identifier":"allow-available-monitors","description":"Enables the available_monitors command without any pre-configured scope.","commands":{"allow":["available_monitors"],"deny":[]}},"allow-center":{"identifier":"allow-center","description":"Enables the center command without any pre-configured scope.","commands":{"allow":["center"],"deny":[]}},"allow-close":{"identifier":"allow-close","description":"Enables the close command without any pre-configured scope.","commands":{"allow":["close"],"deny":[]}},"allow-create":{"identifier":"allow-create","description":"Enables the create command without any pre-configured scope.","commands":{"allow":["create"],"deny":[]}},"allow-current-monitor":{"identifier":"allow-current-monitor","description":"Enables the current_monitor command without any pre-configured scope.","commands":{"allow":["current_monitor"],"deny":[]}},"allow-cursor-position":{"identifier":"allow-cursor-position","description":"Enables the cursor_position command without any pre-configured scope.","commands":{"allow":["cursor_position"],"deny":[]}},"allow-destroy":{"identifier":"allow-destroy","description":"Enables the destroy command without any pre-configured scope.","commands":{"allow":["destroy"],"deny":[]}},"allow-get-all-windows":{"identifier":"allow-get-all-windows","description":"Enables the get_all_windows command without any pre-configured scope.","commands":{"allow":["get_all_windows"],"deny":[]}},"allow-hide":{"identifier":"allow-hide","description":"Enables the hide command without any pre-configured scope.","commands":{"allow":["hide"],"deny":[]}},"allow-inner-position":{"identifier":"allow-inner-position","description":"Enables the inner_position command without any pre-configured scope.","commands":{"allow":["inner_position"],"deny":[]}},"allow-inner-size":{"identifier":"allow-inner-size","description":"Enables the inner_size command without any pre-configured scope.","commands":{"allow":["inner_size"],"deny":[]}},"allow-internal-toggle-maximize":{"identifier":"allow-internal-toggle-maximize","description":"Enables the internal_toggle_maximize command without any pre-configured scope.","commands":{"allow":["internal_toggle_maximize"],"deny":[]}},"allow-is-always-on-top":{"identifier":"allow-is-always-on-top","description":"Enables the is_always_on_top command without any pre-configured scope.","commands":{"allow":["is_always_on_top"],"deny":[]}},"allow-is-closable":{"identifier":"allow-is-closable","description":"Enables the is_closable command without any pre-configured scope.","commands":{"allow":["is_closable"],"deny":[]}},"allow-is-decorated":{"identifier":"allow-is-decorated","description":"Enables the is_decorated command without any pre-configured scope.","commands":{"allow":["is_decorated"],"deny":[]}},"allow-is-enabled":{"identifier":"allow-is-enabled","description":"Enables the is_enabled command without any pre-configured scope.","commands":{"allow":["is_enabled"],"deny":[]}},"allow-is-focused":{"identifier":"allow-is-focused","description":"Enables the is_focused command without any pre-configured scope.","commands":{"allow":["is_focused"],"deny":[]}},"allow-is-fullscreen":{"identifier":"allow-is-fullscreen","description":"Enables the is_fullscreen command without any pre-configured scope.","commands":{"allow":["is_fullscreen"],"deny":[]}},"allow-is-maximizable":{"identifier":"allow-is-maximizable","description":"Enables the is_maximizable command without any pre-configured scope.","commands":{"allow":["is_maximizable"],"deny":[]}},"allow-is-maximized":{"identifier":"allow-is-maximized","description":"Enables the is_maximized command without any pre-configured scope.","commands":{"allow":["is_maximized"],"deny":[]}},"allow-is-minimizable":{"identifier":"allow-is-minimizable","description":"Enables the is_minimizable command without any pre-configured scope.","commands":{"allow":["is_minimizable"],"deny":[]}},"allow-is-minimized":{"identifier":"allow-is-minimized","description":"Enables the is_minimized command without any pre-configured scope.","commands":{"allow":["is_minimized"],"deny":[]}},"allow-is-resizable":{"identifier":"allow-is-resizable","description":"Enables the is_resizable command without any pre-configured scope.","commands":{"allow":["is_resizable"],"deny":[]}},"allow-is-visible":{"identifier":"allow-is-visible","description":"Enables the is_visible command without any pre-configured scope.","commands":{"allow":["is_visible"],"deny":[]}},"allow-maximize":{"identifier":"allow-maximize","description":"Enables the maximize command without any pre-configured scope.","commands":{"allow":["maximize"],"deny":[]}},"allow-minimize":{"identifier":"allow-minimize","description":"Enables the minimize command without any pre-configured scope.","commands":{"allow":["minimize"],"deny":[]}},"allow-monitor-from-point":{"identifier":"allow-monitor-from-point","description":"Enables the monitor_from_point command without any pre-configured scope.","commands":{"allow":["monitor_from_point"],"deny":[]}},"allow-outer-position":{"identifier":"allow-outer-position","description":"Enables the outer_position command without any pre-configured scope.","commands":{"allow":["outer_position"],"deny":[]}},"allow-outer-size":{"identifier":"allow-outer-size","description":"Enables the outer_size command without any pre-configured scope.","commands":{"allow":["outer_size"],"deny":[]}},"allow-primary-monitor":{"identifier":"allow-primary-monitor","description":"Enables the primary_monitor command without any pre-configured scope.","commands":{"allow":["primary_monitor"],"deny":[]}},"allow-request-user-attention":{"identifier":"allow-request-user-attention","description":"Enables the request_user_attention command without any pre-configured scope.","commands":{"allow":["request_user_attention"],"deny":[]}},"allow-scale-factor":{"identifier":"allow-scale-factor","description":"Enables the scale_factor command without any pre-configured scope.","commands":{"allow":["scale_factor"],"deny":[]}},"allow-scene-identifier":{"identifier":"allow-scene-identifier","description":"Enables the scene_identifier command without any pre-configured scope.","commands":{"allow":["scene_identifier"],"deny":[]}},"allow-set-always-on-bottom":{"identifier":"allow-set-always-on-bottom","description":"Enables the set_always_on_bottom command without any pre-configured scope.","commands":{"allow":["set_always_on_bottom"],"deny":[]}},"allow-set-always-on-top":{"identifier":"allow-set-always-on-top","description":"Enables the set_always_on_top command without any pre-configured scope.","commands":{"allow":["set_always_on_top"],"deny":[]}},"allow-set-background-color":{"identifier":"allow-set-background-color","description":"Enables the set_background_color command without any pre-configured scope.","commands":{"allow":["set_background_color"],"deny":[]}},"allow-set-badge-count":{"identifier":"allow-set-badge-count","description":"Enables the set_badge_count command without any pre-configured scope.","commands":{"allow":["set_badge_count"],"deny":[]}},"allow-set-badge-label":{"identifier":"allow-set-badge-label","description":"Enables the set_badge_label command without any pre-configured scope.","commands":{"allow":["set_badge_label"],"deny":[]}},"allow-set-closable":{"identifier":"allow-set-closable","description":"Enables the set_closable command without any pre-configured scope.","commands":{"allow":["set_closable"],"deny":[]}},"allow-set-content-protected":{"identifier":"allow-set-content-protected","description":"Enables the set_content_protected command without any pre-configured scope.","commands":{"allow":["set_content_protected"],"deny":[]}},"allow-set-cursor-grab":{"identifier":"allow-set-cursor-grab","description":"Enables the set_cursor_grab command without any pre-configured scope.","commands":{"allow":["set_cursor_grab"],"deny":[]}},"allow-set-cursor-icon":{"identifier":"allow-set-cursor-icon","description":"Enables the set_cursor_icon command without any pre-configured scope.","commands":{"allow":["set_cursor_icon"],"deny":[]}},"allow-set-cursor-position":{"identifier":"allow-set-cursor-position","description":"Enables the set_cursor_position command without any pre-configured scope.","commands":{"allow":["set_cursor_position"],"deny":[]}},"allow-set-cursor-visible":{"identifier":"allow-set-cursor-visible","description":"Enables the set_cursor_visible command without any pre-configured scope.","commands":{"allow":["set_cursor_visible"],"deny":[]}},"allow-set-decorations":{"identifier":"allow-set-decorations","description":"Enables the set_decorations command without any pre-configured scope.","commands":{"allow":["set_decorations"],"deny":[]}},"allow-set-effects":{"identifier":"allow-set-effects","description":"Enables the set_effects command without any pre-configured scope.","commands":{"allow":["set_effects"],"deny":[]}},"allow-set-enabled":{"identifier":"allow-set-enabled","description":"Enables the set_enabled command without any pre-configured scope.","commands":{"allow":["set_enabled"],"deny":[]}},"allow-set-focus":{"identifier":"allow-set-focus","description":"Enables the set_focus command without any pre-configured scope.","commands":{"allow":["set_focus"],"deny":[]}},"allow-set-focusable":{"identifier":"allow-set-focusable","description":"Enables the set_focusable command without any pre-configured scope.","commands":{"allow":["set_focusable"],"deny":[]}},"allow-set-fullscreen":{"identifier":"allow-set-fullscreen","description":"Enables the set_fullscreen command without any pre-configured scope.","commands":{"allow":["set_fullscreen"],"deny":[]}},"allow-set-icon":{"identifier":"allow-set-icon","description":"Enables the set_icon command without any pre-configured scope.","commands":{"allow":["set_icon"],"deny":[]}},"allow-set-ignore-cursor-events":{"identifier":"allow-set-ignore-cursor-events","description":"Enables the set_ignore_cursor_events command without any pre-configured scope.","commands":{"allow":["set_ignore_cursor_events"],"deny":[]}},"allow-set-max-size":{"identifier":"allow-set-max-size","description":"Enables the set_max_size command without any pre-configured scope.","commands":{"allow":["set_max_size"],"deny":[]}},"allow-set-maximizable":{"identifier":"allow-set-maximizable","description":"Enables the set_maximizable command without any pre-configured scope.","commands":{"allow":["set_maximizable"],"deny":[]}},"allow-set-min-size":{"identifier":"allow-set-min-size","description":"Enables the set_min_size command without any pre-configured scope.","commands":{"allow":["set_min_size"],"deny":[]}},"allow-set-minimizable":{"identifier":"allow-set-minimizable","description":"Enables the set_minimizable command without any pre-configured scope.","commands":{"allow":["set_minimizable"],"deny":[]}},"allow-set-overlay-icon":{"identifier":"allow-set-overlay-icon","description":"Enables the set_overlay_icon command without any pre-configured scope.","commands":{"allow":["set_overlay_icon"],"deny":[]}},"allow-set-position":{"identifier":"allow-set-position","description":"Enables the set_position command without any pre-configured scope.","commands":{"allow":["set_position"],"deny":[]}},"allow-set-progress-bar":{"identifier":"allow-set-progress-bar","description":"Enables the set_progress_bar command without any pre-configured scope.","commands":{"allow":["set_progress_bar"],"deny":[]}},"allow-set-resizable":{"identifier":"allow-set-resizable","description":"Enables the set_resizable command without any pre-configured scope.","commands":{"allow":["set_resizable"],"deny":[]}},"allow-set-shadow":{"identifier":"allow-set-shadow","description":"Enables the set_shadow command without any pre-configured scope.","commands":{"allow":["set_shadow"],"deny":[]}},"allow-set-simple-fullscreen":{"identifier":"allow-set-simple-fullscreen","description":"Enables the set_simple_fullscreen command without any pre-configured scope.","commands":{"allow":["set_simple_fullscreen"],"deny":[]}},"allow-set-size":{"identifier":"allow-set-size","description":"Enables the set_size command without any pre-configured scope.","commands":{"allow":["set_size"],"deny":[]}},"allow-set-size-constraints":{"identifier":"allow-set-size-constraints","description":"Enables the set_size_constraints command without any pre-configured scope.","commands":{"allow":["set_size_constraints"],"deny":[]}},"allow-set-skip-taskbar":{"identifier":"allow-set-skip-taskbar","description":"Enables the set_skip_taskbar command without any pre-configured scope.","commands":{"allow":["set_skip_taskbar"],"deny":[]}},"allow-set-theme":{"identifier":"allow-set-theme","description":"Enables the set_theme command without any pre-configured scope.","commands":{"allow":["set_theme"],"deny":[]}},"allow-set-title":{"identifier":"allow-set-title","description":"Enables the set_title command without any pre-configured scope.","commands":{"allow":["set_title"],"deny":[]}},"allow-set-title-bar-style":{"identifier":"allow-set-title-bar-style","description":"Enables the set_title_bar_style command without any pre-configured scope.","commands":{"allow":["set_title_bar_style"],"deny":[]}},"allow-set-visible-on-all-workspaces":{"identifier":"allow-set-visible-on-all-workspaces","description":"Enables the set_visible_on_all_workspaces command without any pre-configured scope.","commands":{"allow":["set_visible_on_all_workspaces"],"deny":[]}},"allow-show":{"identifier":"allow-show","description":"Enables the show command without any pre-configured scope.","commands":{"allow":["show"],"deny":[]}},"allow-start-dragging":{"identifier":"allow-start-dragging","description":"Enables the start_dragging command without any pre-configured scope.","commands":{"allow":["start_dragging"],"deny":[]}},"allow-start-resize-dragging":{"identifier":"allow-start-resize-dragging","description":"Enables the start_resize_dragging command without any pre-configured scope.","commands":{"allow":["start_resize_dragging"],"deny":[]}},"allow-theme":{"identifier":"allow-theme","description":"Enables the theme command without any pre-configured scope.","commands":{"allow":["theme"],"deny":[]}},"allow-title":{"identifier":"allow-title","description":"Enables the title command without any pre-configured scope.","commands":{"allow":["title"],"deny":[]}},"allow-toggle-maximize":{"identifier":"allow-toggle-maximize","description":"Enables the toggle_maximize command without any pre-configured scope.","commands":{"allow":["toggle_maximize"],"deny":[]}},"allow-unmaximize":{"identifier":"allow-unmaximize","description":"Enables the unmaximize command without any pre-configured scope.","commands":{"allow":["unmaximize"],"deny":[]}},"allow-unminimize":{"identifier":"allow-unminimize","description":"Enables the unminimize command without any pre-configured scope.","commands":{"allow":["unminimize"],"deny":[]}},"deny-activity-name":{"identifier":"deny-activity-name","description":"Denies the activity_name command without any pre-configured scope.","commands":{"allow":[],"deny":["activity_name"]}},"deny-available-monitors":{"identifier":"deny-available-monitors","description":"Denies the available_monitors command without any pre-configured scope.","commands":{"allow":[],"deny":["available_monitors"]}},"deny-center":{"identifier":"deny-center","description":"Denies the center command without any pre-configured scope.","commands":{"allow":[],"deny":["center"]}},"deny-close":{"identifier":"deny-close","description":"Denies the close command without any pre-configured scope.","commands":{"allow":[],"deny":["close"]}},"deny-create":{"identifier":"deny-create","description":"Denies the create command without any pre-configured scope.","commands":{"allow":[],"deny":["create"]}},"deny-current-monitor":{"identifier":"deny-current-monitor","description":"Denies the current_monitor command without any pre-configured scope.","commands":{"allow":[],"deny":["current_monitor"]}},"deny-cursor-position":{"identifier":"deny-cursor-position","description":"Denies the cursor_position command without any pre-configured scope.","commands":{"allow":[],"deny":["cursor_position"]}},"deny-destroy":{"identifier":"deny-destroy","description":"Denies the destroy command without any pre-configured scope.","commands":{"allow":[],"deny":["destroy"]}},"deny-get-all-windows":{"identifier":"deny-get-all-windows","description":"Denies the get_all_windows command without any pre-configured scope.","commands":{"allow":[],"deny":["get_all_windows"]}},"deny-hide":{"identifier":"deny-hide","description":"Denies the hide command without any pre-configured scope.","commands":{"allow":[],"deny":["hide"]}},"deny-inner-position":{"identifier":"deny-inner-position","description":"Denies the inner_position command without any pre-configured scope.","commands":{"allow":[],"deny":["inner_position"]}},"deny-inner-size":{"identifier":"deny-inner-size","description":"Denies the inner_size command without any pre-configured scope.","commands":{"allow":[],"deny":["inner_size"]}},"deny-internal-toggle-maximize":{"identifier":"deny-internal-toggle-maximize","description":"Denies the internal_toggle_maximize command without any pre-configured scope.","commands":{"allow":[],"deny":["internal_toggle_maximize"]}},"deny-is-always-on-top":{"identifier":"deny-is-always-on-top","description":"Denies the is_always_on_top command without any pre-configured scope.","commands":{"allow":[],"deny":["is_always_on_top"]}},"deny-is-closable":{"identifier":"deny-is-closable","description":"Denies the is_closable command without any pre-configured scope.","commands":{"allow":[],"deny":["is_closable"]}},"deny-is-decorated":{"identifier":"deny-is-decorated","description":"Denies the is_decorated command without any pre-configured scope.","commands":{"allow":[],"deny":["is_decorated"]}},"deny-is-enabled":{"identifier":"deny-is-enabled","description":"Denies the is_enabled command without any pre-configured scope.","commands":{"allow":[],"deny":["is_enabled"]}},"deny-is-focused":{"identifier":"deny-is-focused","description":"Denies the is_focused command without any pre-configured scope.","commands":{"allow":[],"deny":["is_focused"]}},"deny-is-fullscreen":{"identifier":"deny-is-fullscreen","description":"Denies the is_fullscreen command without any pre-configured scope.","commands":{"allow":[],"deny":["is_fullscreen"]}},"deny-is-maximizable":{"identifier":"deny-is-maximizable","description":"Denies the is_maximizable command without any pre-configured scope.","commands":{"allow":[],"deny":["is_maximizable"]}},"deny-is-maximized":{"identifier":"deny-is-maximized","description":"Denies the is_maximized command without any pre-configured scope.","commands":{"allow":[],"deny":["is_maximized"]}},"deny-is-minimizable":{"identifier":"deny-is-minimizable","description":"Denies the is_minimizable command without any pre-configured scope.","commands":{"allow":[],"deny":["is_minimizable"]}},"deny-is-minimized":{"identifier":"deny-is-minimized","description":"Denies the is_minimized command without any pre-configured scope.","commands":{"allow":[],"deny":["is_minimized"]}},"deny-is-resizable":{"identifier":"deny-is-resizable","description":"Denies the is_resizable command without any pre-configured scope.","commands":{"allow":[],"deny":["is_resizable"]}},"deny-is-visible":{"identifier":"deny-is-visible","description":"Denies the is_visible command without any pre-configured scope.","commands":{"allow":[],"deny":["is_visible"]}},"deny-maximize":{"identifier":"deny-maximize","description":"Denies the maximize command without any pre-configured scope.","commands":{"allow":[],"deny":["maximize"]}},"deny-minimize":{"identifier":"deny-minimize","description":"Denies the minimize command without any pre-configured scope.","commands":{"allow":[],"deny":["minimize"]}},"deny-monitor-from-point":{"identifier":"deny-monitor-from-point","description":"Denies the monitor_from_point command without any pre-configured scope.","commands":{"allow":[],"deny":["monitor_from_point"]}},"deny-outer-position":{"identifier":"deny-outer-position","description":"Denies the outer_position command without any pre-configured scope.","commands":{"allow":[],"deny":["outer_position"]}},"deny-outer-size":{"identifier":"deny-outer-size","description":"Denies the outer_size command without any pre-configured scope.","commands":{"allow":[],"deny":["outer_size"]}},"deny-primary-monitor":{"identifier":"deny-primary-monitor","description":"Denies the primary_monitor command without any pre-configured scope.","commands":{"allow":[],"deny":["primary_monitor"]}},"deny-request-user-attention":{"identifier":"deny-request-user-attention","description":"Denies the request_user_attention command without any pre-configured scope.","commands":{"allow":[],"deny":["request_user_attention"]}},"deny-scale-factor":{"identifier":"deny-scale-factor","description":"Denies the scale_factor command without any pre-configured scope.","commands":{"allow":[],"deny":["scale_factor"]}},"deny-scene-identifier":{"identifier":"deny-scene-identifier","description":"Denies the scene_identifier command without any pre-configured scope.","commands":{"allow":[],"deny":["scene_identifier"]}},"deny-set-always-on-bottom":{"identifier":"deny-set-always-on-bottom","description":"Denies the set_always_on_bottom command without any pre-configured scope.","commands":{"allow":[],"deny":["set_always_on_bottom"]}},"deny-set-always-on-top":{"identifier":"deny-set-always-on-top","description":"Denies the set_always_on_top command without any pre-configured scope.","commands":{"allow":[],"deny":["set_always_on_top"]}},"deny-set-background-color":{"identifier":"deny-set-background-color","description":"Denies the set_background_color command without any pre-configured scope.","commands":{"allow":[],"deny":["set_background_color"]}},"deny-set-badge-count":{"identifier":"deny-set-badge-count","description":"Denies the set_badge_count command without any pre-configured scope.","commands":{"allow":[],"deny":["set_badge_count"]}},"deny-set-badge-label":{"identifier":"deny-set-badge-label","description":"Denies the set_badge_label command without any pre-configured scope.","commands":{"allow":[],"deny":["set_badge_label"]}},"deny-set-closable":{"identifier":"deny-set-closable","description":"Denies the set_closable command without any pre-configured scope.","commands":{"allow":[],"deny":["set_closable"]}},"deny-set-content-protected":{"identifier":"deny-set-content-protected","description":"Denies the set_content_protected command without any pre-configured scope.","commands":{"allow":[],"deny":["set_content_protected"]}},"deny-set-cursor-grab":{"identifier":"deny-set-cursor-grab","description":"Denies the set_cursor_grab command without any pre-configured scope.","commands":{"allow":[],"deny":["set_cursor_grab"]}},"deny-set-cursor-icon":{"identifier":"deny-set-cursor-icon","description":"Denies the set_cursor_icon command without any pre-configured scope.","commands":{"allow":[],"deny":["set_cursor_icon"]}},"deny-set-cursor-position":{"identifier":"deny-set-cursor-position","description":"Denies the set_cursor_position command without any pre-configured scope.","commands":{"allow":[],"deny":["set_cursor_position"]}},"deny-set-cursor-visible":{"identifier":"deny-set-cursor-visible","description":"Denies the set_cursor_visible command without any pre-configured scope.","commands":{"allow":[],"deny":["set_cursor_visible"]}},"deny-set-decorations":{"identifier":"deny-set-decorations","description":"Denies the set_decorations command without any pre-configured scope.","commands":{"allow":[],"deny":["set_decorations"]}},"deny-set-effects":{"identifier":"deny-set-effects","description":"Denies the set_effects command without any pre-configured scope.","commands":{"allow":[],"deny":["set_effects"]}},"deny-set-enabled":{"identifier":"deny-set-enabled","description":"Denies the set_enabled command without any pre-configured scope.","commands":{"allow":[],"deny":["set_enabled"]}},"deny-set-focus":{"identifier":"deny-set-focus","description":"Denies the set_focus command without any pre-configured scope.","commands":{"allow":[],"deny":["set_focus"]}},"deny-set-focusable":{"identifier":"deny-set-focusable","description":"Denies the set_focusable command without any pre-configured scope.","commands":{"allow":[],"deny":["set_focusable"]}},"deny-set-fullscreen":{"identifier":"deny-set-fullscreen","description":"Denies the set_fullscreen command without any pre-configured scope.","commands":{"allow":[],"deny":["set_fullscreen"]}},"deny-set-icon":{"identifier":"deny-set-icon","description":"Denies the set_icon command without any pre-configured scope.","commands":{"allow":[],"deny":["set_icon"]}},"deny-set-ignore-cursor-events":{"identifier":"deny-set-ignore-cursor-events","description":"Denies the set_ignore_cursor_events command without any pre-configured scope.","commands":{"allow":[],"deny":["set_ignore_cursor_events"]}},"deny-set-max-size":{"identifier":"deny-set-max-size","description":"Denies the set_max_size command without any pre-configured scope.","commands":{"allow":[],"deny":["set_max_size"]}},"deny-set-maximizable":{"identifier":"deny-set-maximizable","description":"Denies the set_maximizable command without any pre-configured scope.","commands":{"allow":[],"deny":["set_maximizable"]}},"deny-set-min-size":{"identifier":"deny-set-min-size","description":"Denies the set_min_size command without any pre-configured scope.","commands":{"allow":[],"deny":["set_min_size"]}},"deny-set-minimizable":{"identifier":"deny-set-minimizable","description":"Denies the set_minimizable command without any pre-configured scope.","commands":{"allow":[],"deny":["set_minimizable"]}},"deny-set-overlay-icon":{"identifier":"deny-set-overlay-icon","description":"Denies the set_overlay_icon command without any pre-configured scope.","commands":{"allow":[],"deny":["set_overlay_icon"]}},"deny-set-position":{"identifier":"deny-set-position","description":"Denies the set_position command without any pre-configured scope.","commands":{"allow":[],"deny":["set_position"]}},"deny-set-progress-bar":{"identifier":"deny-set-progress-bar","description":"Denies the set_progress_bar command without any pre-configured scope.","commands":{"allow":[],"deny":["set_progress_bar"]}},"deny-set-resizable":{"identifier":"deny-set-resizable","description":"Denies the set_resizable command without any pre-configured scope.","commands":{"allow":[],"deny":["set_resizable"]}},"deny-set-shadow":{"identifier":"deny-set-shadow","description":"Denies the set_shadow command without any pre-configured scope.","commands":{"allow":[],"deny":["set_shadow"]}},"deny-set-simple-fullscreen":{"identifier":"deny-set-simple-fullscreen","description":"Denies the set_simple_fullscreen command without any pre-configured scope.","commands":{"allow":[],"deny":["set_simple_fullscreen"]}},"deny-set-size":{"identifier":"deny-set-size","description":"Denies the set_size command without any pre-configured scope.","commands":{"allow":[],"deny":["set_size"]}},"deny-set-size-constraints":{"identifier":"deny-set-size-constraints","description":"Denies the set_size_constraints command without any pre-configured scope.","commands":{"allow":[],"deny":["set_size_constraints"]}},"deny-set-skip-taskbar":{"identifier":"deny-set-skip-taskbar","description":"Denies the set_skip_taskbar command without any pre-configured scope.","commands":{"allow":[],"deny":["set_skip_taskbar"]}},"deny-set-theme":{"identifier":"deny-set-theme","description":"Denies the set_theme command without any pre-configured scope.","commands":{"allow":[],"deny":["set_theme"]}},"deny-set-title":{"identifier":"deny-set-title","description":"Denies the set_title command without any pre-configured scope.","commands":{"allow":[],"deny":["set_title"]}},"deny-set-title-bar-style":{"identifier":"deny-set-title-bar-style","description":"Denies the set_title_bar_style command without any pre-configured scope.","commands":{"allow":[],"deny":["set_title_bar_style"]}},"deny-set-visible-on-all-workspaces":{"identifier":"deny-set-visible-on-all-workspaces","description":"Denies the set_visible_on_all_workspaces command without any pre-configured scope.","commands":{"allow":[],"deny":["set_visible_on_all_workspaces"]}},"deny-show":{"identifier":"deny-show","description":"Denies the show command without any pre-configured scope.","commands":{"allow":[],"deny":["show"]}},"deny-start-dragging":{"identifier":"deny-start-dragging","description":"Denies the start_dragging command without any pre-configured scope.","commands":{"allow":[],"deny":["start_dragging"]}},"deny-start-resize-dragging":{"identifier":"deny-start-resize-dragging","description":"Denies the start_resize_dragging command without any pre-configured scope.","commands":{"allow":[],"deny":["start_resize_dragging"]}},"deny-theme":{"identifier":"deny-theme","description":"Denies the theme command without any pre-configured scope.","commands":{"allow":[],"deny":["theme"]}},"deny-title":{"identifier":"deny-title","description":"Denies the title command without any pre-configured scope.","commands":{"allow":[],"deny":["title"]}},"deny-toggle-maximize":{"identifier":"deny-toggle-maximize","description":"Denies the toggle_maximize command without any pre-configured scope.","commands":{"allow":[],"deny":["toggle_maximize"]}},"deny-unmaximize":{"identifier":"deny-unmaximize","description":"Denies the unmaximize command without any pre-configured scope.","commands":{"allow":[],"deny":["unmaximize"]}},"deny-unminimize":{"identifier":"deny-unminimize","description":"Denies the unminimize command without any pre-configured scope.","commands":{"allow":[],"deny":["unminimize"]}}},"permission_sets":{},"global_scope_schema":null}}
 
 ################################################################################
-FILE 21/69: gen\schemas\capabilities.json
+FILE 21/72: gen\schemas\capabilities.json
 ################################################################################
 
 {}
 
 ################################################################################
-FILE 22/69: gen\schemas\desktop-schema.json
+FILE 22/72: gen\schemas\desktop-schema.json
 ################################################################################
 
 {
@@ -3404,7 +3408,7 @@ FILE 22/69: gen\schemas\desktop-schema.json
 }
 
 ################################################################################
-FILE 23/69: gen\schemas\windows-schema.json
+FILE 23/72: gen\schemas\windows-schema.json
 ################################################################################
 
 {
@@ -5701,7 +5705,7 @@ FILE 23/69: gen\schemas\windows-schema.json
 }
 
 ################################################################################
-FILE 24/69: icons\128x128.png
+FILE 24/72: icons\128x128.png
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -5710,7 +5714,7 @@ Size: 70 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 25/69: icons\128x128@2x.png
+FILE 25/72: icons\128x128@2x.png
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -5719,7 +5723,7 @@ Size: 70 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 26/69: icons\32x32.png
+FILE 26/72: icons\32x32.png
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -5728,7 +5732,7 @@ Size: 70 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 27/69: icons\icon.icns
+FILE 27/72: icons\icon.icns
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -5737,7 +5741,7 @@ Size: 16 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 28/69: icons\icon.ico
+FILE 28/72: icons\icon.ico
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -5746,7 +5750,7 @@ Size: 249998 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 29/69: index.html
+FILE 29/72: index.html
 ################################################################################
 
 <!DOCTYPE html>
@@ -5914,7 +5918,7 @@ FILE 29/69: index.html
 
 
 ################################################################################
-FILE 30/69: package-lock.json
+FILE 30/72: package-lock.json
 ################################################################################
 
 {
@@ -5927,7 +5931,8 @@ FILE 30/69: package-lock.json
       "name": "zombie-survival",
       "version": "0.1.0",
       "dependencies": {
-        "@tauri-apps/api": "^2.11.1"
+        "@tauri-apps/api": "^2.11.1",
+        "@tauri-apps/plugin-fs": "^2.5.2"
       },
       "devDependencies": {
         "@tauri-apps/cli": "^2.0.0",
@@ -6919,6 +6924,15 @@ FILE 30/69: package-lock.json
         "node": ">= 10"
       }
     },
+    "node_modules/@tauri-apps/plugin-fs": {
+      "version": "2.5.2",
+      "resolved": "https://registry.npmjs.org/@tauri-apps/plugin-fs/-/plugin-fs-2.5.2.tgz",
+      "integrity": "sha512-XXvMSnFiob+G1H+YHCDf+bzWVumseQuEIhzpbOJzevUfL4k0U+sTApZWJHpoLiamggnVPJm5dJ5sDsniRyWxlg==",
+      "license": "MIT OR Apache-2.0",
+      "dependencies": {
+        "@tauri-apps/api": "^2.11.0"
+      }
+    },
     "node_modules/@types/estree": {
       "version": "1.0.9",
       "resolved": "https://registry.npmjs.org/@types/estree/-/estree-1.0.9.tgz",
@@ -7156,7 +7170,7 @@ FILE 30/69: package-lock.json
 
 
 ################################################################################
-FILE 31/69: package.json
+FILE 31/72: package.json
 ################################################################################
 
 {
@@ -7175,13 +7189,14 @@ FILE 31/69: package.json
     "vite": "^5.0.0"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.11.1"
+    "@tauri-apps/api": "^2.11.1",
+    "@tauri-apps/plugin-fs": "^2.5.2"
   }
 }
 
 
 ################################################################################
-FILE 32/69: README.md
+FILE 32/72: README.md
 ################################################################################
 
 # ZombieSurvival Game Builder
@@ -7255,7 +7270,7 @@ A 2D pixel-art post-apocalyptic zombie survival game builder.
 
 
 ################################################################################
-FILE 33/69: src\components\animation_component.js
+FILE 33/72: src\components\animation_component.js
 ################################################################################
 
 // Animation Component
@@ -7438,7 +7453,7 @@ export class AnimationComponent {
 
 
 ################################################################################
-FILE 34/69: src\components\component.js
+FILE 34/72: src\components\component.js
 ################################################################################
 
 // Component definitions
@@ -7495,7 +7510,7 @@ ComponentRegistry.register('interaction', { range: 50, prompt: '' });
 ComponentRegistry.register('status_effects', { effects: [] });
 
 ################################################################################
-FILE 35/69: src\components\cutscene_component.js
+FILE 35/72: src\components\cutscene_component.js
 ################################################################################
 
 // Cutscene Component
@@ -7740,7 +7755,7 @@ export class CutsceneComponent {
 }
 
 ################################################################################
-FILE 36/69: src\components\dialogue_component.js
+FILE 36/72: src\components\dialogue_component.js
 ################################################################################
 
 // Dialogue Component
@@ -8062,7 +8077,7 @@ export class DialogueManager {
 }
 
 ################################################################################
-FILE 37/69: src\components\mission_component.js
+FILE 37/72: src\components\mission_component.js
 ################################################################################
 
 // Mission Component
@@ -8266,7 +8281,7 @@ checkObjective(eventType, data) {
 }
 
 ################################################################################
-FILE 38/69: src\components\npc_component.js
+FILE 38/72: src\components\npc_component.js
 ################################################################################
 
 // NPC Component
@@ -8343,7 +8358,7 @@ export class NPCComponent {
 }
 
 ################################################################################
-FILE 39/69: src\components\rig_component.js
+FILE 39/72: src\components\rig_component.js
 ################################################################################
 
 // Character Rig / Body Layout System
@@ -8488,7 +8503,7 @@ export class RigComponent {
 }
 
 ################################################################################
-FILE 40/69: src\components\survival_component.js
+FILE 40/72: src\components\survival_component.js
 ################################################################################
 
 // Survival Component
@@ -8659,7 +8674,7 @@ export class SurvivalComponent {
 }
 
 ################################################################################
-FILE 41/69: src\core\app.js
+FILE 41/72: src\core\app.js
 ################################################################################
 
 // Main application entry point
@@ -9184,17 +9199,18 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 ################################################################################
-FILE 42/69: src\editor\animationEditor.js
+FILE 42/72: src\editor\animationEditor.js
 ################################################################################
 
 // Animation Editor
 // Lightweight animation creation and management
 
+import { writeTextFile, writeFile, exists, mkdir } from '@tauri-apps/plugin-fs';
+
 export class AnimationEditor {
     constructor(gameRuntime) {
         this.game = gameRuntime;
         this.workflow = 'existing'; // 'existing' or 'new'
-        this.selectedEntity = null;
         this.animationName = '';
         this.frames = [];
         this.currentFrameIndex = 0;
@@ -9208,6 +9224,7 @@ export class AnimationEditor {
         this.customHeight = 32;
         this.targetCategory = 'character'; // 'character', 'item', 'object'
         this.targetSubType = 'player'; // 'player', 'npc', 'enemy', 'medicine', etc.
+        this._updateInterval = null;
         
         this.initUI();
     }
@@ -9236,8 +9253,8 @@ export class AnimationEditor {
                 <span id="anim-workflow-label" style="color: #888; font-size: 11px; margin-left: 8px;">Edit existing entity's visual</span>
             </div>
             
-            <!-- Category Selection -->
-            <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px;">
+            <!-- Category Selection (New mode only) -->
+            <div id="anim-new-controls" style="display: none; gap: 16px; flex-wrap: wrap; margin-bottom: 16px;">
                 <div>
                     <label style="color: #888; font-size: 12px; display: block;">Category</label>
                     <select id="anim-category-select" style="background: #2a2a2a; color: #c0c0c0; border: 1px solid #444; padding: 6px 12px; font-family: inherit; width: 150px;">
@@ -9253,10 +9270,6 @@ export class AnimationEditor {
                         <option value="npc">NPC</option>
                         <option value="enemy">Enemy</option>
                     </select>
-                </div>
-                <div>
-                    <label style="color: #888; font-size: 12px; display: block;">Animation Name</label>
-                    <input id="anim-name-input" type="text" placeholder="idle" style="background: #2a2a2a; color: #c0c0c0; border: 1px solid #444; padding: 6px 12px; font-family: inherit; width: 150px;">
                 </div>
                 <div id="anim-size-section" style="display: none;">
                     <label style="color: #888; font-size: 12px; display: block;">Object Size</label>
@@ -9276,14 +9289,33 @@ export class AnimationEditor {
                         <input id="anim-custom-height" type="number" value="32" style="width: 50px; background: #2a2a2a; color: #c0c0c0; border: 1px solid #444; padding: 4px 6px; font-family: inherit;">
                     </div>
                 </div>
-                <div id="anim-existing-info" style="display: none;">
-                    <label style="color: #888; font-size: 12px; display: block;">Existing Dimensions</label>
-                    <span id="anim-existing-dimensions" style="color: #4caf50; font-size: 13px;">32 × 48</span>
-                </div>
-                <div style="display: flex; align-items: flex-end; gap: 8px;">
-                    <button id="anim-create-btn" style="background: #4caf50; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Create Animation</button>
-                    <button id="anim-add-frame-btn" style="background: #2196f3; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Add Frame</button>
-                    <button id="anim-import-frame-btn" style="background: #ff9800; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Import Frame</button>
+            </div>
+            
+            <!-- Existing Entity Info (Existing mode only) -->
+            <div id="anim-existing-controls" style="display: block; margin-bottom: 16px;">
+                <div style="display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-end;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <label style="color: #888; font-size: 12px; display: block;">Selected Entity</label>
+                        <div id="anim-entity-info" style="background: #0a1a0a; border: 1px solid #2a4a2a; border-radius: 4px; padding: 10px 14px;">
+                            <div style="color: #4caf50; font-weight: bold; font-size: 14px;" id="anim-entity-name">No entity selected</div>
+                            <div style="color: #888; font-size: 11px; margin-top: 4px;">
+                                <span id="anim-entity-id">ID: ---</span>
+                                <span style="margin-left: 16px;" id="anim-entity-type">Type: ---</span>
+                            </div>
+                            <div style="color: #888; font-size: 11px; margin-top: 4px; border-top: 1px solid #1a3a1a; padding-top: 4px;">
+                                Dimensions: <span id="anim-existing-dimensions" style="color: #4caf50;">---</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label style="color: #888; font-size: 12px; display: block;">Animation Name</label>
+                        <input id="anim-name-input" type="text" placeholder="idle" style="background: #2a2a2a; color: #c0c0c0; border: 1px solid #444; padding: 6px 12px; font-family: inherit; width: 150px;">
+                    </div>
+                    <div style="display: flex; gap: 8px; align-items: flex-end;">
+                        <button id="anim-create-btn" style="background: #4caf50; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Create Animation</button>
+                        <button id="anim-add-frame-btn" style="background: #2196f3; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Add Frame</button>
+                        <button id="anim-import-frame-btn" style="background: #ff9800; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Import Frame</button>
+                    </div>
                 </div>
             </div>
             
@@ -9312,8 +9344,9 @@ export class AnimationEditor {
             
             <div style="margin-top: 16px; border-top: 1px solid #333; padding-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
                 <button id="anim-export-btn" style="background: #4caf50; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Export Animation Data</button>
-                <button id="anim-download-frames-btn" style="background: #2196f3; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Download All Frames</button>
+                <button id="anim-save-btn" style="background: #2196f3; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">💾 Save to Project</button>
                 <button id="anim-close-btn" style="background: #f44336; color: #fff; border: none; padding: 6px 16px; cursor: pointer; font-family: inherit;">Close Editor</button>
+                <span id="anim-status" style="color: #888; font-size: 12px; margin-left: 12px; align-self: center;"></span>
             </div>
         `;
         
@@ -9325,7 +9358,12 @@ export class AnimationEditor {
         this.setupEvents();
         this.updateSubtypeOptions();
         this.updateWorkflowUI();
-        this.populateEntityList();
+        this.updateEntityInfo();
+        
+        // Start periodic update to catch selection changes
+        this._updateInterval = setInterval(() => {
+            this.updateEntityInfo();
+        }, 250);
     }
     
     updateSubtypeOptions() {
@@ -9379,50 +9417,102 @@ export class AnimationEditor {
     
     updateWorkflowUI() {
         const isNew = this.workflow === 'new';
-        const category = document.getElementById('anim-category-select')?.value || 'character';
-        const isObject = category === 'object';
-        
-        const sizeSection = document.getElementById('anim-size-section');
-        const customSizeSection = document.getElementById('anim-custom-size-section');
-        const existingInfo = document.getElementById('anim-existing-info');
+        const newControls = document.getElementById('anim-new-controls');
+        const existingControls = document.getElementById('anim-existing-controls');
+        const label = document.getElementById('anim-workflow-label');
         const categorySelect = document.getElementById('anim-category-select');
         const subtypeSelect = document.getElementById('anim-subtype-select');
-        const label = document.getElementById('anim-workflow-label');
         
-        if (isNew && isObject) {
-            sizeSection.style.display = 'block';
-            customSizeSection.style.display = document.getElementById('anim-size-select')?.value === 'custom' ? 'block' : 'none';
-            existingInfo.style.display = 'none';
-            categorySelect.disabled = false;
-            subtypeSelect.disabled = false;
-            if (label) label.textContent = 'Create new environmental object';
-        } else if (isNew) {
-            sizeSection.style.display = 'none';
-            customSizeSection.style.display = 'none';
-            existingInfo.style.display = 'none';
-            categorySelect.disabled = false;
-            subtypeSelect.disabled = false;
+        if (isNew) {
+            // New mode: show category/subtype, hide entity info
+            if (newControls) newControls.style.display = 'flex';
+            if (existingControls) existingControls.style.display = 'none';
+            if (categorySelect) categorySelect.disabled = false;
+            if (subtypeSelect) subtypeSelect.disabled = false;
             if (label) label.textContent = 'Create new visual asset';
+            
+            // Show size options for objects
+            const category = document.getElementById('anim-category-select')?.value || 'character';
+            const sizeSection = document.getElementById('anim-size-section');
+            const customSizeSection = document.getElementById('anim-custom-size-section');
+            if (category === 'object') {
+                if (sizeSection) sizeSection.style.display = 'block';
+                if (customSizeSection) {
+                    customSizeSection.style.display = document.getElementById('anim-size-select')?.value === 'custom' ? 'block' : 'none';
+                }
+            } else {
+                if (sizeSection) sizeSection.style.display = 'none';
+                if (customSizeSection) customSizeSection.style.display = 'none';
+            }
         } else {
-            sizeSection.style.display = 'none';
-            customSizeSection.style.display = 'none';
-            existingInfo.style.display = 'block';
-            categorySelect.disabled = true;
-            subtypeSelect.disabled = true;
+            // Existing mode: hide category/subtype, show entity info
+            if (newControls) newControls.style.display = 'none';
+            if (existingControls) existingControls.style.display = 'block';
+            if (categorySelect) categorySelect.disabled = true;
+            if (subtypeSelect) subtypeSelect.disabled = true;
             if (label) label.textContent = 'Edit existing entity\'s visual';
-            this.updateExistingDimensions();
+            
+            // Update entity info
+            this.updateEntityInfo();
         }
     }
     
-    updateExistingDimensions() {
-        const entity = this.game.entities.find(e => e.type === this.selectedEntity);
+    updateEntityInfo() {
+        // Get the selected entity from the game's selection state
+        const entity = this.game.selectedEntity;
+        const nameEl = document.getElementById('anim-entity-name');
+        const idEl = document.getElementById('anim-entity-id');
+        const typeEl = document.getElementById('anim-entity-type');
         const dimsEl = document.getElementById('anim-existing-dimensions');
-        if (entity && entity.components.sprite) {
-            const w = entity.components.sprite.width || 32;
-            const h = entity.components.sprite.height || 48;
-            dimsEl.textContent = `${w} × ${h}`;
+        
+        if (entity) {
+            // Update name
+            if (nameEl) {
+                nameEl.textContent = entity.name || 'Unnamed Entity';
+                nameEl.style.color = '#4caf50';
+            }
+            
+            // Update ID
+            if (idEl) {
+                idEl.textContent = `ID: ${entity.id || '---'}`;
+                idEl.style.color = '#aaa';
+            }
+            
+            // Update type
+            if (typeEl) {
+                typeEl.textContent = `Type: ${entity.type || 'unknown'}`;
+                typeEl.style.color = '#aaa';
+            }
+            
+            // Update dimensions from sprite component
+            if (dimsEl) {
+                const sprite = entity.components?.sprite;
+                if (sprite && sprite.width && sprite.height) {
+                    dimsEl.textContent = `${sprite.width} × ${sprite.height}`;
+                    dimsEl.style.color = '#4caf50';
+                } else {
+                    dimsEl.textContent = 'No sprite dimensions';
+                    dimsEl.style.color = '#888';
+                }
+            }
         } else {
-            dimsEl.textContent = 'No entity selected';
+            // No entity selected
+            if (nameEl) {
+                nameEl.textContent = 'No entity selected';
+                nameEl.style.color = '#888';
+            }
+            if (idEl) {
+                idEl.textContent = 'ID: ---';
+                idEl.style.color = '#666';
+            }
+            if (typeEl) {
+                typeEl.textContent = 'Type: ---';
+                typeEl.style.color = '#666';
+            }
+            if (dimsEl) {
+                dimsEl.textContent = '---';
+                dimsEl.style.color = '#666';
+            }
         }
     }
     
@@ -9434,8 +9524,6 @@ export class AnimationEditor {
             document.getElementById('anim-workflow-new').style.background = '#2a2a2a';
             document.getElementById('anim-workflow-new').style.color = '#aaa';
             this.updateWorkflowUI();
-            this.populateEntityList();
-            this.updateExistingDimensions();
         });
         
         document.getElementById('anim-workflow-new')?.addEventListener('click', () => {
@@ -9445,15 +9533,11 @@ export class AnimationEditor {
             document.getElementById('anim-workflow-existing').style.background = '#2a2a2a';
             document.getElementById('anim-workflow-existing').style.color = '#aaa';
             this.updateWorkflowUI();
-            this.populateEntityList();
         });
         
         document.getElementById('anim-category-select')?.addEventListener('change', () => {
             this.updateSubtypeOptions();
             this.updateWorkflowUI();
-            if (this.workflow === 'new') {
-                this.updateSizeOptions();
-            }
         });
         
         document.getElementById('anim-size-select')?.addEventListener('change', (e) => {
@@ -9462,13 +9546,6 @@ export class AnimationEditor {
                 customSection.style.display = 'block';
             } else {
                 customSection.style.display = 'none';
-            }
-        });
-        
-        document.getElementById('anim-entity-select')?.addEventListener('change', (e) => {
-            this.selectedEntity = e.target.value;
-            if (this.workflow === 'existing') {
-                this.updateExistingDimensions();
             }
         });
         
@@ -9508,8 +9585,8 @@ export class AnimationEditor {
             this.exportAnimation();
         });
         
-        document.getElementById('anim-download-frames-btn')?.addEventListener('click', () => {
-            this.downloadAllFrames();
+        document.getElementById('anim-save-btn')?.addEventListener('click', () => {
+            this.saveAnimationToProject();
         });
         
         document.getElementById('anim-close-btn')?.addEventListener('click', () => {
@@ -9517,78 +9594,10 @@ export class AnimationEditor {
         });
     }
     
-    updateSizeOptions() {
-        const category = document.getElementById('anim-category-select')?.value || 'character';
-        const select = document.getElementById('anim-size-select');
-        if (!select) return;
-        
-        if (category !== 'object') {
-            select.style.display = 'none';
-            document.getElementById('anim-size-section').style.display = 'none';
-            return;
-        }
-        
-        select.style.display = 'block';
-        const presets = [
-            { value: '16x16', label: '1×1 (16×16)' },
-            { value: '32x32', label: '2×2 (32×32)' },
-            { value: '48x48', label: '3×3 (48×48)' },
-            { value: '64x64', label: '4×4 (64×64)' },
-            { value: '80x80', label: '5×5 (80×80)' },
-            { value: 'custom', label: 'Custom' }
-        ];
-        
-        const currentValue = select.value;
-        select.innerHTML = '';
-        for (const opt of presets) {
-            const option = document.createElement('option');
-            option.value = opt.value;
-            option.textContent = opt.label;
-            select.appendChild(option);
-        }
-        if (currentValue) {
-            const exists = Array.from(select.options).some(o => o.value === currentValue);
-            if (exists) select.value = currentValue;
-        }
-    }
-    
-    populateEntityList() {
-        const select = document.getElementById('anim-entity-select');
-        if (!select) return;
-        
-        while (select.options.length > 1) {
-            select.remove(1);
-        }
-        
-        if (this.workflow === 'existing') {
-            const types = new Set();
-            for (const entity of this.game.entities) {
-                if (entity.type) {
-                    types.add(entity.type);
-                }
-            }
-            types.add('player');
-            
-            for (const type of types) {
-                const option = document.createElement('option');
-                option.value = type;
-                option.textContent = type.charAt(0).toUpperCase() + type.slice(1);
-                select.appendChild(option);
-            }
-        } else {
-            const category = document.getElementById('anim-category-select')?.value || 'character';
-            const subtype = document.getElementById('anim-subtype-select')?.value || 'player';
-            const option = document.createElement('option');
-            option.value = `${category}_${subtype}`;
-            option.textContent = `New ${subtype.charAt(0).toUpperCase() + subtype.slice(1)} (${category})`;
-            select.appendChild(option);
-        }
-    }
-    
     getCanvasDimensions() {
         if (this.workflow === 'existing') {
-            const entity = this.game.entities.find(e => e.type === this.selectedEntity);
-            if (entity && entity.components.sprite) {
+            const entity = this.game.selectedEntity;
+            if (entity && entity.components && entity.components.sprite) {
                 return { width: entity.components.sprite.width || 32, height: entity.components.sprite.height || 48 };
             }
             return { width: 32, height: 48 };
@@ -9632,6 +9641,7 @@ export class AnimationEditor {
         this.updatePreview();
         
         console.log(`Animation "${name}" created with dimensions ${width}x${height} (${this.workflow} workflow)`);
+        this.setStatus(`Animation "${name}" created (${this.frames.length} frames)`, 'success');
     }
     
     addFrame() {
@@ -9677,9 +9687,10 @@ export class AnimationEditor {
         this.currentFrameIndex = this.frames.length - 1;
         this.updateFrameList();
         this.updatePreview();
-        this.downloadFrame(this.frames.length - 1);
+        
         
         console.log(`Frame ${this.frames.length} added`);
+        this.setStatus(`Frame ${this.frames.length} added`, 'info');
     }
     
     importFrame() {
@@ -9718,6 +9729,7 @@ export class AnimationEditor {
                     this.updateFrameList();
                     this.updatePreview();
                     console.log(`Imported frame ${this.frames.length}`);
+                    this.setStatus(`Imported frame ${this.frames.length}`, 'info');
                 };
                 img.src = ev.target.result;
             };
@@ -9739,19 +9751,9 @@ export class AnimationEditor {
         this.updateFrameList();
         this.updatePreview();
         console.log(`Frame deleted`);
+        this.setStatus(`Frame deleted`, 'info');
     }
     
-    downloadFrame(index) {
-        const frame = this.frames[index];
-        if (!frame) return;
-        
-        const link = document.createElement('a');
-        link.download = `${this.animationName || 'animation'}_frame_${String(index + 1).padStart(2, '0')}.png`;
-        link.href = frame.dataUrl;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
     
     updateFrameList() {
         const container = document.getElementById('anim-frame-list');
@@ -9902,154 +9904,172 @@ export class AnimationEditor {
         URL.revokeObjectURL(url);
         
         console.log('Animation exported:', data);
+        this.setStatus(`Animation data exported`, 'success');
     }
     
-    async downloadAllFrames() {
+    async saveAnimationToProject() {
+        // Check if we have frames to save
         if (this.frames.length === 0) {
-            alert('No frames to download.');
+            this.setStatus('No frames to save. Add frames first.', 'error');
             return;
         }
         
-        if (typeof JSZip === 'undefined') {
-            await this.loadJSZip();
+        // Get animation name
+        const name = document.getElementById('anim-name-input')?.value || 'unnamed';
+        if (!name || name === 'unnamed') {
+            this.setStatus('Please enter a name for the animation.', 'error');
+            return;
+        }
+        this.animationName = name;
+        
+        // Check if Tauri is available
+        if (typeof window.__TAURI__ === 'undefined') {
+            this.setStatus('Tauri not available. Use "Export Animation Data" instead.', 'error');
+            return;
         }
         
-        const zip = new JSZip();
-        const folderName = this.animationName || 'animation';
-        const folder = zip.folder(folderName);
-        
-        for (let i = 0; i < this.frames.length; i++) {
-            const frame = this.frames[i];
-            const base64Data = frame.dataUrl.split(',')[1];
-            const fileName = `frame_${String(i + 1).padStart(2, '0')}.png`;
-            folder.file(fileName, base64Data, { base64: true });
+        try {
+            this.setStatus('Saving animation to project...', 'info');
+            
+            // Define paths - use project root relative path
+            const basePath = 'assets/animations';
+            const animationFolder = `${basePath}/${name}`;
+            
+            // Check if folder exists, create if not
+            const folderExists = await exists(animationFolder);
+            if (!folderExists) {
+                await mkdir(animationFolder, { recursive: true });
+                console.log(`Created folder: ${animationFolder}`);
+            }
+            
+            // Save each frame as PNG
+            for (let i = 0; i < this.frames.length; i++) {
+                const frame = this.frames[i];
+                const frameName = `frame_${String(i + 1).padStart(2, '0')}.png`;
+                const framePath = `${animationFolder}/${frameName}`;
+                
+                // Convert data URL to Uint8Array
+                const base64Data = frame.dataUrl.split(',')[1];
+                const binaryData = atob(base64Data);
+                const bytes = new Uint8Array(binaryData.length);
+                for (let j = 0; j < binaryData.length; j++) {
+                    bytes[j] = binaryData.charCodeAt(j);
+                }
+                
+                await writeFile(framePath, bytes);
+                console.log(`Saved frame: ${framePath}`);
+            }
+            
+            // Save animation metadata as JSON
+            const category = document.getElementById('anim-category-select')?.value || 'character';
+            const subtype = document.getElementById('anim-subtype-select')?.value || 'player';
+            
+            const jsonData = {
+                name: name,
+                workflow: this.workflow,
+                category: category,
+                subType: subtype,
+                fps: this.fps,
+                loop: this.loop,
+                frameCount: this.frames.length,
+                frames: this.frames.map((f, i) => ({
+                    index: i + 1,
+                    width: f.width,
+                    height: f.height,
+                    filename: `frame_${String(i + 1).padStart(2, '0')}.png`
+                }))
+            };
+            
+            const jsonPath = `${animationFolder}/animation.json`;
+            await writeTextFile(jsonPath, JSON.stringify(jsonData, null, 2));
+            console.log(`Saved metadata: ${jsonPath}`);
+            
+            this.setStatus(`✅ Animation "${name}" saved successfully to ${animationFolder}`, 'success');
+            
+        } catch (error) {
+            console.error('Error saving animation:', error);
+            this.setStatus(`Error saving: ${error.message}`, 'error');
         }
+    }
+    
+    setStatus(message, type = 'info') {
+        const el = document.getElementById('anim-status');
+        if (!el) return;
         
-        const category = document.getElementById('anim-category-select')?.value || 'character';
-        const subtype = document.getElementById('anim-subtype-select')?.value || 'player';
-        
-        const jsonData = {
-            name: this.animationName || 'unnamed',
-            workflow: this.workflow,
-            category: category,
-            subType: subtype,
-            fps: this.fps,
-            loop: this.loop,
-            frameCount: this.frames.length,
-            frames: this.frames.map((f, i) => ({
-                index: i + 1,
-                width: f.width,
-                height: f.height,
-                filename: `frame_${String(i + 1).padStart(2, '0')}.png`
-            }))
+        const colors = {
+            info: '#888',
+            success: '#4caf50',
+            error: '#f44336',
+            warning: '#ff9800'
         };
-        
-        folder.file(`${folderName}.json`, JSON.stringify(jsonData, null, 2));
-        
-        const zipBlob = await zip.generateAsync({ type: 'blob' });
-        const url = URL.createObjectURL(zipBlob);
-        
-        const link = document.createElement('a');
-        link.download = `${folderName}.zip`;
-        link.href = url;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-        
-        const instruction = document.createElement('div');
-        instruction.style.cssText = `
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: #4caf50;
-            padding: 12px 24px;
-            border-radius: 8px;
-            border: 1px solid #4caf50;
-            font-family: 'Courier New', monospace;
-            font-size: 13px;
-            z-index: 10000;
-            text-align: center;
-            max-width: 500px;
-        `;
-        instruction.textContent = '📁 Extract this ZIP into your project\'s animations/ folder';
-        document.body.appendChild(instruction);
-        setTimeout(() => {
-            instruction.style.opacity = '0';
-            instruction.style.transition = 'opacity 0.5s';
-            setTimeout(() => instruction.remove(), 500);
-        }, 4000);
-        
-        console.log(`ZIP exported: ${folderName}.zip with ${this.frames.length} frames`);
+        el.style.color = colors[type] || '#888';
+        el.textContent = message;
     }
     
-    loadJSZip() {
-        return new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
-            script.onload = resolve;
-            script.onerror = reject;
-            document.head.appendChild(script);
-        });
-    }
-    
-close() {
-    if (this.game && this.game.app) {
-        this.game.app.lastOpenedEditor = null;
-    }
+    close() {
+        if (this.game && this.game.app) {
+            this.game.app.lastOpenedEditor = null;
+        }
 
-    this.stopPreview();
-    const panel = document.getElementById('animation-editor-panel');
-    if (panel) {
-        panel.style.display = 'none';
-    }
+        // Stop the update interval
+        if (this._updateInterval) {
+            clearInterval(this._updateInterval);
+            this._updateInterval = null;
+        }
 
-    const editorContent = document.getElementById('editor-content');
-    if (editorContent) {
-        editorContent.style.display = 'block';
-        editorContent.style.visibility = 'visible';
-    }
+        this.stopPreview();
+        const panel = document.getElementById('animation-editor-panel');
+        if (panel) {
+            panel.style.display = 'none';
+        }
 
-    const editorTab = document.querySelector('.tab:last-child');
-    if (editorTab) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        editorTab.classList.add('active');
-        editorTab.click();
-    }
-}
+        const editorContent = document.getElementById('editor-content');
+        if (editorContent) {
+            editorContent.style.display = 'block';
+            editorContent.style.visibility = 'visible';
+        }
 
+        const editorTab = document.querySelector('.tab:last-child');
+        if (editorTab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            editorTab.classList.add('active');
+            editorTab.click();
+        }
+    }
 
     show() {
+        // Store which editor is opened
+        if (this.game && this.game.app) {
+            this.game.app.lastOpenedEditor = 'animation-editor-panel';
+        }
 
-    // Store which editor is opened
-    if (this.game && this.game.app) {
-        this.game.app.lastOpenedEditor = 'animation-editor-panel';
-    }
-
-const editorContent = document.getElementById('editor-content');
-if (editorContent) {
-    editorContent.style.display = 'none';
-    editorContent.style.visibility = 'hidden';
-}
+        const editorContent = document.getElementById('editor-content');
+        if (editorContent) {
+            editorContent.style.display = 'none';
+            editorContent.style.visibility = 'hidden';
+        }
 
         const panel = document.getElementById('animation-editor-panel');
         if (panel) {
             panel.style.display = 'block';
         }
-        this.populateEntityList();
-        this.updateWorkflowUI();
-        this.updateSizeOptions();
-        this.updateSubtypeOptions();
-        if (this.workflow === 'existing') {
-            this.updateExistingDimensions();
+        
+        // Restart update interval if needed
+        if (!this._updateInterval) {
+            this._updateInterval = setInterval(() => {
+                this.updateEntityInfo();
+            }, 250);
         }
+        
+        // Update entity info when showing
+        this.updateEntityInfo();
+        this.updateWorkflowUI();
+        this.setStatus('Ready', 'info');
     }
 }
 
 ################################################################################
-FILE 43/69: src\editor\cutsceneEditor.js
+FILE 43/72: src\editor\cutsceneEditor.js
 ################################################################################
 
 // Cutscene Editor
@@ -10377,7 +10397,7 @@ if (editorContent) {
 }
 
 ################################################################################
-FILE 44/69: src\editor\mapEditor.js
+FILE 44/72: src\editor\mapEditor.js
 ################################################################################
 
 // Map Editor - Minimal version
@@ -10684,7 +10704,7 @@ if (editorContent) {
 }
 
 ################################################################################
-FILE 45/69: src\editor\missionEditor.js
+FILE 45/72: src\editor\missionEditor.js
 ################################################################################
 
 // Mission Editor
@@ -11386,7 +11406,7 @@ if (editorContent) {
 }
 
 ################################################################################
-FILE 46/69: src\editor\npcEditor.js
+FILE 46/72: src\editor\npcEditor.js
 ################################################################################
 
 // NPC Editor - Minimal version
@@ -11723,7 +11743,7 @@ if (editorContent) {
 }
 
 ################################################################################
-FILE 47/69: src\entities\entity.js
+FILE 47/72: src\entities\entity.js
 ################################################################################
 
 export class Entity {
@@ -11843,14 +11863,14 @@ export class EntityManager {
 }
 
 ################################################################################
-FILE 48/69: src\entities\entityManager.js
+FILE 48/72: src\entities\entityManager.js
 ################################################################################
 
 // Re-export from entity.js
 export { EntityManager, Entity } from "./entity.js";
 
 ################################################################################
-FILE 49/69: src\main.rs
+FILE 49/72: src\main.rs
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -11859,7 +11879,7 @@ Size: 146 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 50/69: src\runtime\game.js
+FILE 50/72: src\runtime\game.js
 ################################################################################
 
 import { Entity } from '../entities/entity.js';
@@ -14004,7 +14024,7 @@ async openNpcEditor() {
 }
 
 ################################################################################
-FILE 51/69: src\systems\animation_system.js
+FILE 51/72: src\systems\animation_system.js
 ################################################################################
 
 // Animation System
@@ -14070,7 +14090,7 @@ export class AnimationSystem {
 
 
 ################################################################################
-FILE 52/69: src\utils\assetLoader.js
+FILE 52/72: src\utils\assetLoader.js
 ################################################################################
 
 // Asset Loader
@@ -14153,7 +14173,7 @@ export class AssetLoader {
 }
 
 ################################################################################
-FILE 53/69: src\utils\console.js
+FILE 53/72: src\utils\console.js
 ################################################################################
 
 export class Console {
@@ -14246,7 +14266,7 @@ export class Console {
 }
 
 ################################################################################
-FILE 54/69: src\utils\locationLoader.js
+FILE 54/72: src\utils\locationLoader.js
 ################################################################################
 
 // Location Loader
@@ -14384,7 +14404,7 @@ getExitAt(playerX, playerY) {
 }
 
 ################################################################################
-FILE 55/69: src\utils\missionLoader.js
+FILE 55/72: src\utils\missionLoader.js
 ################################################################################
 
 // Mission Loader
@@ -14528,7 +14548,7 @@ checkEvent(eventType, eventData) {
 }
 
 ################################################################################
-FILE 56/69: src\utils\templateLoader.js
+FILE 56/72: src\utils\templateLoader.js
 ################################################################################
 
 export class TemplateLoader {
@@ -14709,7 +14729,7 @@ medicine: {
 }
 
 ################################################################################
-FILE 57/69: style.css
+FILE 57/72: style.css
 ################################################################################
 
 * {
@@ -15129,7 +15149,7 @@ html, body {
 
 
 ################################################################################
-FILE 58/69: styles.css
+FILE 58/72: styles.css
 ################################################################################
 
 * {
@@ -15548,7 +15568,7 @@ html, body {
 }
 
 ################################################################################
-FILE 59/69: tauri.conf.json
+FILE 59/72: tauri.conf.json
 ################################################################################
 
 {
@@ -15605,7 +15625,34 @@ FILE 59/69: tauri.conf.json
 
 
 ################################################################################
-FILE 60/69: temp\bed.png
+FILE 60/72: temp\anim_test\stick_01.png
+################################################################################
+
+[BINARY / NON-TEXT FILE]
+File: temp\anim_test\stick_01.png
+Size: 510 bytes
+Content not included in dump.
+
+################################################################################
+FILE 61/72: temp\anim_test\stick_02.png
+################################################################################
+
+[BINARY / NON-TEXT FILE]
+File: temp\anim_test\stick_02.png
+Size: 959 bytes
+Content not included in dump.
+
+################################################################################
+FILE 62/72: temp\anim_test\stick_03.png
+################################################################################
+
+[BINARY / NON-TEXT FILE]
+File: temp\anim_test\stick_03.png
+Size: 935 bytes
+Content not included in dump.
+
+################################################################################
+FILE 63/72: temp\bed.png
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -15614,7 +15661,7 @@ Size: 87 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 61/69: temp\crate.png
+FILE 64/72: temp\crate.png
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -15623,7 +15670,7 @@ Size: 87 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 62/69: temp\door.png
+FILE 65/72: temp\door.png
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -15632,7 +15679,7 @@ Size: 87 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 63/69: temp\food.png
+FILE 66/72: temp\food.png
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -15641,7 +15688,7 @@ Size: 87 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 64/69: temp\player.png
+FILE 67/72: temp\player.png
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -15650,7 +15697,7 @@ Size: 86 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 65/69: temp\rock.png
+FILE 68/72: temp\rock.png
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -15659,7 +15706,7 @@ Size: 87 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 66/69: temp\tree.png
+FILE 69/72: temp\tree.png
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -15668,7 +15715,7 @@ Size: 85 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 67/69: temp\water.png
+FILE 70/72: temp\water.png
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -15677,7 +15724,7 @@ Size: 87 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 68/69: temp\zombie.png
+FILE 71/72: temp\zombie.png
 ################################################################################
 
 [BINARY / NON-TEXT FILE]
@@ -15686,7 +15733,7 @@ Size: 85 bytes
 Content not included in dump.
 
 ################################################################################
-FILE 69/69: vite.config.js
+FILE 72/72: vite.config.js
 ################################################################################
 
 import { defineConfig } from 'vite'
