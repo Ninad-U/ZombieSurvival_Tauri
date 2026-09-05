@@ -885,64 +885,58 @@ saveAnimationAssignment(entity, animationName) {
         el.textContent = message;
     }
     
-    close() {
-        if (this.game && this.game.app) {
-            this.game.app.lastOpenedEditor = null;
-        }
-
-        // Stop the update interval
-        if (this._updateInterval) {
-            clearInterval(this._updateInterval);
-            this._updateInterval = null;
-        }
-
-        this.stopPreview();
-        const panel = document.getElementById('animation-editor-panel');
-        if (panel) {
-            panel.style.display = 'none';
-        }
-
-        const editorContent = document.getElementById('editor-content');
-        if (editorContent) {
-            editorContent.style.display = 'block';
-            editorContent.style.visibility = 'visible';
-        }
-
-        const editorTab = document.querySelector('.tab:last-child');
-        if (editorTab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            editorTab.classList.add('active');
-            editorTab.click();
-        }
+close() {
+    if (this.game && this.game.app) {
+        this.game.app.lastOpenedEditor = null;
     }
 
-    show() {
-        // Store which editor is opened
-        if (this.game && this.game.app) {
-            this.game.app.lastOpenedEditor = 'animation-editor-panel';
-        }
-
-        const editorContent = document.getElementById('editor-content');
-        if (editorContent) {
-            editorContent.style.display = 'none';
-            editorContent.style.visibility = 'hidden';
-        }
-
-        const panel = document.getElementById('animation-editor-panel');
-        if (panel) {
-            panel.style.display = 'block';
-        }
-        
-        // Restart update interval if needed
-        if (!this._updateInterval) {
-            this._updateInterval = setInterval(() => {
-                this.updateEntityInfo();
-            }, 250);
-        }
-        
-        // Update entity info when showing
-        this.updateEntityInfo();
-        this.updateWorkflowUI();
-        this.setStatus('Ready', 'info');
+    // Stop the update interval
+    if (this._updateInterval) {
+        clearInterval(this._updateInterval);
+        this._updateInterval = null;
     }
+
+    this.stopPreview();
+    const panel = document.getElementById('animation-editor-panel');
+    if (panel) {
+        panel.style.display = 'none';
+    }
+
+    // --- FIX: Show cards grid ---
+    const editorContent = document.getElementById('editor-content');
+    if (editorContent) {
+        editorContent.style.display = 'block';
+        editorContent.style.visibility = 'visible';
+    }
+
+    // --- FIX: Switch to Editor tab (index 1), NOT Admin Shell (last-child) ---
+    const tabs = document.querySelectorAll('.tab');
+    const editorTab = tabs[1]; // Editor tab is index 1
+    if (editorTab) {
+        tabs.forEach(t => t.classList.remove('active'));
+        editorTab.classList.add('active');
+        // The tab click handler will handle the rest
+        editorTab.click();
+    }
+}
+
+show() {
+    // Store which editor is opened
+    if (this.game && this.game.app) {
+        this.game.app.lastOpenedEditor = 'animation-editor-panel';
+    }
+
+    // --- FIX: Hide cards grid ---
+    const editorContent = document.getElementById('editor-content');
+    if (editorContent) {
+        editorContent.style.display = 'none';
+        editorContent.style.visibility = 'hidden';
+    }
+
+    const panel = document.getElementById('animation-editor-panel');
+    if (panel) {
+        panel.style.display = 'block';
+    }
+    this.setStatus('Ready', 'info');
+}
 }

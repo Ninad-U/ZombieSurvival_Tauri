@@ -282,45 +282,48 @@ export class NPCEditor {
         URL.revokeObjectURL(url);
     }
     
-    close() {
-
-            if (this.game && this.game.app) {
+close() {
+    if (this.game && this.game.app) {
         this.game.app.lastOpenedEditor = null;
     }
 
-        const panel = document.getElementById('npc-editor-panel');
-        if (panel) {
-            panel.style.display = 'none';
-        }
+    const panel = document.getElementById('npc-editor-panel');
+    if (panel) {
+        panel.style.display = 'none';
+    }
 
-        const editorContent = document.getElementById('editor-content');
-if (editorContent) {
-    editorContent.style.display = 'block';
-    editorContent.style.visibility = 'visible';
+    // --- FIX: Show cards grid ---
+    const editorContent = document.getElementById('editor-content');
+    if (editorContent) {
+        editorContent.style.display = 'block';
+        editorContent.style.visibility = 'visible';
+    }
+
+    // --- FIX: Switch to Editor tab (index 1), NOT Admin Shell ---
+    const tabs = document.querySelectorAll('.tab');
+    const editorTab = tabs[1];
+    if (editorTab) {
+        tabs.forEach(t => t.classList.remove('active'));
+        editorTab.classList.add('active');
+        editorTab.click();
+    }
 }
 
-        const editorTab = document.querySelector('.tab:last-child');
-        if (editorTab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            editorTab.classList.add('active');
-            editorTab.click();
-        }
-    }
-    
-    show() {
 
+show() {
     // Store which editor is opened
     if (this.game && this.game.app) {
         this.game.app.lastOpenedEditor = 'npc-editor-panel';
     }
 
-const editorContent = document.getElementById('editor-content');
-if (editorContent) {
-    editorContent.style.display = 'none';
-    editorContent.style.visibility = 'hidden';
-}
+    // --- FIX: Hide cards grid ---
+    const editorContent = document.getElementById('editor-content');
+    if (editorContent) {
+        editorContent.style.display = 'none';
+        editorContent.style.visibility = 'hidden';
+    }
 
-        const panel = document.getElementById('npc-editor-panel');
+    const panel = document.getElementById('npc-editor-panel');
         if (panel) {
             panel.style.display = 'block';
         }
@@ -328,5 +331,7 @@ if (editorContent) {
             this.newTemplate();
         }
         this.populateTemplateList();
-    }
+}
+
+
 }

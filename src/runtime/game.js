@@ -2205,39 +2205,48 @@ renderCutscene(ctx) {
     }
 }
 
-    async openAnimationEditor() {
-        console.log('🔴 Opening Animation Editor...');
-        try {
-            if (!this.animationEditor) {
-                const { AnimationEditor } = await import('../editor/animationEditor.js');
-                console.log('🔴 AnimationEditor imported successfully');
-                this.animationEditor = new AnimationEditor(this);
-            }
-            this.animationEditor.show();
-            console.log('🔴 Animation Editor shown');
-        } catch (error) {
-            console.error('🔴 Error opening Animation Editor:', error);
+async openAnimationEditor() {
+    console.log('🔴 Opening Animation Editor...');
+    try {
+        // --- FIX: Hide all editor panels first ---
+        this.hideAllEditorPanels();
+        
+        if (!this.animationEditor) {
+            const { AnimationEditor } = await import('../editor/animationEditor.js');
+            console.log('🔴 AnimationEditor imported successfully');
+            this.animationEditor = new AnimationEditor(this);
         }
+        this.animationEditor.show();
+        console.log('🔴 Animation Editor shown');
+    } catch (error) {
+        console.error('🔴 Error opening Animation Editor:', error);
     }
+}
 
-    async openCutsceneEditor() {
-        console.log('🔴 Opening Cutscene Editor...');
-        try {
-            if (!this.cutsceneEditor) {
-                const { CutsceneEditor } = await import('../editor/cutsceneEditor.js');
-                console.log('🔴 CutsceneEditor imported successfully');
-                this.cutsceneEditor = new CutsceneEditor(this);
-            }
-            this.cutsceneEditor.show();
-            console.log('🔴 Cutscene Editor shown');
-        } catch (error) {
-            console.error('🔴 Error opening Cutscene Editor:', error);
+async openCutsceneEditor() {
+    console.log('🔴 Opening Cutscene Editor...');
+    try {
+        // --- FIX: Hide all editor panels first ---
+        this.hideAllEditorPanels();
+        
+        if (!this.cutsceneEditor) {
+            const { CutsceneEditor } = await import('../editor/cutsceneEditor.js');
+            console.log('🔴 CutsceneEditor imported successfully');
+            this.cutsceneEditor = new CutsceneEditor(this);
         }
+        this.cutsceneEditor.show();
+        console.log('🔴 Cutscene Editor shown');
+    } catch (error) {
+        console.error('🔴 Error opening Cutscene Editor:', error);
     }
+}
 
 async openMissionEditor() {
     console.log('Opening Mission Editor...');
     try {
+        // --- FIX: Hide all editor panels first ---
+        this.hideAllEditorPanels();
+        
         if (!this.missionEditor) {
             const { MissionEditor } = await import('../editor/missionEditor.js');
             this.missionEditor = new MissionEditor(this);
@@ -2248,10 +2257,12 @@ async openMissionEditor() {
     }
 }
 
-
 async openMapEditor() {
     console.log('Opening Map Editor...');
     try {
+        // --- FIX: Hide all editor panels first ---
+        this.hideAllEditorPanels();
+        
         if (!this.mapEditor) {
             const { MapEditor } = await import('../editor/mapEditor.js');
             this.mapEditor = new MapEditor(this);
@@ -2265,6 +2276,9 @@ async openMapEditor() {
 async openNpcEditor() {
     console.log('Opening NPC Editor...');
     try {
+        // --- FIX: Hide all editor panels first ---
+        this.hideAllEditorPanels();
+        
         if (!this.npcEditor) {
             const { NPCEditor } = await import('../editor/npcEditor.js');
             this.npcEditor = new NPCEditor(this);
@@ -2274,6 +2288,45 @@ async openNpcEditor() {
         console.error('Error opening NPC Editor:', error);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+hideAllEditorPanels() {
+    // Hide all editor panels in the editor container
+    const editorContainer = document.getElementById('editor-container');
+    if (!editorContainer) return;
+    
+    const editorPanels = editorContainer.querySelectorAll(
+        '#animation-editor-panel, #cutscene-editor-panel, #mission-editor-panel, #map-editor-panel, #npc-editor-panel'
+    );
+    editorPanels.forEach(panel => {
+        if (panel) {
+            panel.style.display = 'none';
+            // Also call close/cleanup if the panel has it
+            if (panel.id === 'animation-editor-panel' && this.animationEditor) {
+                // Don't destroy, just hide
+            }
+        }
+    });
+    
+    // Also hide the card grid
+    const editorContent = document.getElementById('editor-content');
+    if (editorContent) {
+        editorContent.style.display = 'none';
+        editorContent.style.visibility = 'hidden';
+    }
+    
+    console.log('[Game] All editor panels hidden');
+}
+
 
     resetMissionProgress() {
         // Reset mission loader

@@ -310,48 +310,51 @@ downloadDialogue(data) {
         el.textContent = message;
     }
     
-    close() {
-
+close() {
     if (this.game && this.game.app) {
         this.game.app.lastOpenedEditor = null;
     }
 
-        const panel = document.getElementById('cutscene-editor-panel');
-        if (panel) {
-            panel.style.display = 'none';
-        }
-
-        const editorContent = document.getElementById('editor-content');
-if (editorContent) {
-    editorContent.style.display = 'block';
-    editorContent.style.visibility = 'visible';
-}
-
-        const editorTab = document.querySelector('.tab:last-child');
-        if (editorTab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            editorTab.classList.add('active');
-            editorTab.click();
-        }
+    const panel = document.getElementById('cutscene-editor-panel');
+    if (panel) {
+        panel.style.display = 'none';
     }
-    
-    show() {
 
+    // --- FIX: Show cards grid ---
+    const editorContent = document.getElementById('editor-content');
+    if (editorContent) {
+        editorContent.style.display = 'block';
+        editorContent.style.visibility = 'visible';
+    }
+
+    // --- FIX: Switch to Editor tab (index 1), NOT Admin Shell ---
+    const tabs = document.querySelectorAll('.tab');
+    const editorTab = tabs[1];
+    if (editorTab) {
+        tabs.forEach(t => t.classList.remove('active'));
+        editorTab.classList.add('active');
+        editorTab.click();
+    }
+}
+    
+show() {
     // Store which editor is opened
     if (this.game && this.game.app) {
         this.game.app.lastOpenedEditor = 'cutscene-editor-panel';
     }
 
-const editorContent = document.getElementById('editor-content');
-if (editorContent) {
-    editorContent.style.display = 'none';
-    editorContent.style.visibility = 'hidden';
+    // --- FIX: Hide cards grid ---
+    const editorContent = document.getElementById('editor-content');
+    if (editorContent) {
+        editorContent.style.display = 'none';
+        editorContent.style.visibility = 'hidden';
+    }
+
+    const panel = document.getElementById('cutscene-editor-panel');
+    if (panel) {
+        panel.style.display = 'block';
+    }
+    this.setStatus('Ready', 'info');
 }
 
-        const panel = document.getElementById('cutscene-editor-panel');
-        if (panel) {
-            panel.style.display = 'block';
-        }
-        this.setStatus('Ready', 'info');
-    }
 }

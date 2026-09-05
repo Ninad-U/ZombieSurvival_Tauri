@@ -648,50 +648,80 @@ export class MissionEditor {
         URL.revokeObjectURL(url);
     }
     
-    close() {
-
-            if (this.game && this.game.app) {
+close() {
+    if (this.game && this.game.app) {
         this.game.app.lastOpenedEditor = null;
     }
 
-        const panel = document.getElementById('mission-editor-panel');
-        if (panel) {
-            panel.style.display = 'none';
-        }
-
-        const editorContent = document.getElementById('editor-content');
-if (editorContent) {
-    editorContent.style.display = 'block';
-    editorContent.style.visibility = 'visible';
-}
-
-        const editorTab = document.querySelector('.tab:last-child');
-        if (editorTab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            editorTab.classList.add('active');
-            editorTab.click();
-        }
+    const panel = document.getElementById('mission-editor-panel');
+    if (panel) {
+        panel.style.display = 'none';
     }
-    
-    show() {
 
+    // --- FIX: Show cards grid ---
+    const editorContent = document.getElementById('editor-content');
+    if (editorContent) {
+        editorContent.style.display = 'block';
+        editorContent.style.visibility = 'visible';
+    }
+
+    // --- FIX: Switch to Editor tab (index 1), NOT Admin Shell ---
+    const tabs = document.querySelectorAll('.tab');
+    const editorTab = tabs[1];
+    if (editorTab) {
+        tabs.forEach(t => t.classList.remove('active'));
+        editorTab.classList.add('active');
+        editorTab.click();
+    }
+}
+    
+show() {
     // Store which editor is opened
     if (this.game && this.game.app) {
         this.game.app.lastOpenedEditor = 'mission-editor-panel';
     }
 
-const editorContent = document.getElementById('editor-content');
-if (editorContent) {
-    editorContent.style.display = 'none';
-    editorContent.style.visibility = 'hidden';
+    // --- FIX: Hide cards grid ---
+    const editorContent = document.getElementById('editor-content');
+    if (editorContent) {
+        editorContent.style.display = 'none';
+        editorContent.style.visibility = 'hidden';
+    }
+
+    const panel = document.getElementById('mission-editor-panel');
+    if (panel) {
+        panel.style.display = 'block';
+    }
+    
+    // --- FIX: Show the editor content inside the panel ---
+    const editorContentDiv = document.getElementById('mission-editor-content');
+    if (editorContentDiv) {
+        editorContentDiv.style.display = 'block';
+    }
+    
+    // --- FIX: If no mission exists, create a new one ---
+    if (!this.currentMission) {
+        this.newMission();
+    }
+    
+    // --- FIX: Show the mission list container if we have missions ---
+    // But default to showing the editor content
+    const missionListContainer = document.getElementById('mission-list-container');
+    if (missionListContainer) {
+        missionListContainer.style.display = 'none';
+    }
+    
+    // Make sure the editor tab is visible
+    const editorTab = document.querySelector('.tab:nth-child(2)');
+    if (editorTab && !editorTab.classList.contains('active')) {
+        // Only switch if not already active
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        editorTab.classList.add('active');
+    }
+    
+    this.setStatus('Ready', 'info');
 }
 
-        const panel = document.getElementById('mission-editor-panel');
-        if (panel) {
-            panel.style.display = 'block';
-        }
-        if (!this.currentMission) {
-            this.newMission();
-        }
-    }
+
+
 }
