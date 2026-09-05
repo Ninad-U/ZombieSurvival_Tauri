@@ -412,3 +412,70 @@ html, body {
     font-size: 20px;
     font-weight: bold;
 }
+
+/* Fullscreen button styles */
+#fullscreen-btn {
+    background: none !important;
+    border: none !important;
+    color: #888 !important;
+    cursor: pointer !important;
+    font-family: 'Courier New', monospace !important;
+    font-size: 12px !important;
+    padding: 4px 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    border-bottom: 2px solid transparent !important;
+    height: 100% !important;
+    transition: color 0.2s !important;
+}
+
+#fullscreen-btn:hover {
+    color: #fff !important;
+}
+
+#fullscreen-btn.active {
+    color: #4caf50 !important;
+    border-bottom-color: #4caf50 !important;
+}
+
+/* Studio Workspace Fullscreen Layout Mode */
+#app.fullscreen-mode #menu-bar {
+    display: none !important;
+}
+
+#app.fullscreen-mode #left-panel {
+    display: none !important;
+}
+
+#app.fullscreen-mode #right-panel {
+    display: none !important;
+}
+
+#app.fullscreen-mode #console-panel {
+    display: none !important;
+}
+
+#app.fullscreen-mode #workspace {
+    flex: 1 !important;
+    width: 100% !important;
+}
+
+#app.fullscreen-mode #main-layout {
+    display: flex !important;
+    flex: 1 !important;
+}
+
+#app.fullscreen-mode #workspace-tabs {
+    flex-shrink: 0 !important;
+}
+
+#app.fullscreen-mode #game-container,
+#app.fullscreen-mode #editor-container {
+    flex: 1 !important;
+    min-height: 0 !important;
+}
+
+#app.fullscreen-mode #project-status {
+    display: none !important;
+}

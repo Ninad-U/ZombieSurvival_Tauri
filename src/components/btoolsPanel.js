@@ -17,7 +17,8 @@ export class BtoolsPanel {
     this.selectedTerrain = null;
     this.isPainting = false;
     this.brushSize = 1;
-    this.brushSizes = [1, 4, 8, 16];
+    
+    this.brushSizes = [1, 2, 4, 8];  // Changed from [1, 4, 8, 16]
     
     // --- NEW: Custom placement state ---
     this.placementActive = false;
@@ -68,13 +69,13 @@ export class BtoolsPanel {
     propertiesContent.appendChild(this.panel);
   }
   
-  render() {
+render() {
     if (!this.panel) return;
     
     const section = btoolsResources[this.currentSection];
     if (!section) {
-      this.panel.innerHTML = '<div style="color: #666;">No resources loaded</div>';
-      return;
+        this.panel.innerHTML = '<div style="color: #666;">No resources loaded</div>';
+        return;
     }
     
     const categories = getCategoriesForSection(this.currentSection);
@@ -82,162 +83,225 @@ export class BtoolsPanel {
     const isTerrainSection = this.currentSection === 'environment';
     
     let html = `
-      <div class="btools-header" style="
-        color: #4caf50;
-        font-weight: bold;
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 2px;
-        border-bottom: 1px solid #2a4a2a;
-        padding-bottom: 4px;
-      ">🔧 BTOOLS</div>
-      
-      <div style="display: flex; gap: 8px; margin-bottom: 2px;">
-        <button class="btools-section-btn" data-section="environment" style="
-          background: ${this.currentSection === 'environment' ? '#4caf50' : '#2a2a2a'};
-          color: ${this.currentSection === 'environment' ? '#fff' : '#aaa'};
-          border: 1px solid ${this.currentSection === 'environment' ? '#4caf50' : '#444'};
-          padding: 2px 10px;
-          font-family: inherit;
-          font-size: 10px;
-          cursor: pointer;
-          border-radius: 3px;
-        ">MAP / ENVIRONMENT</button>
-        <button class="btools-section-btn" data-section="objects" style="
-          background: ${this.currentSection === 'objects' ? '#4caf50' : '#2a2a2a'};
-          color: ${this.currentSection === 'objects' ? '#fff' : '#aaa'};
-          border: 1px solid ${this.currentSection === 'objects' ? '#4caf50' : '#444'};
-          padding: 2px 10px;
-          font-family: inherit;
-          font-size: 10px;
-          cursor: pointer;
-          border-radius: 3px;
-        ">OBJECTS</button>
-      </div>
-      
-      <div style="color: #888; font-size: 11px; font-weight: bold; margin: 2px 0 2px 0;">
-        ${section.label} ${isTerrainSection ? `— Brush Size: ${this.brushSize}×${this.brushSize}` : ''}
-      </div>
+        <div class="btools-header" style="
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+            border-bottom: 1px solid #2a4a2a;
+            padding-bottom: 4px;
+        ">🔧 BTOOLS</div>
+        
+        <div style="display: flex; gap: 8px; margin-bottom: 2px;">
+            <button class="btools-section-btn" data-section="environment" style="
+                background: ${this.currentSection === 'environment' ? '#4caf50' : '#2a2a2a'};
+                color: ${this.currentSection === 'environment' ? '#fff' : '#aaa'};
+                border: 1px solid ${this.currentSection === 'environment' ? '#4caf50' : '#444'};
+                padding: 2px 10px;
+                font-family: inherit;
+                font-size: 10px;
+                cursor: pointer;
+                border-radius: 3px;
+            ">MAP / ENVIRONMENT</button>
+            <button class="btools-section-btn" data-section="objects" style="
+                background: ${this.currentSection === 'objects' ? '#4caf50' : '#2a2a2a'};
+                color: ${this.currentSection === 'objects' ? '#fff' : '#aaa'};
+                border: 1px solid ${this.currentSection === 'objects' ? '#4caf50' : '#444'};
+                padding: 2px 10px;
+                font-family: inherit;
+                font-size: 10px;
+                cursor: pointer;
+                border-radius: 3px;
+            ">OBJECTS</button>
+        </div>
+        
+        <div style="color: #888; font-size: 11px; font-weight: bold; margin: 2px 0 2px 0;">
+            ${section.label} ${isTerrainSection ? `— Brush Size: ${this.brushSize}×${this.brushSize}` : ''}
+        </div>
     `;
     
     if (isTerrainSection) {
-      html += `
-        <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 4px;">
-          ${this.brushSizes.map(size => `
-            <button class="btools-brush-btn" data-size="${size}" style="
-              background: ${this.brushSize === size ? '#4caf50' : '#2a2a2a'};
-              color: ${this.brushSize === size ? '#fff' : '#aaa'};
-              border: 1px solid ${this.brushSize === size ? '#4caf50' : '#444'};
-              padding: 1px 8px;
-              font-family: inherit;
-              font-size: 9px;
-              cursor: pointer;
-              border-radius: 3px;
-            ">${size}×${size}</button>
-          `).join('')}
-          <span style="color: #555; font-size: 9px; margin-left: 4px; align-self: center;">
-            ${this.selectedTerrain ? `Selected: ${this.selectedTerrain.name}` : 'Click a terrain to select'}
-          </span>
-        </div>
-      `;
+        html += `
+            <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 4px;">
+                ${this.brushSizes.map(size => `
+                    <button class="btools-brush-btn" data-size="${size}" style="
+                        background: ${this.brushSize === size ? '#4caf50' : '#2a2a2a'};
+                        color: ${this.brushSize === size ? '#fff' : '#aaa'};
+                        border: 1px solid ${this.brushSize === size ? '#4caf50' : '#444'};
+                        padding: 1px 8px;
+                        font-family: inherit;
+                        font-size: 9px;
+                        cursor: pointer;
+                        border-radius: 3px;
+                    ">${size}×${size}</button>
+                `).join('')}
+                <span style="color: #555; font-size: 9px; margin-left: 4px; align-self: center;">
+                    ${this.selectedTerrain ? `Selected: ${this.selectedTerrain.isEraser ? '🧹 Eraser' : this.selectedTerrain.name}` : 'Click a terrain to select'}
+                </span>
+            </div>
+        `;
     }
     
     html += `
-      <div class="btools-filters" style="
-        display: flex;
-        flex-wrap: wrap;
-        gap: 3px;
-        margin-bottom: 4px;
-      ">
+        <div class="btools-filters" style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            margin-bottom: 4px;
+        ">
     `;
     
     for (const cat of categories) {
-      const isActive = cat === this.currentFilter;
-      html += `
-        <button class="btools-filter-btn" data-filter="${cat}" style="
-          background: ${isActive ? '#4caf50' : '#2a2a2a'};
-          color: ${isActive ? '#fff' : '#aaa'};
-          border: 1px solid ${isActive ? '#4caf50' : '#444'};
-          padding: 1px 8px;
-          font-family: inherit;
-          font-size: 9px;
-          cursor: pointer;
-          border-radius: 10px;
-          transition: all 0.2s;
-        ">${cat}</button>
-      `;
+        const isActive = cat === this.currentFilter;
+        html += `
+            <button class="btools-filter-btn" data-filter="${cat}" style="
+                background: ${isActive ? '#4caf50' : '#2a2a2a'};
+                color: ${isActive ? '#fff' : '#aaa'};
+                border: 1px solid ${isActive ? '#4caf50' : '#444'};
+                padding: 1px 8px;
+                font-family: inherit;
+                font-size: 9px;
+                cursor: pointer;
+                border-radius: 10px;
+                transition: all 0.2s;
+            ">${cat}</button>
+        `;
     }
     
     html += `
-      </div>
-      
-      <div class="btools-resources" style="
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-        gap: 4px;
-        margin-top: 2px;
-      ">
+        </div>
+        
+        <div class="btools-resources" style="
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 4px;
+            margin-top: 2px;
+        ">
     `;
     
+    // --- FIX: Pre-load all object images before rendering ---
+    // First, collect all object resources that need loading
+    const objectResources = resources.filter(r => r.type === 'object' && r.asset);
+    
+    // Trigger loading for all object images
+    for (const resource of objectResources) {
+        const fullPath = `assets/sprites/${resource.asset}`;
+        // Start loading in background
+        this.game.assetLoader.loadImage(fullPath).catch(() => {});
+    }
+    
+    // Now render the resources
     for (const resource of resources) {
-      const categoryPath = resource.category ? resource.category.join(' › ') : '';
-      const isTerrain = resource.type === 'terrain';
-      const isSelected = this.selectedTerrain && this.selectedTerrain.id === resource.id;
-      
-      // --- CHANGED: Use mousedown instead of draggable ---
-      html += `
-        <div class="btools-resource" 
-             data-resource-id="${resource.id}"
-             data-resource-type="${resource.type}"
-             style="
-               background: ${isSelected ? '#1a3a1a' : '#1a1a1a'};
-               border: ${isSelected ? '2px solid #4caf50' : '1px solid #333'};
-               border-radius: 3px;
-               padding: 4px 2px;
-               text-align: center;
-               ${isTerrain ? 'cursor: pointer;' : 'cursor: crosshair;'}
-               transition: all 0.2s;
-               position: relative;
-               user-select: none;
-             "
-             title="${resource.name}\n${categoryPath}">
-          <div class="btools-resource-thumb" style="
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2px;
-            ${isTerrain ? `background: ${resource.color || '#333'}; border: 1px solid #555;` : 'background: #111;'}
-          ">
-            ${isTerrain ? '' : this.getResourceImage(resource)}
-          </div>
-          <div class="btools-resource-name" style="
-            font-size: 7px;
-            color: ${isSelected ? '#4caf50' : '#888'};
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            line-height: 1.2;
-          ">${resource.name}</div>
-          ${isTerrain && isSelected ? '<div style="color:#4caf50;font-size:8px;position:absolute;top:-4px;right:-4px;">✓</div>' : ''}
-        </div>
-      `;
+        const categoryPath = resource.category ? resource.category.join(' › ') : '';
+        const isTerrain = resource.type === 'terrain';
+        const isSelected = this.selectedTerrain && this.selectedTerrain.id === resource.id;
+        const isEraser = resource.isEraser === true;
+        
+        // --- FIX: Get image immediately (it may still be loading) ---
+        let thumbContent = '';
+        if (isEraser) {
+            thumbContent = '<span style="font-size: 20px;">🧹</span>';
+        } else if (isTerrain) {
+            thumbContent = '';
+        } else if (resource.asset) {
+            const fullPath = `assets/sprites/${resource.asset}`;
+            const img = this.game.assetLoader.getImage(fullPath);
+            if (img) {
+                // Image is loaded - show it
+                thumbContent = `<img src="${fullPath}" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;">`;
+            } else {
+                // Image not loaded yet - show loading indicator with the path
+                // We'll use a data attribute to update it later
+                thumbContent = `<div style="width:100%;height:100%;background:#2a2a2a;border-radius:2px;font-size:10px;color:#555;display:flex;align-items:center;justify-content:center;flex-direction:column;">
+                    <span>⏳</span>
+                    <span style="font-size:6px;">${resource.asset.split('/').pop()}</span>
+                </div>`;
+            }
+        }
+        
+        html += `
+            <div class="btools-resource" 
+                 data-resource-id="${resource.id}"
+                 data-resource-type="${resource.type}"
+                 data-asset-path="${resource.asset ? `assets/sprites/${resource.asset}` : ''}"
+                 style="
+                   background: ${isSelected ? '#1a3a1a' : '#1a1a1a'};
+                   border: ${isSelected ? '2px solid #4caf50' : '1px solid #333'};
+                   border-radius: 3px;
+                   padding: 4px 2px;
+                   text-align: center;
+                   cursor: pointer;
+                   transition: all 0.2s;
+                   position: relative;
+                   user-select: none;
+                 "
+                 title="${resource.name}\n${categoryPath}">
+              <div class="btools-resource-thumb" style="
+                width: 100%;
+                aspect-ratio: 1;
+                border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 2px;
+                ${isTerrain ? `background: ${resource.color || '#333'}; border: 1px solid ${isSelected ? '#4caf50' : '#555'};` : 'background: #111;'}
+                ${isEraser ? 'border: 2px dashed #ff4444;' : ''}
+              ">
+                ${thumbContent}
+              </div>
+              <div class="btools-resource-name" style="
+                font-size: 7px;
+                color: ${isSelected ? '#4caf50' : (isEraser ? '#ff4444' : '#888')};
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                line-height: 1.2;
+              ">${isEraser ? '🧹 Eraser' : resource.name}</div>
+              ${isSelected ? '<div style="color:#4caf50;font-size:8px;position:absolute;top:-4px;right:-4px;">✓</div>' : ''}
+            </div>
+        `;
     }
     
     html += `
-      </div>
-      
-      <div style="margin-top: 4px; border-top: 1px solid #2a2a2a; padding-top: 4px; font-size: 8px; color: #555; text-align: center;">
-        ${isTerrainSection ? 'Click terrain, then paint on Game Preview' : 'Click object, then click on Game Preview to place'}
-      </div>
+        </div>
+        
+        <div style="margin-top: 4px; border-top: 1px solid #2a2a2a; padding-top: 4px; font-size: 8px; color: #555; text-align: center;">
+            ${isTerrainSection ? 'Click terrain/eraser, then paint on Game Preview' : 'Click object, then click on Game Preview to place'}
+        </div>
     `;
     
     this.panel.innerHTML = html;
     
-    // Event listeners
+    // --- FIX: After rendering, update thumbnails as images load ---
+    // For each object resource that has an asset, check if it loaded and update
+    const objectElements = this.panel.querySelectorAll('.btools-resource[data-resource-type="object"]');
+    for (const el of objectElements) {
+        const assetPath = el.dataset.assetPath;
+        if (assetPath) {
+            const img = this.game.assetLoader.getImage(assetPath);
+            if (img) {
+                // Already loaded - update the thumbnail
+                const thumb = el.querySelector('.btools-resource-thumb');
+                if (thumb) {
+                    thumb.innerHTML = `<img src="${assetPath}" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;">`;
+                }
+            } else {
+                // Not loaded yet - load it and update when done
+                this.game.assetLoader.loadImage(assetPath).then((loadedImg) => {
+                    if (loadedImg) {
+                        const thumb = el.querySelector('.btools-resource-thumb');
+                        if (thumb) {
+                            thumb.innerHTML = `<img src="${assetPath}" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;">`;
+                        }
+                    }
+                }).catch(() => {});
+            }
+        }
+    }
+    
+    // Event listeners (keep your existing ones)
     this.panel.querySelectorAll('.btools-section-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         this.currentSection = btn.dataset.section;
@@ -276,7 +340,6 @@ export class BtoolsPanel {
       });
     });
     
-    // --- CHANGED: Use mousedown to start placement, not dragstart ---
     this.panel.querySelectorAll('.btools-resource[data-resource-type="object"]').forEach(el => {
       el.addEventListener('mousedown', (e) => {
         e.preventDefault();
@@ -288,9 +351,8 @@ export class BtoolsPanel {
         }
       });
     });
-  }
+}
   
-// In src/components/btoolsPanel.js
 
 getResourceImage(resource) {
   if (!resource.asset) return '';
@@ -310,81 +372,82 @@ getResourceImage(resource) {
 
 // Also fix createPlacementGhost
 createPlacementGhost(resource) {
-  // Remove old ghost
-  if (this.placementGhost) {
-    this.placementGhost.remove();
-    this.placementGhost = null;
-  }
-  
-  const ghost = document.createElement('div');
-  ghost.id = 'btools-placement-ghost';
-  ghost.style.cssText = `
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.7;
-    border: 2px solid #4caf50;
-    border-radius: 4px;
-    background: rgba(76, 175, 80, 0.15);
-    display: none;
-    image-rendering: pixelated;
-    transition: none;
-  `;
-  
-  // Try to load the actual image for preview
-  if (resource.asset) {
-    // --- FIX: Build the full path ---
-    const fullPath = `assets/sprites/${resource.asset}`;
-    const img = this.game.assetLoader.getImage(fullPath);
-    if (img) {
-      const w = resource.width || 32;
-      const h = resource.height || 32;
-      ghost.innerHTML = `<img src="${fullPath}" style="width:${w}px;height:${h}px;image-rendering:pixelated;display:block;">`;
-      ghost.style.width = w + 'px';
-      ghost.style.height = h + 'px';
-    } else {
-      // Fallback colored box
-      const w = resource.width || 32;
-      const h = resource.height || 32;
-      ghost.style.width = w + 'px';
-      ghost.style.height = h + 'px';
-      ghost.style.backgroundColor = '#4caf50';
-      ghost.style.opacity = '0.5';
-      // Trigger loading for next time
-      this.game.assetLoader.loadImage(fullPath).catch(() => {});
+    // Remove old ghost
+    if (this.placementGhost) {
+        this.placementGhost.remove();
+        this.placementGhost = null;
     }
-  } else {
-    // Fallback colored box
+
+    const ghost = document.createElement('div');
+    ghost.id = 'btools-placement-ghost';
+    ghost.style.cssText = `
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0.7;
+        border: 2px solid #4caf50;
+        border-radius: 4px;
+        background: rgba(76, 175, 80, 0.15);
+        display: none;
+        image-rendering: pixelated;
+        transition: none;
+    `;
+
     const w = resource.width || 32;
     const h = resource.height || 32;
     ghost.style.width = w + 'px';
     ghost.style.height = h + 'px';
-    ghost.style.backgroundColor = '#4caf50';
-    ghost.style.opacity = '0.5';
-  }
-  
-  // Add grid position label
-  const label = document.createElement('div');
-  label.id = 'btools-ghost-label';
-  label.style.cssText = `
-    position: absolute;
-    bottom: -18px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #4caf50;
-    font-size: 9px;
-    font-family: 'Courier New', monospace;
-    background: rgba(0,0,0,0.8);
-    padding: 0 4px;
-    border-radius: 2px;
-    white-space: nowrap;
-    display: none;
-  `;
-  label.textContent = '(0, 0)';
-  ghost.appendChild(label);
-  
-  document.body.appendChild(ghost);
-  this.placementGhost = ghost;
+
+    if (resource.asset) {
+        const fullPath = `assets/sprites/${resource.asset}`;
+        const img = this.game.assetLoader.getImage(fullPath);
+        
+        if (img) {
+            // Already loaded - show it immediately
+            ghost.innerHTML = `<img src="${fullPath}" style="width:${w}px;height:${h}px;image-rendering:pixelated;display:block;">`;
+        } else {
+            // Loading state
+            ghost.innerHTML = `<div style="width:${w}px;height:${h}px;background:#2a2a2a;display:flex;align-items:center;justify-content:center;color:#555;font-size:10px;">Loading...</div>`;
+            
+            // Load and update when ready
+            this.game.assetLoader.loadImage(fullPath).then((loadedImg) => {
+                if (loadedImg && this.placementGhost) {
+                    this.placementGhost.innerHTML = `<img src="${fullPath}" style="width:${w}px;height:${h}px;image-rendering:pixelated;display:block;">`;
+                }
+            }).catch(() => {
+                if (this.placementGhost) {
+                    this.placementGhost.innerHTML = `<div style="width:${w}px;height:${h}px;background:#4caf50;opacity:0.5;"></div>`;
+                }
+            });
+        }
+    } else {
+        // Fallback colored box
+        ghost.style.backgroundColor = '#4caf50';
+        ghost.style.opacity = '0.5';
+    }
+
+    // Add grid position label
+    const label = document.createElement('div');
+    label.id = 'btools-ghost-label';
+    label.style.cssText = `
+        position: absolute;
+        bottom: -18px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #4caf50;
+        font-size: 9px;
+        font-family: 'Courier New', monospace;
+        background: rgba(0,0,0,0.8);
+        padding: 0 4px;
+        border-radius: 2px;
+        white-space: nowrap;
+        display: none;
+    `;
+    label.textContent = '(0, 0)';
+    ghost.appendChild(label);
+
+    document.body.appendChild(ghost);
+    this.placementGhost = ghost;
 }
   
   getResourceById(id) {
@@ -421,79 +484,7 @@ createPlacementGhost(resource) {
     this.showToast(`Click on Game Preview to place ${resource.name}`, 'info');
   }
   
-  createPlacementGhost(resource) {
-    // Remove old ghost
-    if (this.placementGhost) {
-      this.placementGhost.remove();
-      this.placementGhost = null;
-    }
-    
-    const ghost = document.createElement('div');
-    ghost.id = 'btools-placement-ghost';
-    ghost.style.cssText = `
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.7;
-      border: 2px solid #4caf50;
-      border-radius: 4px;
-      background: rgba(76, 175, 80, 0.15);
-      display: none;
-      image-rendering: pixelated;
-      transition: none;
-    `;
-    
-    // Try to load the actual image for preview
-    if (resource.asset) {
-      const img = this.game.assetLoader.getImage(resource.asset);
-      if (img) {
-        const w = resource.width || 32;
-        const h = resource.height || 32;
-        ghost.innerHTML = `<img src="${resource.asset}" style="width:${w}px;height:${h}px;image-rendering:pixelated;display:block;">`;
-        ghost.style.width = w + 'px';
-        ghost.style.height = h + 'px';
-      } else {
-        // Fallback colored box
-        const w = resource.width || 32;
-        const h = resource.height || 32;
-        ghost.style.width = w + 'px';
-        ghost.style.height = h + 'px';
-        ghost.style.backgroundColor = '#4caf50';
-        ghost.style.opacity = '0.5';
-      }
-    } else {
-      // Fallback colored box
-      const w = resource.width || 32;
-      const h = resource.height || 32;
-      ghost.style.width = w + 'px';
-      ghost.style.height = h + 'px';
-      ghost.style.backgroundColor = '#4caf50';
-      ghost.style.opacity = '0.5';
-    }
-    
-    // Add grid position label
-    const label = document.createElement('div');
-    label.id = 'btools-ghost-label';
-    label.style.cssText = `
-      position: absolute;
-      bottom: -18px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: #4caf50;
-      font-size: 9px;
-      font-family: 'Courier New', monospace;
-      background: rgba(0,0,0,0.8);
-      padding: 0 4px;
-      border-radius: 2px;
-      white-space: nowrap;
-      display: none;
-    `;
-    label.textContent = '(0, 0)';
-    ghost.appendChild(label);
-    
-    document.body.appendChild(ghost);
-    this.placementGhost = ghost;
-  }
+
   
   setupPlacementEvents() {
     // Remove any existing listeners to avoid duplicates
@@ -881,7 +872,7 @@ placeObjectAtGrid(resource, gridX, gridY, worldX, worldY) {
     console.log('[Btools] Events setup complete (custom placement)');
   }
   
-  paintTerrain(e) {
+paintTerrain(e) {
     if (!this.selectedTerrain) return;
     
     const canvas = document.getElementById('gameCanvas');
@@ -906,36 +897,37 @@ placeObjectAtGrid(resource, gridX, gridY, worldX, worldY) {
     
     if (!location.layers) location.layers = {};
     if (!location.layers.ground) {
-      const h = location.height || 30;
-      const w = location.width || 40;
-      location.layers.ground = Array(h).fill(null).map(() => Array(w).fill(0));
+        const h = location.height || 30;
+        const w = location.width || 40;
+        location.layers.ground = Array(h).fill(null).map(() => Array(w).fill(0));
     }
     
     const h = location.layers.ground.length;
     const w = location.layers.ground[0]?.length || 40;
     
     const halfSize = Math.floor(this.brushSize / 2);
-    const tileValue = this.selectedTerrain.tileValue !== undefined ? this.selectedTerrain.tileValue : 0;
+    // --- FIX: Use tileValue directly (works for 0, 1, 2, 3, 4, 5) ---
+    const tileValue = this.selectedTerrain.isEraser ? 0 : this.selectedTerrain.tileValue;
     
     let painted = false;
     for (let dy = -halfSize; dy < this.brushSize - halfSize; dy++) {
-      for (let dx = -halfSize; dx < this.brushSize - halfSize; dx++) {
-        const tx = centerTileX + dx;
-        const ty = centerTileY + dy;
-        if (tx >= 0 && tx < w && ty >= 0 && ty < h) {
-          location.layers.ground[ty][tx] = tileValue;
-          painted = true;
+        for (let dx = -halfSize; dx < this.brushSize - halfSize; dx++) {
+            const tx = centerTileX + dx;
+            const ty = centerTileY + dy;
+            if (tx >= 0 && tx < w && ty >= 0 && ty < h) {
+                location.layers.ground[ty][tx] = tileValue;
+                painted = true;
+            }
         }
-      }
     }
     
     if (painted && canvas) {
-      canvas.style.outline = '2px solid #ffcc00';
-      setTimeout(() => {
-        canvas.style.outline = '2px solid #4caf50';
-      }, 100);
+        canvas.style.outline = '2px solid #ffcc00';
+        setTimeout(() => {
+            canvas.style.outline = this.selectedTerrain.isEraser ? '2px solid #ff4444' : '2px solid #4caf50';
+        }, 100);
     }
-  }
+}
   
   // ============================================================
   // SHOW / HIDE

@@ -87,7 +87,7 @@ ZombieSurvival_Tauri
 │   │   └── app.js
 │   ├── editor
 │   │   ├── animationEditor.js
-│   │   ├── cutsceneEditor.js
+│   │   ├── dialogueEditor.js
 │   │   ├── mapEditor.js
 │   │   ├── missionEditor.js
 │   │   └── npcEditor.js
@@ -156,7 +156,7 @@ FILE 2/89: .taurignore
 
 [BINARY / NON-TEXT FILE]
 File: .taurignore
-Size: 529 bytes
+Size: 565 bytes
 Content not included in dump.
 
 ################################################################################
@@ -3838,7 +3838,7 @@ NOT PERSISTED (Runtime Only - Excluded from project save):
 
 PARTIAL / NEEDS FIX:
 
-- Cutscene Editor saves -> uses Blob download, needs Tauri FS
+- Dialogue Editor saves -> uses Blob download, needs Tauri FS
 - Mission UI timing -> shows during dialogue, should show after
 
 ============================================================
@@ -4019,8 +4019,8 @@ FILE 41/89: index.html
                             <button id="open-anim-editor-btn" style="background: #4caf50; color: #fff; border: none; padding: 8px 16px; cursor: pointer; font-family: inherit;">
                                 🎬 Open Animation Editor
                             </button>
-                            <button id="open-cutscene-editor-btn" style="background: #ff9800; color: #fff; border: none; padding: 8px 16px; cursor: pointer; font-family: inherit;">
-                                🎬 Open Cutscene Editor
+                            <button id="open-dialogue-editor-btn" style="background: #ff9800; color: #fff; border: none; padding: 8px 16px; cursor: pointer; font-family: inherit;">
+                                🎬 Open Dialogue Editor
                             </button>
                         </div>
                     </div>
@@ -5883,7 +5883,8 @@ export class BtoolsPanel {
     this.selectedTerrain = null;
     this.isPainting = false;
     this.brushSize = 1;
-    this.brushSizes = [1, 4, 8, 16];
+    
+    this.brushSizes = [1, 2, 4, 8];  // Changed from [1, 4, 8, 16]
     
     // --- NEW: Custom placement state ---
     this.placementActive = false;
@@ -5934,13 +5935,13 @@ export class BtoolsPanel {
     propertiesContent.appendChild(this.panel);
   }
   
-  render() {
+render() {
     if (!this.panel) return;
     
     const section = btoolsResources[this.currentSection];
     if (!section) {
-      this.panel.innerHTML = '<div style="color: #666;">No resources loaded</div>';
-      return;
+        this.panel.innerHTML = '<div style="color: #666;">No resources loaded</div>';
+        return;
     }
     
     const categories = getCategoriesForSection(this.currentSection);
@@ -5948,162 +5949,225 @@ export class BtoolsPanel {
     const isTerrainSection = this.currentSection === 'environment';
     
     let html = `
-      <div class="btools-header" style="
-        color: #4caf50;
-        font-weight: bold;
-        font-size: 13px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 2px;
-        border-bottom: 1px solid #2a4a2a;
-        padding-bottom: 4px;
-      ">🔧 BTOOLS</div>
-      
-      <div style="display: flex; gap: 8px; margin-bottom: 2px;">
-        <button class="btools-section-btn" data-section="environment" style="
-          background: ${this.currentSection === 'environment' ? '#4caf50' : '#2a2a2a'};
-          color: ${this.currentSection === 'environment' ? '#fff' : '#aaa'};
-          border: 1px solid ${this.currentSection === 'environment' ? '#4caf50' : '#444'};
-          padding: 2px 10px;
-          font-family: inherit;
-          font-size: 10px;
-          cursor: pointer;
-          border-radius: 3px;
-        ">MAP / ENVIRONMENT</button>
-        <button class="btools-section-btn" data-section="objects" style="
-          background: ${this.currentSection === 'objects' ? '#4caf50' : '#2a2a2a'};
-          color: ${this.currentSection === 'objects' ? '#fff' : '#aaa'};
-          border: 1px solid ${this.currentSection === 'objects' ? '#4caf50' : '#444'};
-          padding: 2px 10px;
-          font-family: inherit;
-          font-size: 10px;
-          cursor: pointer;
-          border-radius: 3px;
-        ">OBJECTS</button>
-      </div>
-      
-      <div style="color: #888; font-size: 11px; font-weight: bold; margin: 2px 0 2px 0;">
-        ${section.label} ${isTerrainSection ? `— Brush Size: ${this.brushSize}×${this.brushSize}` : ''}
-      </div>
+        <div class="btools-header" style="
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+            border-bottom: 1px solid #2a4a2a;
+            padding-bottom: 4px;
+        ">🔧 BTOOLS</div>
+        
+        <div style="display: flex; gap: 8px; margin-bottom: 2px;">
+            <button class="btools-section-btn" data-section="environment" style="
+                background: ${this.currentSection === 'environment' ? '#4caf50' : '#2a2a2a'};
+                color: ${this.currentSection === 'environment' ? '#fff' : '#aaa'};
+                border: 1px solid ${this.currentSection === 'environment' ? '#4caf50' : '#444'};
+                padding: 2px 10px;
+                font-family: inherit;
+                font-size: 10px;
+                cursor: pointer;
+                border-radius: 3px;
+            ">MAP / ENVIRONMENT</button>
+            <button class="btools-section-btn" data-section="objects" style="
+                background: ${this.currentSection === 'objects' ? '#4caf50' : '#2a2a2a'};
+                color: ${this.currentSection === 'objects' ? '#fff' : '#aaa'};
+                border: 1px solid ${this.currentSection === 'objects' ? '#4caf50' : '#444'};
+                padding: 2px 10px;
+                font-family: inherit;
+                font-size: 10px;
+                cursor: pointer;
+                border-radius: 3px;
+            ">OBJECTS</button>
+        </div>
+        
+        <div style="color: #888; font-size: 11px; font-weight: bold; margin: 2px 0 2px 0;">
+            ${section.label} ${isTerrainSection ? `— Brush Size: ${this.brushSize}×${this.brushSize}` : ''}
+        </div>
     `;
     
     if (isTerrainSection) {
-      html += `
-        <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 4px;">
-          ${this.brushSizes.map(size => `
-            <button class="btools-brush-btn" data-size="${size}" style="
-              background: ${this.brushSize === size ? '#4caf50' : '#2a2a2a'};
-              color: ${this.brushSize === size ? '#fff' : '#aaa'};
-              border: 1px solid ${this.brushSize === size ? '#4caf50' : '#444'};
-              padding: 1px 8px;
-              font-family: inherit;
-              font-size: 9px;
-              cursor: pointer;
-              border-radius: 3px;
-            ">${size}×${size}</button>
-          `).join('')}
-          <span style="color: #555; font-size: 9px; margin-left: 4px; align-self: center;">
-            ${this.selectedTerrain ? `Selected: ${this.selectedTerrain.name}` : 'Click a terrain to select'}
-          </span>
-        </div>
-      `;
+        html += `
+            <div style="display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 4px;">
+                ${this.brushSizes.map(size => `
+                    <button class="btools-brush-btn" data-size="${size}" style="
+                        background: ${this.brushSize === size ? '#4caf50' : '#2a2a2a'};
+                        color: ${this.brushSize === size ? '#fff' : '#aaa'};
+                        border: 1px solid ${this.brushSize === size ? '#4caf50' : '#444'};
+                        padding: 1px 8px;
+                        font-family: inherit;
+                        font-size: 9px;
+                        cursor: pointer;
+                        border-radius: 3px;
+                    ">${size}×${size}</button>
+                `).join('')}
+                <span style="color: #555; font-size: 9px; margin-left: 4px; align-self: center;">
+                    ${this.selectedTerrain ? `Selected: ${this.selectedTerrain.isEraser ? '🧹 Eraser' : this.selectedTerrain.name}` : 'Click a terrain to select'}
+                </span>
+            </div>
+        `;
     }
     
     html += `
-      <div class="btools-filters" style="
-        display: flex;
-        flex-wrap: wrap;
-        gap: 3px;
-        margin-bottom: 4px;
-      ">
+        <div class="btools-filters" style="
+            display: flex;
+            flex-wrap: wrap;
+            gap: 3px;
+            margin-bottom: 4px;
+        ">
     `;
     
     for (const cat of categories) {
-      const isActive = cat === this.currentFilter;
-      html += `
-        <button class="btools-filter-btn" data-filter="${cat}" style="
-          background: ${isActive ? '#4caf50' : '#2a2a2a'};
-          color: ${isActive ? '#fff' : '#aaa'};
-          border: 1px solid ${isActive ? '#4caf50' : '#444'};
-          padding: 1px 8px;
-          font-family: inherit;
-          font-size: 9px;
-          cursor: pointer;
-          border-radius: 10px;
-          transition: all 0.2s;
-        ">${cat}</button>
-      `;
+        const isActive = cat === this.currentFilter;
+        html += `
+            <button class="btools-filter-btn" data-filter="${cat}" style="
+                background: ${isActive ? '#4caf50' : '#2a2a2a'};
+                color: ${isActive ? '#fff' : '#aaa'};
+                border: 1px solid ${isActive ? '#4caf50' : '#444'};
+                padding: 1px 8px;
+                font-family: inherit;
+                font-size: 9px;
+                cursor: pointer;
+                border-radius: 10px;
+                transition: all 0.2s;
+            ">${cat}</button>
+        `;
     }
     
     html += `
-      </div>
-      
-      <div class="btools-resources" style="
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-        gap: 4px;
-        margin-top: 2px;
-      ">
+        </div>
+        
+        <div class="btools-resources" style="
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 4px;
+            margin-top: 2px;
+        ">
     `;
     
+    // --- FIX: Pre-load all object images before rendering ---
+    // First, collect all object resources that need loading
+    const objectResources = resources.filter(r => r.type === 'object' && r.asset);
+    
+    // Trigger loading for all object images
+    for (const resource of objectResources) {
+        const fullPath = `assets/sprites/${resource.asset}`;
+        // Start loading in background
+        this.game.assetLoader.loadImage(fullPath).catch(() => {});
+    }
+    
+    // Now render the resources
     for (const resource of resources) {
-      const categoryPath = resource.category ? resource.category.join(' › ') : '';
-      const isTerrain = resource.type === 'terrain';
-      const isSelected = this.selectedTerrain && this.selectedTerrain.id === resource.id;
-      
-      // --- CHANGED: Use mousedown instead of draggable ---
-      html += `
-        <div class="btools-resource" 
-             data-resource-id="${resource.id}"
-             data-resource-type="${resource.type}"
-             style="
-               background: ${isSelected ? '#1a3a1a' : '#1a1a1a'};
-               border: ${isSelected ? '2px solid #4caf50' : '1px solid #333'};
-               border-radius: 3px;
-               padding: 4px 2px;
-               text-align: center;
-               ${isTerrain ? 'cursor: pointer;' : 'cursor: crosshair;'}
-               transition: all 0.2s;
-               position: relative;
-               user-select: none;
-             "
-             title="${resource.name}\n${categoryPath}">
-          <div class="btools-resource-thumb" style="
-            width: 100%;
-            aspect-ratio: 1;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 2px;
-            ${isTerrain ? `background: ${resource.color || '#333'}; border: 1px solid #555;` : 'background: #111;'}
-          ">
-            ${isTerrain ? '' : this.getResourceImage(resource)}
-          </div>
-          <div class="btools-resource-name" style="
-            font-size: 7px;
-            color: ${isSelected ? '#4caf50' : '#888'};
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            line-height: 1.2;
-          ">${resource.name}</div>
-          ${isTerrain && isSelected ? '<div style="color:#4caf50;font-size:8px;position:absolute;top:-4px;right:-4px;">✓</div>' : ''}
-        </div>
-      `;
+        const categoryPath = resource.category ? resource.category.join(' › ') : '';
+        const isTerrain = resource.type === 'terrain';
+        const isSelected = this.selectedTerrain && this.selectedTerrain.id === resource.id;
+        const isEraser = resource.isEraser === true;
+        
+        // --- FIX: Get image immediately (it may still be loading) ---
+        let thumbContent = '';
+        if (isEraser) {
+            thumbContent = '<span style="font-size: 20px;">🧹</span>';
+        } else if (isTerrain) {
+            thumbContent = '';
+        } else if (resource.asset) {
+            const fullPath = `assets/sprites/${resource.asset}`;
+            const img = this.game.assetLoader.getImage(fullPath);
+            if (img) {
+                // Image is loaded - show it
+                thumbContent = `<img src="${fullPath}" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;">`;
+            } else {
+                // Image not loaded yet - show loading indicator with the path
+                // We'll use a data attribute to update it later
+                thumbContent = `<div style="width:100%;height:100%;background:#2a2a2a;border-radius:2px;font-size:10px;color:#555;display:flex;align-items:center;justify-content:center;flex-direction:column;">
+                    <span>⏳</span>
+                    <span style="font-size:6px;">${resource.asset.split('/').pop()}</span>
+                </div>`;
+            }
+        }
+        
+        html += `
+            <div class="btools-resource" 
+                 data-resource-id="${resource.id}"
+                 data-resource-type="${resource.type}"
+                 data-asset-path="${resource.asset ? `assets/sprites/${resource.asset}` : ''}"
+                 style="
+                   background: ${isSelected ? '#1a3a1a' : '#1a1a1a'};
+                   border: ${isSelected ? '2px solid #4caf50' : '1px solid #333'};
+                   border-radius: 3px;
+                   padding: 4px 2px;
+                   text-align: center;
+                   cursor: pointer;
+                   transition: all 0.2s;
+                   position: relative;
+                   user-select: none;
+                 "
+                 title="${resource.name}\n${categoryPath}">
+              <div class="btools-resource-thumb" style="
+                width: 100%;
+                aspect-ratio: 1;
+                border-radius: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 2px;
+                ${isTerrain ? `background: ${resource.color || '#333'}; border: 1px solid ${isSelected ? '#4caf50' : '#555'};` : 'background: #111;'}
+                ${isEraser ? 'border: 2px dashed #ff4444;' : ''}
+              ">
+                ${thumbContent}
+              </div>
+              <div class="btools-resource-name" style="
+                font-size: 7px;
+                color: ${isSelected ? '#4caf50' : (isEraser ? '#ff4444' : '#888')};
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                line-height: 1.2;
+              ">${isEraser ? '🧹 Eraser' : resource.name}</div>
+              ${isSelected ? '<div style="color:#4caf50;font-size:8px;position:absolute;top:-4px;right:-4px;">✓</div>' : ''}
+            </div>
+        `;
     }
     
     html += `
-      </div>
-      
-      <div style="margin-top: 4px; border-top: 1px solid #2a2a2a; padding-top: 4px; font-size: 8px; color: #555; text-align: center;">
-        ${isTerrainSection ? 'Click terrain, then paint on Game Preview' : 'Click object, then click on Game Preview to place'}
-      </div>
+        </div>
+        
+        <div style="margin-top: 4px; border-top: 1px solid #2a2a2a; padding-top: 4px; font-size: 8px; color: #555; text-align: center;">
+            ${isTerrainSection ? 'Click terrain/eraser, then paint on Game Preview' : 'Click object, then click on Game Preview to place'}
+        </div>
     `;
     
     this.panel.innerHTML = html;
     
-    // Event listeners
+    // --- FIX: After rendering, update thumbnails as images load ---
+    // For each object resource that has an asset, check if it loaded and update
+    const objectElements = this.panel.querySelectorAll('.btools-resource[data-resource-type="object"]');
+    for (const el of objectElements) {
+        const assetPath = el.dataset.assetPath;
+        if (assetPath) {
+            const img = this.game.assetLoader.getImage(assetPath);
+            if (img) {
+                // Already loaded - update the thumbnail
+                const thumb = el.querySelector('.btools-resource-thumb');
+                if (thumb) {
+                    thumb.innerHTML = `<img src="${assetPath}" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;">`;
+                }
+            } else {
+                // Not loaded yet - load it and update when done
+                this.game.assetLoader.loadImage(assetPath).then((loadedImg) => {
+                    if (loadedImg) {
+                        const thumb = el.querySelector('.btools-resource-thumb');
+                        if (thumb) {
+                            thumb.innerHTML = `<img src="${assetPath}" style="width:100%;height:100%;object-fit:contain;image-rendering:pixelated;">`;
+                        }
+                    }
+                }).catch(() => {});
+            }
+        }
+    }
+    
+    // Event listeners (keep your existing ones)
     this.panel.querySelectorAll('.btools-section-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         this.currentSection = btn.dataset.section;
@@ -6142,7 +6206,6 @@ export class BtoolsPanel {
       });
     });
     
-    // --- CHANGED: Use mousedown to start placement, not dragstart ---
     this.panel.querySelectorAll('.btools-resource[data-resource-type="object"]').forEach(el => {
       el.addEventListener('mousedown', (e) => {
         e.preventDefault();
@@ -6154,9 +6217,8 @@ export class BtoolsPanel {
         }
       });
     });
-  }
+}
   
-// In src/components/btoolsPanel.js
 
 getResourceImage(resource) {
   if (!resource.asset) return '';
@@ -6176,81 +6238,82 @@ getResourceImage(resource) {
 
 // Also fix createPlacementGhost
 createPlacementGhost(resource) {
-  // Remove old ghost
-  if (this.placementGhost) {
-    this.placementGhost.remove();
-    this.placementGhost = null;
-  }
-  
-  const ghost = document.createElement('div');
-  ghost.id = 'btools-placement-ghost';
-  ghost.style.cssText = `
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.7;
-    border: 2px solid #4caf50;
-    border-radius: 4px;
-    background: rgba(76, 175, 80, 0.15);
-    display: none;
-    image-rendering: pixelated;
-    transition: none;
-  `;
-  
-  // Try to load the actual image for preview
-  if (resource.asset) {
-    // --- FIX: Build the full path ---
-    const fullPath = `assets/sprites/${resource.asset}`;
-    const img = this.game.assetLoader.getImage(fullPath);
-    if (img) {
-      const w = resource.width || 32;
-      const h = resource.height || 32;
-      ghost.innerHTML = `<img src="${fullPath}" style="width:${w}px;height:${h}px;image-rendering:pixelated;display:block;">`;
-      ghost.style.width = w + 'px';
-      ghost.style.height = h + 'px';
-    } else {
-      // Fallback colored box
-      const w = resource.width || 32;
-      const h = resource.height || 32;
-      ghost.style.width = w + 'px';
-      ghost.style.height = h + 'px';
-      ghost.style.backgroundColor = '#4caf50';
-      ghost.style.opacity = '0.5';
-      // Trigger loading for next time
-      this.game.assetLoader.loadImage(fullPath).catch(() => {});
+    // Remove old ghost
+    if (this.placementGhost) {
+        this.placementGhost.remove();
+        this.placementGhost = null;
     }
-  } else {
-    // Fallback colored box
+
+    const ghost = document.createElement('div');
+    ghost.id = 'btools-placement-ghost';
+    ghost.style.cssText = `
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        opacity: 0.7;
+        border: 2px solid #4caf50;
+        border-radius: 4px;
+        background: rgba(76, 175, 80, 0.15);
+        display: none;
+        image-rendering: pixelated;
+        transition: none;
+    `;
+
     const w = resource.width || 32;
     const h = resource.height || 32;
     ghost.style.width = w + 'px';
     ghost.style.height = h + 'px';
-    ghost.style.backgroundColor = '#4caf50';
-    ghost.style.opacity = '0.5';
-  }
-  
-  // Add grid position label
-  const label = document.createElement('div');
-  label.id = 'btools-ghost-label';
-  label.style.cssText = `
-    position: absolute;
-    bottom: -18px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #4caf50;
-    font-size: 9px;
-    font-family: 'Courier New', monospace;
-    background: rgba(0,0,0,0.8);
-    padding: 0 4px;
-    border-radius: 2px;
-    white-space: nowrap;
-    display: none;
-  `;
-  label.textContent = '(0, 0)';
-  ghost.appendChild(label);
-  
-  document.body.appendChild(ghost);
-  this.placementGhost = ghost;
+
+    if (resource.asset) {
+        const fullPath = `assets/sprites/${resource.asset}`;
+        const img = this.game.assetLoader.getImage(fullPath);
+        
+        if (img) {
+            // Already loaded - show it immediately
+            ghost.innerHTML = `<img src="${fullPath}" style="width:${w}px;height:${h}px;image-rendering:pixelated;display:block;">`;
+        } else {
+            // Loading state
+            ghost.innerHTML = `<div style="width:${w}px;height:${h}px;background:#2a2a2a;display:flex;align-items:center;justify-content:center;color:#555;font-size:10px;">Loading...</div>`;
+            
+            // Load and update when ready
+            this.game.assetLoader.loadImage(fullPath).then((loadedImg) => {
+                if (loadedImg && this.placementGhost) {
+                    this.placementGhost.innerHTML = `<img src="${fullPath}" style="width:${w}px;height:${h}px;image-rendering:pixelated;display:block;">`;
+                }
+            }).catch(() => {
+                if (this.placementGhost) {
+                    this.placementGhost.innerHTML = `<div style="width:${w}px;height:${h}px;background:#4caf50;opacity:0.5;"></div>`;
+                }
+            });
+        }
+    } else {
+        // Fallback colored box
+        ghost.style.backgroundColor = '#4caf50';
+        ghost.style.opacity = '0.5';
+    }
+
+    // Add grid position label
+    const label = document.createElement('div');
+    label.id = 'btools-ghost-label';
+    label.style.cssText = `
+        position: absolute;
+        bottom: -18px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: #4caf50;
+        font-size: 9px;
+        font-family: 'Courier New', monospace;
+        background: rgba(0,0,0,0.8);
+        padding: 0 4px;
+        border-radius: 2px;
+        white-space: nowrap;
+        display: none;
+    `;
+    label.textContent = '(0, 0)';
+    ghost.appendChild(label);
+
+    document.body.appendChild(ghost);
+    this.placementGhost = ghost;
 }
   
   getResourceById(id) {
@@ -6287,79 +6350,7 @@ createPlacementGhost(resource) {
     this.showToast(`Click on Game Preview to place ${resource.name}`, 'info');
   }
   
-  createPlacementGhost(resource) {
-    // Remove old ghost
-    if (this.placementGhost) {
-      this.placementGhost.remove();
-      this.placementGhost = null;
-    }
-    
-    const ghost = document.createElement('div');
-    ghost.id = 'btools-placement-ghost';
-    ghost.style.cssText = `
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.7;
-      border: 2px solid #4caf50;
-      border-radius: 4px;
-      background: rgba(76, 175, 80, 0.15);
-      display: none;
-      image-rendering: pixelated;
-      transition: none;
-    `;
-    
-    // Try to load the actual image for preview
-    if (resource.asset) {
-      const img = this.game.assetLoader.getImage(resource.asset);
-      if (img) {
-        const w = resource.width || 32;
-        const h = resource.height || 32;
-        ghost.innerHTML = `<img src="${resource.asset}" style="width:${w}px;height:${h}px;image-rendering:pixelated;display:block;">`;
-        ghost.style.width = w + 'px';
-        ghost.style.height = h + 'px';
-      } else {
-        // Fallback colored box
-        const w = resource.width || 32;
-        const h = resource.height || 32;
-        ghost.style.width = w + 'px';
-        ghost.style.height = h + 'px';
-        ghost.style.backgroundColor = '#4caf50';
-        ghost.style.opacity = '0.5';
-      }
-    } else {
-      // Fallback colored box
-      const w = resource.width || 32;
-      const h = resource.height || 32;
-      ghost.style.width = w + 'px';
-      ghost.style.height = h + 'px';
-      ghost.style.backgroundColor = '#4caf50';
-      ghost.style.opacity = '0.5';
-    }
-    
-    // Add grid position label
-    const label = document.createElement('div');
-    label.id = 'btools-ghost-label';
-    label.style.cssText = `
-      position: absolute;
-      bottom: -18px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: #4caf50;
-      font-size: 9px;
-      font-family: 'Courier New', monospace;
-      background: rgba(0,0,0,0.8);
-      padding: 0 4px;
-      border-radius: 2px;
-      white-space: nowrap;
-      display: none;
-    `;
-    label.textContent = '(0, 0)';
-    ghost.appendChild(label);
-    
-    document.body.appendChild(ghost);
-    this.placementGhost = ghost;
-  }
+
   
   setupPlacementEvents() {
     // Remove any existing listeners to avoid duplicates
@@ -6747,7 +6738,7 @@ placeObjectAtGrid(resource, gridX, gridY, worldX, worldY) {
     console.log('[Btools] Events setup complete (custom placement)');
   }
   
-  paintTerrain(e) {
+paintTerrain(e) {
     if (!this.selectedTerrain) return;
     
     const canvas = document.getElementById('gameCanvas');
@@ -6772,36 +6763,37 @@ placeObjectAtGrid(resource, gridX, gridY, worldX, worldY) {
     
     if (!location.layers) location.layers = {};
     if (!location.layers.ground) {
-      const h = location.height || 30;
-      const w = location.width || 40;
-      location.layers.ground = Array(h).fill(null).map(() => Array(w).fill(0));
+        const h = location.height || 30;
+        const w = location.width || 40;
+        location.layers.ground = Array(h).fill(null).map(() => Array(w).fill(0));
     }
     
     const h = location.layers.ground.length;
     const w = location.layers.ground[0]?.length || 40;
     
     const halfSize = Math.floor(this.brushSize / 2);
-    const tileValue = this.selectedTerrain.tileValue !== undefined ? this.selectedTerrain.tileValue : 0;
+    // --- FIX: Use tileValue directly (works for 0, 1, 2, 3, 4, 5) ---
+    const tileValue = this.selectedTerrain.isEraser ? 0 : this.selectedTerrain.tileValue;
     
     let painted = false;
     for (let dy = -halfSize; dy < this.brushSize - halfSize; dy++) {
-      for (let dx = -halfSize; dx < this.brushSize - halfSize; dx++) {
-        const tx = centerTileX + dx;
-        const ty = centerTileY + dy;
-        if (tx >= 0 && tx < w && ty >= 0 && ty < h) {
-          location.layers.ground[ty][tx] = tileValue;
-          painted = true;
+        for (let dx = -halfSize; dx < this.brushSize - halfSize; dx++) {
+            const tx = centerTileX + dx;
+            const ty = centerTileY + dy;
+            if (tx >= 0 && tx < w && ty >= 0 && ty < h) {
+                location.layers.ground[ty][tx] = tileValue;
+                painted = true;
+            }
         }
-      }
     }
     
     if (painted && canvas) {
-      canvas.style.outline = '2px solid #ffcc00';
-      setTimeout(() => {
-        canvas.style.outline = '2px solid #4caf50';
-      }, 100);
+        canvas.style.outline = '2px solid #ffcc00';
+        setTimeout(() => {
+            canvas.style.outline = this.selectedTerrain.isEraser ? '2px solid #ff4444' : '2px solid #4caf50';
+        }, 100);
     }
-  }
+}
   
   // ============================================================
   // SHOW / HIDE
@@ -8111,50 +8103,43 @@ class App {
 
     initUI() {
         // Tool navigation
-        document.querySelectorAll('.tool-item').forEach(item => {
-            item.addEventListener('click', () => {
-                document.querySelectorAll('.tool-item').forEach(el => el.classList.remove('active'));
-                item.classList.add('active');
-                const tool = item.dataset.tool;
-                
-                document.getElementById('templates-panel').style.display = 'none';
-                document.getElementById('guide-panel').style.display = 'none';
-                
-                if (tool === 'guide') {
-                    document.getElementById('guide-panel').style.display = 'block';
-                    this.console.log('info', 'Showing Project Guide');
-                } else if (tool === 'templates') {
-                    document.getElementById('templates-panel').style.display = 'block';
-                    this.console.log('info', 'Showing Templates');
-                } else if (tool === 'maps') {
-                    this.console.log('info', 'Opening Map Editor');
-                    this.switchToEditorTab();
-                    setTimeout(() => {
-                        this.game.openMapEditor();
-                    }, 100);
-                } else if (tool === 'missions') {
-                    this.console.log('info', 'Opening Mission Editor');
-                    this.switchToEditorTab();
-                    setTimeout(() => {
-                        this.game.openMissionEditor();
-                    }, 100);
-                } else if (tool === 'dialogue') {
-                    this.console.log('info', 'Opening Cutscene/Dialogue Editor');
-                    this.switchToEditorTab();
-                    setTimeout(() => {
-                        this.game.openCutsceneEditor();
-                    }, 100);
-                } else if (tool === 'npcs') {
-                    this.console.log('info', 'Opening NPC Editor');
-                    this.switchToEditorTab();
-                    setTimeout(() => {
-                        this.game.openNpcEditor();
-                    }, 100);
-                } else {
-                    document.getElementById('templates-panel').style.display = 'block';
-                }
-            });
-        });
+
+document.querySelectorAll('.tool-item').forEach(item => {
+    item.addEventListener('click', () => {
+        document.querySelectorAll('.tool-item').forEach(el => el.classList.remove('active'));
+        item.classList.add('active');
+        const tool = item.dataset.tool;
+        
+        document.getElementById('templates-panel').style.display = 'none';
+        document.getElementById('guide-panel').style.display = 'none';
+        
+        if (tool === 'guide') {
+            document.getElementById('guide-panel').style.display = 'block';
+            this.console.log('info', 'Showing Project Guide');
+        } else if (tool === 'templates') {
+            document.getElementById('templates-panel').style.display = 'block';
+            this.console.log('info', 'Showing Templates');
+        } else if (tool === 'maps') {
+            this.console.log('info', 'Opening Map Editor');
+            this.switchToEditorTab(false);  // Don't show cards grid
+            this.game.openMapEditor();  // No timeout needed
+        } else if (tool === 'missions') {
+            this.console.log('info', 'Opening Mission Editor');
+            this.switchToEditorTab(false);
+            this.game.openMissionEditor();
+        } else if (tool === 'dialogue') {
+            this.console.log('info', 'Opening Cutscene/Dialogue Editor');
+            this.switchToEditorTab(false);
+            this.game.openDialogueEditor();
+        } else if (tool === 'npcs') {
+            this.console.log('info', 'Opening NPC Editor');
+            this.switchToEditorTab(false);
+            this.game.openNpcEditor();
+        } else {
+            document.getElementById('templates-panel').style.display = 'block';
+        }
+    });
+});
         
         // Menu bar items with dropdowns
         this.setupMenuBar();
@@ -8197,7 +8182,7 @@ class App {
                 
                 // Hide all editor panels
                 const editorPanels = editorContainer.querySelectorAll(
-                    '#animation-editor-panel, #cutscene-editor-panel, #mission-editor-panel, #map-editor-panel, #npc-editor-panel, #btools-panel, #admin-shell-panel'
+                    '#animation-editor-panel, #dialogue-editor-panel, #mission-editor-panel, #map-editor-panel, #npc-editor-panel, #btools-panel, #admin-shell-panel'
                 );
                 editorPanels.forEach(panel => {
                     panel.style.display = 'none';
@@ -8254,9 +8239,9 @@ class App {
                                         <p style="color: #4caf50; font-size: 10px; text-align: center; margin-top: 4px;">✓ Click to Open</p>
                                     </div>
                                     
-                                    <div class="editor-card" id="cutscene-editor-card" style="background: #ff9800; border: 1px solid #ff9800; border-radius: 8px; padding: 16px; cursor: pointer; transition: all 0.2s;">
+                                    <div class="editor-card" id="dialogue-editor-card" style="background: #ff9800; border: 1px solid #ff9800; border-radius: 8px; padding: 16px; cursor: pointer; transition: all 0.2s;">
                                         <div style="font-size: 32px; text-align: center;">🎭</div>
-                                        <h3 style="color: #fff; text-align: center; margin: 8px 0;">Cutscene Editor</h3>
+                                        <h3 style="color: #fff; text-align: center; margin: 8px 0;">Dialogue Editor</h3>
                                         <p style="color: #ddd; font-size: 12px; text-align: center;">Edit dialogue cutscenes</p>
                                         <p style="color: #ff9800; font-size: 10px; text-align: center; margin-top: 4px;">✓ Click to Open</p>
                                     </div>
@@ -8307,9 +8292,9 @@ class App {
                                 this.lastOpenedEditor = 'animation-editor-panel';
                                 this.game.openAnimationEditor();
                             });
-                            document.getElementById('cutscene-editor-card')?.addEventListener('click', () => {
-                                this.lastOpenedEditor = 'cutscene-editor-panel';
-                                this.game.openCutsceneEditor();
+                            document.getElementById('dialogue-editor-card')?.addEventListener('click', () => {
+                                this.lastOpenedEditor = 'dialogue-editor-panel';
+                                this.game.openDialogueEditor();
                             });
                             document.getElementById('mission-editor-card')?.addEventListener('click', () => {
                                 this.lastOpenedEditor = 'mission-editor-panel';
@@ -8371,8 +8356,7 @@ class App {
         this.console.log('info', 'UI initialized');
     }
 
-switchToEditorTab() {
-    // Find the Editor tab (index 1 - Game Preview is 0, Editor is 1, Admin Shell is 2)
+switchToEditorTab(showCards = true) {
     const tabs = document.querySelectorAll('.tab');
     const editorTab = tabs[1];
     
@@ -8396,7 +8380,7 @@ switchToEditorTab() {
         
         // Hide all editor panels
         const editorPanels = editorContainer?.querySelectorAll(
-            '#animation-editor-panel, #cutscene-editor-panel, #mission-editor-panel, #map-editor-panel, #npc-editor-panel, #btools-panel, #admin-shell-panel'
+            '#animation-editor-panel, #dialogue-editor-panel, #mission-editor-panel, #map-editor-panel, #npc-editor-panel, #btools-panel, #admin-shell-panel'
         ) || [];
         editorPanels.forEach(panel => {
             if (panel) {
@@ -8411,7 +8395,6 @@ switchToEditorTab() {
         }
         
         // --- STEP 2: Show Editor tab ---
-        // Remove active from all tabs and activate Editor tab
         tabs.forEach(t => t.classList.remove('active'));
         editorTab.classList.add('active');
         
@@ -8421,8 +8404,16 @@ switchToEditorTab() {
             editorContainer.style.visibility = 'visible';
         }
         
-        // If there was a previously opened editor, restore it
-        if (this.lastOpenedEditor) {
+        // --- STEP 3: Only show cards grid if explicitly requested ---
+        // (i.e., when user clicks the Editor tab, not when a tool is clicked)
+        if (showCards && !this.lastOpenedEditor) {
+            if (editorContent) {
+                editorContent.style.display = 'block';
+                editorContent.style.visibility = 'visible';
+            }
+            this.console.log('info', 'Switched to Editor - Cards Grid');
+        } else if (this.lastOpenedEditor) {
+            // If there was a previously opened editor, restore it
             const panel = document.getElementById(this.lastOpenedEditor);
             if (panel) {
                 panel.style.display = 'block';
@@ -8430,14 +8421,6 @@ switchToEditorTab() {
                 return;
             }
         }
-        
-        // No last editor, show the card grid
-        if (editorContent) {
-            editorContent.style.display = 'block';
-            editorContent.style.visibility = 'visible';
-        }
-        
-        this.console.log('info', 'Switched to Editor');
     }
 }
 
@@ -9948,13 +9931,13 @@ show() {
 }
 
 ################################################################################
-FILE 57/89: src\editor\cutsceneEditor.js
+FILE 57/89: src\editor\dialogueEditor.js
 ################################################################################
 
-// Cutscene Editor
+// Dialogue Editor
 // Lightweight editor for dialogue cutscene data (focus + black bars)
 
-export class CutsceneEditor {
+export class DialogueEditor {
     constructor(gameRuntime) {
         this.game = gameRuntime;
         this.dialogueData = null;
@@ -9970,7 +9953,7 @@ export class CutsceneEditor {
     
     initUI() {
         const panel = document.createElement('div');
-        panel.id = 'cutscene-editor-panel';
+        panel.id = 'dialogue-editor-panel';
         panel.style.cssText = `
             display: none;
             padding: 20px;
@@ -9982,7 +9965,7 @@ export class CutsceneEditor {
         `;
         
         panel.innerHTML = `
-            <h2 style="color: #4caf50; margin-bottom: 16px;">🎬 Cutscene Editor</h2>
+            <h2 style="color: #4caf50; margin-bottom: 16px;">🎬 Dialogue Editor</h2>
             
             <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px;">
                 <div>
@@ -10268,7 +10251,7 @@ close() {
         this.game.app.lastOpenedEditor = null;
     }
 
-    const panel = document.getElementById('cutscene-editor-panel');
+    const panel = document.getElementById('dialogue-editor-panel');
     if (panel) {
         panel.style.display = 'none';
     }
@@ -10293,7 +10276,7 @@ close() {
 show() {
     // Store which editor is opened
     if (this.game && this.game.app) {
-        this.game.app.lastOpenedEditor = 'cutscene-editor-panel';
+        this.game.app.lastOpenedEditor = 'dialogue-editor-panel';
     }
 
     // --- FIX: Hide cards grid ---
@@ -10303,7 +10286,7 @@ show() {
         editorContent.style.visibility = 'hidden';
     }
 
-    const panel = document.getElementById('cutscene-editor-panel');
+    const panel = document.getElementById('dialogue-editor-panel');
     if (panel) {
         panel.style.display = 'block';
     }
@@ -11884,7 +11867,7 @@ export class GameRuntime {
         this.assetLoader = new AssetLoader();
         this.loadedImages = {};
         // Cutscene properties
-        this.cutsceneEditor = null;
+        this.dialogueEditor = null;
         this._cutsceneActive = false;
         this._cutsceneComponent = null;
         this._cutsceneInstruction = 0;
@@ -12722,84 +12705,101 @@ export class GameRuntime {
         this.renderUI(ctx);
     }
 
-    renderMap(ctx) {
-        const location = this.locationLoader.getCurrentLocation();
-        if (!location) return;
+// In src/runtime/game.js - replace the renderMap method:
 
-        const w = location.width || 40;
-        const h = location.height || 30;
-        const tileSize = this.tileSize;
+renderMap(ctx) {
+    const location = this.locationLoader.getCurrentLocation();
+    if (!location) return;
 
-        const ground = location.layers?.ground || [];
-        for (let y = 0; y < h; y++) {
-            for (let x = 0; x < w; x++) {
-                const tile = ground[y]?.[x] || 0;
-                const px = x * tileSize;
-                const py = y * tileSize;
+    const w = location.width || 40;
+    const h = location.height || 30;
+    const tileSize = this.tileSize;
 
-                if (tile === 0) {
+    const ground = location.layers?.ground || [];
+    for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+            const tile = ground[y]?.[x] || 0;
+            const px = x * tileSize;
+            const py = y * tileSize;
+
+            // --- FIX: Handle ALL tile values ---
+            switch(tile) {
+                case 0: // Grass
                     ctx.fillStyle = (x + y) % 2 === 0 ? '#2d5a2d' : '#3a6b3a';
-                } else if (tile === 1) {
+                    break;
+                case 1: // Dirt
                     ctx.fillStyle = '#8b7355';
-                } else if (tile === 2) {
+                    break;
+                case 2: // Stone
                     ctx.fillStyle = '#6b6b6b';
-                } else {
+                    break;
+                case 3: // Water
+                    ctx.fillStyle = '#2a6b8a';
+                    break;
+                case 4: // Sand
+                    ctx.fillStyle = '#c4b070';
+                    break;
+                case 5: // Wood Floor
+                    ctx.fillStyle = '#8b6b3a';
+                    break;
+                default:
                     ctx.fillStyle = '#2d5a2d';
-                }
-                ctx.fillRect(px, py, tileSize, tileSize);
             }
-        }
-
-        const objects = location.layers?.objects || [];
-        for (let y = 0; y < h; y++) {
-            for (let x = 0; x < w; x++) {
-                const obj = objects[y]?.[x] || 0;
-                if (obj === 1) {
-                    const px = x * tileSize;
-                    const py = y * tileSize;
-                    ctx.fillStyle = '#1a4a1a';
-                    ctx.fillRect(px + 4, py + 4, tileSize - 8, tileSize - 8);
-                    ctx.fillStyle = '#2d6b2d';
-                    ctx.fillRect(px + 8, py, tileSize - 16, tileSize - 8);
-                } else if (obj === 2) {
-                    const px = x * tileSize;
-                    const py = y * tileSize;
-                    ctx.fillStyle = '#5a5a5a';
-                    ctx.fillRect(px, py, tileSize, tileSize);
-                    ctx.strokeStyle = '#4a4a4a';
-                    ctx.lineWidth = 1;
-                    ctx.strokeRect(px, py, tileSize, tileSize);
-                }
-            }
-        }
-
-        const exits = location.exits || [];
-        for (const exit of exits) {
-            if (exit.visible === false) continue;
-
-            const sizeX = exit.size?.x || 1;
-            const sizeY = exit.size?.y || 3;
-            const tileSize = this.tileSize;
-
-            const startX = exit.x * tileSize;
-            const startY = exit.y * tileSize;
-            const width = sizeX * tileSize;
-            const height = sizeY * tileSize;
-
-            ctx.fillStyle = 'rgba(255, 200, 50, 0.3)';
-            ctx.fillRect(startX, startY, width, height);
-
-            ctx.strokeStyle = '#ffcc00';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(startX, startY, width, height);
-
-            ctx.fillStyle = '#ffcc00';
-            ctx.font = 'bold 10px monospace';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('EXIT', startX + width / 2, startY + height / 2);
+            ctx.fillRect(px, py, tileSize, tileSize);
         }
     }
+
+    // ... rest of renderMap (objects, exits) remains the same
+    const objects = location.layers?.objects || [];
+    for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+            const obj = objects[y]?.[x] || 0;
+            if (obj === 1) {
+                const px = x * tileSize;
+                const py = y * tileSize;
+                ctx.fillStyle = '#1a4a1a';
+                ctx.fillRect(px + 4, py + 4, tileSize - 8, tileSize - 8);
+                ctx.fillStyle = '#2d6b2d';
+                ctx.fillRect(px + 8, py, tileSize - 16, tileSize - 8);
+            } else if (obj === 2) {
+                const px = x * tileSize;
+                const py = y * tileSize;
+                ctx.fillStyle = '#5a5a5a';
+                ctx.fillRect(px, py, tileSize, tileSize);
+                ctx.strokeStyle = '#4a4a4a';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(px, py, tileSize, tileSize);
+            }
+        }
+    }
+
+    const exits = location.exits || [];
+    for (const exit of exits) {
+        if (exit.visible === false) continue;
+
+        const sizeX = exit.size?.x || 1;
+        const sizeY = exit.size?.y || 3;
+        const tileSize = this.tileSize;
+
+        const startX = exit.x * tileSize;
+        const startY = exit.y * tileSize;
+        const width = sizeX * tileSize;
+        const height = sizeY * tileSize;
+
+        ctx.fillStyle = 'rgba(255, 200, 50, 0.3)';
+        ctx.fillRect(startX, startY, width, height);
+
+        ctx.strokeStyle = '#ffcc00';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(startX, startY, width, height);
+
+        ctx.fillStyle = '#ffcc00';
+        ctx.font = 'bold 10px monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('EXIT', startX + width / 2, startY + height / 2);
+    }
+}
 
     renderEntity(ctx, entity) {
         const transform = entity.components.transform;
@@ -14064,21 +14064,21 @@ async openAnimationEditor() {
     }
 }
 
-async openCutsceneEditor() {
-    console.log('🔴 Opening Cutscene Editor...');
+async openDialogueEditor() {
+    console.log('🔴 Opening Dialogue Editor...');
     try {
         // --- FIX: Hide all editor panels first ---
         this.hideAllEditorPanels();
         
-        if (!this.cutsceneEditor) {
-            const { CutsceneEditor } = await import('../editor/cutsceneEditor.js');
-            console.log('🔴 CutsceneEditor imported successfully');
-            this.cutsceneEditor = new CutsceneEditor(this);
+        if (!this.dialogueEditor) {
+            const { DialogueEditor } = await import('../editor/dialogueEditor.js');
+            console.log('🔴 DialogueEditor imported successfully');
+            this.dialogueEditor = new DialogueEditor(this);
         }
-        this.cutsceneEditor.show();
-        console.log('🔴 Cutscene Editor shown');
+        this.dialogueEditor.show();
+        console.log('🔴 Dialogue Editor shown');
     } catch (error) {
-        console.error('🔴 Error opening Cutscene Editor:', error);
+        console.error('🔴 Error opening Dialogue Editor:', error);
     }
 }
 
@@ -14146,7 +14146,7 @@ hideAllEditorPanels() {
     if (!editorContainer) return;
     
     const editorPanels = editorContainer.querySelectorAll(
-        '#animation-editor-panel, #cutscene-editor-panel, #mission-editor-panel, #map-editor-panel, #npc-editor-panel'
+        '#animation-editor-panel, #dialogue-editor-panel, #mission-editor-panel, #map-editor-panel, #npc-editor-panel'
     );
     editorPanels.forEach(panel => {
         if (panel) {
@@ -14444,13 +14444,22 @@ export const btoolsResources = {
     label: 'MAP / ENVIRONMENT',
     resources: [
       {
+        id: 'eraser',
+        name: 'Eraser',
+        category: ['tools'],
+        type: 'terrain',
+        tileValue: 0,  // Sets to grass (0)
+        color: '#ff4444',
+        icon: '🧹',  // Will be displayed as fallback
+        isEraser: true
+      },
+      {
         id: 'grass',
         name: 'Grass',
         category: ['ground', 'grass'],
-        type: 'terrain',  // MUST be 'terrain' so the panel knows it's terrain
+        type: 'terrain',
         tileValue: 0,
         color: '#3a7a3a',
-        // No asset - rendered procedurally by the game
       },
       {
         id: 'dirt',
@@ -14566,19 +14575,19 @@ export const btoolsResources = {
 
 // Helper to get all categories from a section
 export function getCategoriesForSection(sectionId) {
-  const section = btoolsResources[sectionId];
-  if (!section) return ['All'];
-  
-  const categories = new Set();
-  categories.add('All');
-  
-  for (const resource of section.resources) {
-    if (resource.category && resource.category.length > 0) {
-      categories.add(resource.category[0]);
+    const section = btoolsResources[sectionId];
+    if (!section) return ['All'];
+    
+    const categories = new Set();
+    categories.add('All');
+    
+    for (const resource of section.resources) {
+        if (resource.category && resource.category.length > 0) {
+            categories.add(resource.category[0]);
+        }
     }
-  }
-  
-  return Array.from(categories);
+    
+    return Array.from(categories);
 }
 
 // Helper to get resources filtered by category

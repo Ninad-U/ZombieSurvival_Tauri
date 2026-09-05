@@ -6,7 +6,7 @@ import { TemplateLoader } from '../utils/templateLoader.js';
 import { ProjectState } from '../utils/projectState.js';
 import { AdminShell } from '../admin/adminShell.js';   
 import { BtoolsPanel } from '../components/btoolsPanel.js';
-
+import { getCurrentWindow } from '@tauri-apps/api/window';
 
 class App {
     constructor() {
@@ -67,7 +67,7 @@ document.querySelectorAll('.tool-item').forEach(item => {
         } else if (tool === 'dialogue') {
             this.console.log('info', 'Opening Cutscene/Dialogue Editor');
             this.switchToEditorTab(false);
-            this.game.openCutsceneEditor();
+            this.game.openDialogueEditor();
         } else if (tool === 'npcs') {
             this.console.log('info', 'Opening NPC Editor');
             this.switchToEditorTab(false);
@@ -119,7 +119,7 @@ document.querySelectorAll('.tool-item').forEach(item => {
                 
                 // Hide all editor panels
                 const editorPanels = editorContainer.querySelectorAll(
-                    '#animation-editor-panel, #cutscene-editor-panel, #mission-editor-panel, #map-editor-panel, #npc-editor-panel, #btools-panel, #admin-shell-panel'
+                    '#animation-editor-panel, #dialogue-editor-panel, #mission-editor-panel, #map-editor-panel, #npc-editor-panel, #btools-panel, #admin-shell-panel'
                 );
                 editorPanels.forEach(panel => {
                     panel.style.display = 'none';
@@ -176,9 +176,9 @@ document.querySelectorAll('.tool-item').forEach(item => {
                                         <p style="color: #4caf50; font-size: 10px; text-align: center; margin-top: 4px;">✓ Click to Open</p>
                                     </div>
                                     
-                                    <div class="editor-card" id="cutscene-editor-card" style="background: #ff9800; border: 1px solid #ff9800; border-radius: 8px; padding: 16px; cursor: pointer; transition: all 0.2s;">
+                                    <div class="editor-card" id="dialogue-editor-card" style="background: #ff9800; border: 1px solid #ff9800; border-radius: 8px; padding: 16px; cursor: pointer; transition: all 0.2s;">
                                         <div style="font-size: 32px; text-align: center;">🎭</div>
-                                        <h3 style="color: #fff; text-align: center; margin: 8px 0;">Cutscene Editor</h3>
+                                        <h3 style="color: #fff; text-align: center; margin: 8px 0;">Dialogue Editor</h3>
                                         <p style="color: #ddd; font-size: 12px; text-align: center;">Edit dialogue cutscenes</p>
                                         <p style="color: #ff9800; font-size: 10px; text-align: center; margin-top: 4px;">✓ Click to Open</p>
                                     </div>
@@ -229,9 +229,9 @@ document.querySelectorAll('.tool-item').forEach(item => {
                                 this.lastOpenedEditor = 'animation-editor-panel';
                                 this.game.openAnimationEditor();
                             });
-                            document.getElementById('cutscene-editor-card')?.addEventListener('click', () => {
-                                this.lastOpenedEditor = 'cutscene-editor-panel';
-                                this.game.openCutsceneEditor();
+                            document.getElementById('dialogue-editor-card')?.addEventListener('click', () => {
+                                this.lastOpenedEditor = 'dialogue-editor-panel';
+                                this.game.openDialogueEditor();
                             });
                             document.getElementById('mission-editor-card')?.addEventListener('click', () => {
                                 this.lastOpenedEditor = 'mission-editor-panel';
@@ -262,6 +262,16 @@ document.querySelectorAll('.tool-item').forEach(item => {
                     this.console.log('info', 'Switched to Admin Shell');
                 }
             });
+        
+
+            // Re-apply fullscreen mode if active (to ensure panels stay hidden)
+        if (document.getElementById('app').classList.contains('fullscreen-mode')) {
+            // The CSS will handle hiding panels
+            this.console.log('debug', 'Fullscreen mode maintained');
+        }
+
+
+
         });
 
         // Console controls
@@ -281,6 +291,109 @@ document.querySelectorAll('.tool-item').forEach(item => {
         document.getElementById('filter-level').addEventListener('change', (e) => {
             this.console.setFilter(e.target.value);
         });
+
+
+
+// --- Studio Workspace Fullscreen Button ---
+// --- Studio Fullscreen (Native Tauri + Layout Mode) ---
+const fullscreenBtn = document.getElementById('fullscreen-btn');
+if (fullscreenBtn) {
+    const appWindow = getCurrentWindow();
+    const app = document.getElementById('app');
+    let isFullscreen = false;
+
+    // Get initial native fullscreen state
+    appWindow.isFullscreen().then((fullscreen) => {
+        isFullscreen = fullscreen;
+        if (isFullscreen) {
+            app.classList.add('fullscreen-mode');
+            fullscreenBtn.innerHTML = '<span style="font-size: 14px;">⛶</span> Exit';
+            fullscreenBtn.classList.add('active');
+        } else {
+            app.classList.remove('fullscreen-mode');
+            fullscreenBtn.innerHTML = '<span style="font-size: 14px;">⛶</span> Fullscreen';
+            fullscreenBtn.classList.remove('active');
+        }
+    }).catch(() => {});
+
+    // Click handler - toggles native fullscreen + layout mode
+    fullscreenBtn.addEventListener('click', () => {
+        appWindow.isFullscreen().then((fullscreen) => {
+            if (fullscreen) {
+                // Exit native fullscreen
+                appWindow.setFullscreen(false).then(() => {
+                    app.classList.remove('fullscreen-mode');
+                    fullscreenBtn.innerHTML = '<span style="font-size: 14px;">⛶</span> Fullscreen';
+                    fullscreenBtn.classList.remove('active');
+                    this.console.log('info', 'Exited fullscreen mode');
+                    
+                    // Restore console visibility if it was visible before
+                    const consolePanel = document.getElementById('console-panel');
+                    if (consolePanel && consolePanel._wasVisible) {
+                        consolePanel.style.display = 'flex';
+                        consolePanel._wasVisible = false;
+                    }
+                    
+                    setTimeout(() => this.game.resize(), 50);
+                }).catch((err) => {
+                    this.console.log('error', `Failed to exit fullscreen: ${err}`);
+                });
+            } else {
+                // Enter native fullscreen
+                appWindow.setFullscreen(true).then(() => {
+                    app.classList.add('fullscreen-mode');
+                    fullscreenBtn.innerHTML = '<span style="font-size: 14px;">⛶</span> Exit';
+                    fullscreenBtn.classList.add('active');
+                    this.console.log('info', 'Entered fullscreen mode');
+                    
+                    // Hide console and remember its state
+                    const consolePanel = document.getElementById('console-panel');
+                    if (consolePanel && consolePanel.style.display !== 'none') {
+                        consolePanel._wasVisible = true;
+                        consolePanel.style.display = 'none';
+                    }
+                    
+                    setTimeout(() => this.game.resize(), 50);
+                }).catch((err) => {
+                    this.console.log('error', `Failed to enter fullscreen: ${err}`);
+                });
+            }
+        }).catch((err) => {
+            this.console.log('error', `Failed to check fullscreen state: ${err}`);
+        });
+    });
+
+    // Listen for external fullscreen changes (e.g., F11 key)
+    appWindow.onResized(() => {
+        appWindow.isFullscreen().then((fullscreen) => {
+            if (fullscreen !== isFullscreen) {
+                isFullscreen = fullscreen;
+                if (fullscreen) {
+                    app.classList.add('fullscreen-mode');
+                    fullscreenBtn.innerHTML = '<span style="font-size: 14px;">⛶</span> Exit';
+                    fullscreenBtn.classList.add('active');
+                    
+                    const consolePanel = document.getElementById('console-panel');
+                    if (consolePanel && consolePanel.style.display !== 'none') {
+                        consolePanel._wasVisible = true;
+                        consolePanel.style.display = 'none';
+                    }
+                } else {
+                    app.classList.remove('fullscreen-mode');
+                    fullscreenBtn.innerHTML = '<span style="font-size: 14px;">⛶</span> Fullscreen';
+                    fullscreenBtn.classList.remove('active');
+                    
+                    const consolePanel = document.getElementById('console-panel');
+                    if (consolePanel && consolePanel._wasVisible) {
+                        consolePanel.style.display = 'flex';
+                        consolePanel._wasVisible = false;
+                    }
+                }
+                setTimeout(() => this.game.resize(), 50);
+            }
+        }).catch(() => {});
+    });
+}
 
         // Initialize BtoolsPanel (appears in Properties area when no entity selected)
         this.btools = new BtoolsPanel(this.game, this);
@@ -317,7 +430,7 @@ switchToEditorTab(showCards = true) {
         
         // Hide all editor panels
         const editorPanels = editorContainer?.querySelectorAll(
-            '#animation-editor-panel, #cutscene-editor-panel, #mission-editor-panel, #map-editor-panel, #npc-editor-panel, #btools-panel, #admin-shell-panel'
+            '#animation-editor-panel, #dialogue-editor-panel, #mission-editor-panel, #map-editor-panel, #npc-editor-panel, #btools-panel, #admin-shell-panel'
         ) || [];
         editorPanels.forEach(panel => {
             if (panel) {

@@ -14,6 +14,8 @@
     "fs:allow-exists",
     "fs:allow-read-dir",
     "fs:allow-copy-file",
+       "core:window:allow-set-fullscreen",
+    "core:window:allow-is-fullscreen",
     {
       "identifier": "fs:allow-write-text-file",
       "allow": [{ "path": "**" }]

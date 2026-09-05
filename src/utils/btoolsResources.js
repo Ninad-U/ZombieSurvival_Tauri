@@ -8,13 +8,22 @@ export const btoolsResources = {
     label: 'MAP / ENVIRONMENT',
     resources: [
       {
+        id: 'eraser',
+        name: 'Eraser',
+        category: ['tools'],
+        type: 'terrain',
+        tileValue: 0,  // Sets to grass (0)
+        color: '#ff4444',
+        icon: '🧹',  // Will be displayed as fallback
+        isEraser: true
+      },
+      {
         id: 'grass',
         name: 'Grass',
         category: ['ground', 'grass'],
-        type: 'terrain',  // MUST be 'terrain' so the panel knows it's terrain
+        type: 'terrain',
         tileValue: 0,
         color: '#3a7a3a',
-        // No asset - rendered procedurally by the game
       },
       {
         id: 'dirt',
@@ -130,19 +139,19 @@ export const btoolsResources = {
 
 // Helper to get all categories from a section
 export function getCategoriesForSection(sectionId) {
-  const section = btoolsResources[sectionId];
-  if (!section) return ['All'];
-  
-  const categories = new Set();
-  categories.add('All');
-  
-  for (const resource of section.resources) {
-    if (resource.category && resource.category.length > 0) {
-      categories.add(resource.category[0]);
+    const section = btoolsResources[sectionId];
+    if (!section) return ['All'];
+    
+    const categories = new Set();
+    categories.add('All');
+    
+    for (const resource of section.resources) {
+        if (resource.category && resource.category.length > 0) {
+            categories.add(resource.category[0]);
+        }
     }
-  }
-  
-  return Array.from(categories);
+    
+    return Array.from(categories);
 }
 
 // Helper to get resources filtered by category

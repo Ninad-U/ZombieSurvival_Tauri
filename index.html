@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZombieSurvival Game Builder</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
     <!-- Tauri API -->
     <script type="module">
         // Import Tauri APIs
@@ -103,11 +103,29 @@
                 </div>
             </div>
             <div id="workspace">
-                <div id="workspace-tabs">
-                    <span class="tab active">Game Preview</span>
-                    <span class="tab">Editor</span>
-                    <span class="tab">Admin Shell</span>
-                </div>
+<div id="workspace-tabs">
+    <span class="tab active">Game Preview</span>
+    <span class="tab">Editor</span>
+    <span class="tab">Admin Shell</span>
+    <div style="flex:1"></div>
+    <button id="fullscreen-btn" style="
+        background: none;
+        border: none;
+        color: #888;
+        cursor: pointer;
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        padding: 4px 12px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        transition: color 0.2s;
+        border-bottom: 2px solid transparent;
+        height: 100%;
+    " onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#888'">
+        <span style="font-size: 14px;">⛶</span> Fullscreen
+    </button>
+</div>
                 <div id="game-container">
                     <canvas id="gameCanvas"></canvas>
                 </div>
@@ -119,8 +137,8 @@
                             <button id="open-anim-editor-btn" style="background: #4caf50; color: #fff; border: none; padding: 8px 16px; cursor: pointer; font-family: inherit;">
                                 🎬 Open Animation Editor
                             </button>
-                            <button id="open-cutscene-editor-btn" style="background: #ff9800; color: #fff; border: none; padding: 8px 16px; cursor: pointer; font-family: inherit;">
-                                🎬 Open Cutscene Editor
+                            <button id="open-dialogue-editor-btn" style="background: #ff9800; color: #fff; border: none; padding: 8px 16px; cursor: pointer; font-family: inherit;">
+                                🎬 Open Dialogue Editor
                             </button>
                         </div>
                     </div>

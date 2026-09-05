@@ -30,7 +30,7 @@ NOT PERSISTED (Runtime Only - Excluded from project save):
 
 PARTIAL / NEEDS FIX:
 
-- Cutscene Editor saves -> uses Blob download, needs Tauri FS
+- Dialogue Editor saves -> uses Blob download, needs Tauri FS
 - Mission UI timing -> shows during dialogue, should show after
 
 ============================================================

@@ -10,7 +10,7 @@ data/locations/
 # NPC Editor - saves NPC template files
 data/npcs/
 
-# Cutscene Editor - saves dialogue/cutscene files
+# Dialogue Editor - saves dialogue/cutscene files (formerly named as Cutscene Editor)
 data/dialogue/
 
 # Temporary test files

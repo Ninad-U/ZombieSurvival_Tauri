@@ -1,7 +1,7 @@
-// Cutscene Editor
+// Dialogue Editor
 // Lightweight editor for dialogue cutscene data (focus + black bars)
 
-export class CutsceneEditor {
+export class DialogueEditor {
     constructor(gameRuntime) {
         this.game = gameRuntime;
         this.dialogueData = null;
@@ -17,7 +17,7 @@ export class CutsceneEditor {
     
     initUI() {
         const panel = document.createElement('div');
-        panel.id = 'cutscene-editor-panel';
+        panel.id = 'dialogue-editor-panel';
         panel.style.cssText = `
             display: none;
             padding: 20px;
@@ -29,7 +29,7 @@ export class CutsceneEditor {
         `;
         
         panel.innerHTML = `
-            <h2 style="color: #4caf50; margin-bottom: 16px;">🎬 Cutscene Editor</h2>
+            <h2 style="color: #4caf50; margin-bottom: 16px;">🎬 Dialogue Editor</h2>
             
             <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px;">
                 <div>
@@ -315,7 +315,7 @@ close() {
         this.game.app.lastOpenedEditor = null;
     }
 
-    const panel = document.getElementById('cutscene-editor-panel');
+    const panel = document.getElementById('dialogue-editor-panel');
     if (panel) {
         panel.style.display = 'none';
     }
@@ -340,7 +340,7 @@ close() {
 show() {
     // Store which editor is opened
     if (this.game && this.game.app) {
-        this.game.app.lastOpenedEditor = 'cutscene-editor-panel';
+        this.game.app.lastOpenedEditor = 'dialogue-editor-panel';
     }
 
     // --- FIX: Hide cards grid ---
@@ -350,7 +350,7 @@ show() {
         editorContent.style.visibility = 'hidden';
     }
 
-    const panel = document.getElementById('cutscene-editor-panel');
+    const panel = document.getElementById('dialogue-editor-panel');
     if (panel) {
         panel.style.display = 'block';
     }

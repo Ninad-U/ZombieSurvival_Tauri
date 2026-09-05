@@ -43,7 +43,7 @@ export class GameRuntime {
         this.assetLoader = new AssetLoader();
         this.loadedImages = {};
         // Cutscene properties
-        this.cutsceneEditor = null;
+        this.dialogueEditor = null;
         this._cutsceneActive = false;
         this._cutsceneComponent = null;
         this._cutsceneInstruction = 0;
@@ -881,84 +881,101 @@ export class GameRuntime {
         this.renderUI(ctx);
     }
 
-    renderMap(ctx) {
-        const location = this.locationLoader.getCurrentLocation();
-        if (!location) return;
+// In src/runtime/game.js - replace the renderMap method:
 
-        const w = location.width || 40;
-        const h = location.height || 30;
-        const tileSize = this.tileSize;
+renderMap(ctx) {
+    const location = this.locationLoader.getCurrentLocation();
+    if (!location) return;
 
-        const ground = location.layers?.ground || [];
-        for (let y = 0; y < h; y++) {
-            for (let x = 0; x < w; x++) {
-                const tile = ground[y]?.[x] || 0;
-                const px = x * tileSize;
-                const py = y * tileSize;
+    const w = location.width || 40;
+    const h = location.height || 30;
+    const tileSize = this.tileSize;
 
-                if (tile === 0) {
+    const ground = location.layers?.ground || [];
+    for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+            const tile = ground[y]?.[x] || 0;
+            const px = x * tileSize;
+            const py = y * tileSize;
+
+            // --- FIX: Handle ALL tile values ---
+            switch(tile) {
+                case 0: // Grass
                     ctx.fillStyle = (x + y) % 2 === 0 ? '#2d5a2d' : '#3a6b3a';
-                } else if (tile === 1) {
+                    break;
+                case 1: // Dirt
                     ctx.fillStyle = '#8b7355';
-                } else if (tile === 2) {
+                    break;
+                case 2: // Stone
                     ctx.fillStyle = '#6b6b6b';
-                } else {
+                    break;
+                case 3: // Water
+                    ctx.fillStyle = '#2a6b8a';
+                    break;
+                case 4: // Sand
+                    ctx.fillStyle = '#c4b070';
+                    break;
+                case 5: // Wood Floor
+                    ctx.fillStyle = '#8b6b3a';
+                    break;
+                default:
                     ctx.fillStyle = '#2d5a2d';
-                }
-                ctx.fillRect(px, py, tileSize, tileSize);
             }
-        }
-
-        const objects = location.layers?.objects || [];
-        for (let y = 0; y < h; y++) {
-            for (let x = 0; x < w; x++) {
-                const obj = objects[y]?.[x] || 0;
-                if (obj === 1) {
-                    const px = x * tileSize;
-                    const py = y * tileSize;
-                    ctx.fillStyle = '#1a4a1a';
-                    ctx.fillRect(px + 4, py + 4, tileSize - 8, tileSize - 8);
-                    ctx.fillStyle = '#2d6b2d';
-                    ctx.fillRect(px + 8, py, tileSize - 16, tileSize - 8);
-                } else if (obj === 2) {
-                    const px = x * tileSize;
-                    const py = y * tileSize;
-                    ctx.fillStyle = '#5a5a5a';
-                    ctx.fillRect(px, py, tileSize, tileSize);
-                    ctx.strokeStyle = '#4a4a4a';
-                    ctx.lineWidth = 1;
-                    ctx.strokeRect(px, py, tileSize, tileSize);
-                }
-            }
-        }
-
-        const exits = location.exits || [];
-        for (const exit of exits) {
-            if (exit.visible === false) continue;
-
-            const sizeX = exit.size?.x || 1;
-            const sizeY = exit.size?.y || 3;
-            const tileSize = this.tileSize;
-
-            const startX = exit.x * tileSize;
-            const startY = exit.y * tileSize;
-            const width = sizeX * tileSize;
-            const height = sizeY * tileSize;
-
-            ctx.fillStyle = 'rgba(255, 200, 50, 0.3)';
-            ctx.fillRect(startX, startY, width, height);
-
-            ctx.strokeStyle = '#ffcc00';
-            ctx.lineWidth = 2;
-            ctx.strokeRect(startX, startY, width, height);
-
-            ctx.fillStyle = '#ffcc00';
-            ctx.font = 'bold 10px monospace';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('EXIT', startX + width / 2, startY + height / 2);
+            ctx.fillRect(px, py, tileSize, tileSize);
         }
     }
+
+    // ... rest of renderMap (objects, exits) remains the same
+    const objects = location.layers?.objects || [];
+    for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+            const obj = objects[y]?.[x] || 0;
+            if (obj === 1) {
+                const px = x * tileSize;
+                const py = y * tileSize;
+                ctx.fillStyle = '#1a4a1a';
+                ctx.fillRect(px + 4, py + 4, tileSize - 8, tileSize - 8);
+                ctx.fillStyle = '#2d6b2d';
+                ctx.fillRect(px + 8, py, tileSize - 16, tileSize - 8);
+            } else if (obj === 2) {
+                const px = x * tileSize;
+                const py = y * tileSize;
+                ctx.fillStyle = '#5a5a5a';
+                ctx.fillRect(px, py, tileSize, tileSize);
+                ctx.strokeStyle = '#4a4a4a';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(px, py, tileSize, tileSize);
+            }
+        }
+    }
+
+    const exits = location.exits || [];
+    for (const exit of exits) {
+        if (exit.visible === false) continue;
+
+        const sizeX = exit.size?.x || 1;
+        const sizeY = exit.size?.y || 3;
+        const tileSize = this.tileSize;
+
+        const startX = exit.x * tileSize;
+        const startY = exit.y * tileSize;
+        const width = sizeX * tileSize;
+        const height = sizeY * tileSize;
+
+        ctx.fillStyle = 'rgba(255, 200, 50, 0.3)';
+        ctx.fillRect(startX, startY, width, height);
+
+        ctx.strokeStyle = '#ffcc00';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(startX, startY, width, height);
+
+        ctx.fillStyle = '#ffcc00';
+        ctx.font = 'bold 10px monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('EXIT', startX + width / 2, startY + height / 2);
+    }
+}
 
     renderEntity(ctx, entity) {
         const transform = entity.components.transform;
@@ -2223,21 +2240,21 @@ async openAnimationEditor() {
     }
 }
 
-async openCutsceneEditor() {
-    console.log('🔴 Opening Cutscene Editor...');
+async openDialogueEditor() {
+    console.log('🔴 Opening Dialogue Editor...');
     try {
         // --- FIX: Hide all editor panels first ---
         this.hideAllEditorPanels();
         
-        if (!this.cutsceneEditor) {
-            const { CutsceneEditor } = await import('../editor/cutsceneEditor.js');
-            console.log('🔴 CutsceneEditor imported successfully');
-            this.cutsceneEditor = new CutsceneEditor(this);
+        if (!this.dialogueEditor) {
+            const { DialogueEditor } = await import('../editor/dialogueEditor.js');
+            console.log('🔴 DialogueEditor imported successfully');
+            this.dialogueEditor = new DialogueEditor(this);
         }
-        this.cutsceneEditor.show();
-        console.log('🔴 Cutscene Editor shown');
+        this.dialogueEditor.show();
+        console.log('🔴 Dialogue Editor shown');
     } catch (error) {
-        console.error('🔴 Error opening Cutscene Editor:', error);
+        console.error('🔴 Error opening Dialogue Editor:', error);
     }
 }
 
@@ -2305,7 +2322,7 @@ hideAllEditorPanels() {
     if (!editorContainer) return;
     
     const editorPanels = editorContainer.querySelectorAll(
-        '#animation-editor-panel, #cutscene-editor-panel, #mission-editor-panel, #map-editor-panel, #npc-editor-panel'
+        '#animation-editor-panel, #dialogue-editor-panel, #mission-editor-panel, #map-editor-panel, #npc-editor-panel'
     );
     editorPanels.forEach(panel => {
         if (panel) {
